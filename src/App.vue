@@ -1,19 +1,12 @@
 <template>  
   <div id="app">  
-    <NavVarBar /> 
-    <!-- 其他页面内容 -->  
-    <!--router-view /-->  
+    <router-view />  
   </div>  
 </template>  
   
 <script>  
-import NavVarBar from './components/NavVarBar.vue';  
-  
 export default {  
-  name: 'App',  
-  components: {  
-    NavVarBar
-  },  
+  name: 'App'
 };  
 </script>  
   
