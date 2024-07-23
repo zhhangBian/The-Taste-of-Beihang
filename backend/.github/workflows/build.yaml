@@ -1,0 +1,23 @@
+# This workflow will do a clean installation of python packages.
+
+name: Build django App
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      - name: rsync
+        run: rsync -arv --delete --exclude=".git" --exclude="venv" --exclude="config.yaml" --exclude="__pycache__" . /Users/hangeat/Public/backend
+      - name: pip install requirements
+        run: cd /Users/hangeat/Public/backend
+          && source venv/bin/activate
+          && pip install -r requirements.txt
+      - name: restart service
+        run: launchctl kickstart -k system/cn.cpolar.hang-eat
