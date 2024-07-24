@@ -16,12 +16,12 @@ from django.utils import timezone
 from django.views.decorators.http import require_POST, require_GET, require_http_methods
 from .. import *
 from .auth import generate_token, generate_refresh_token, jwt_auth
-from .email import varify_captcha
+from .comment import varify_captcha
 from ..models import User, AuthRecord
 
 name_not_allow = ['default', 'delete']
 
-# 进行登录
+
 @response_wrapper
 @require_POST
 def login_user(request: HttpRequest):

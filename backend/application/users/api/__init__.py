@@ -2,6 +2,9 @@
 在 init 中引入所有的 api 方法
 """
 
+# 后续需要对api进行相应的修改
+# 需要包含注册等函数
+
 from .user_info import login_user
 from .user_info import signup_user
 from .user_info import logout_user

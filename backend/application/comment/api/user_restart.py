@@ -1,5 +1,5 @@
 """
-关于用户历史发言的api
+关于用户收藏的店铺的api
 """
 
 from .. import *
@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST, require_GET, require_http
 from ..models import User, Collection
 from ...restaurant.models import Restaurant
 
-# 收藏餐厅
+
 @response_wrapper
 @jwt_auth()
 @require_POST
@@ -24,7 +24,7 @@ def collect_restart(request):
     user.collections.add(target_restart)
     return success_api_response({"message": "收藏成功！"})
 
-# 取消收藏
+
 @response_wrapper
 @jwt_auth()
 @require_POST
@@ -50,18 +50,10 @@ def get_collections_num(request):
     return success_api_response({"collections_num": collections.count()})
 
 
-# 用户发言 
 @response_wrapper
 @jwt_auth()
 @require_GET
-def add_commebt(request):
-    user = request.user
-    
-
-@response_wrapper
-@jwt_auth()
-@require_GET
-def get_comment_list(request):
+def get_collections_list(request):
     user = request.user
     left = int(request.GET.get('from'))
     right = int(request.GET.get('to'))
