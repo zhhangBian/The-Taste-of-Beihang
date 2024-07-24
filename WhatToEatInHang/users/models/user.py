@@ -1,0 +1,34 @@
+# 存储了用户的基本信息
+
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.conf import settings
+
+default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
+
+
+class User(AbstractUser):
+    id = models.AutoField(primary_key=True, auto_created=True, verbose_name='用户ID', editable=False)
+    email = models.EmailField(unique=True, verbose_name='邮箱',
+                              error_messages={'unique': '该邮箱已被注册'}, blank=False)
+    password = models.CharField(max_length=256, verbose_name='密码')
+
+    gender_choices = (
+        ('secret', '不设置/保密'),
+        ('male', '男'),
+        ('female', '女'),
+    )
+    gender = models.CharField(choices=gender_choices, max_length=32, default='保密', verbose_name='性别')
+    # motto = models.CharField(max_length=256, default='这个人很懒，什么都没有留下', verbose_name='个性签名')
+    avatar = models.CharField(default=default_avatar, verbose_name='头像')
+
+    # 该用户发布过的评论
+    comments = models.ForeignKey('comment.Comment', on_delete=models.CASCADE, related_name='comments')
+
+    def __str__(self):
+        return self.username
+
+    class Meta:
+        ordering = ['-date_joined']
+        verbose_name = '用户'
+        verbose_name_plural = '用户'
