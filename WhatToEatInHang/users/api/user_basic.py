@@ -21,6 +21,7 @@ from django.views.decorators.http import require_POST, require_GET, require_http
 
 from utils.data_process import *
 from utils.response import *
+from .email import varify_captcha
 from ..models import User
 
 name_not_allow = ['default', 'delete']
