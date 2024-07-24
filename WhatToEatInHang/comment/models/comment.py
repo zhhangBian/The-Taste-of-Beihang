@@ -14,7 +14,9 @@ class Comment(models.Model):
 
     grade = models.IntegerField(default=0,
                                 choices=(
-                                    (0, '未评分'), (1, '一星'), (2, '二星'), (3, '三星'), (4, '四星'), (5, '五星')
+                                    (0, '未评分'), (1, '一星'),
+                                    (2, '二星'), (3, '三星'),
+                                    (4, '四星'), (5, '五星')
                                 ))
     avg_price = models.IntegerField(default=0)
 

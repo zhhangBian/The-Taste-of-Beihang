@@ -3,6 +3,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
+from comment.models import Comment
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
 
@@ -23,7 +24,7 @@ class User(AbstractUser):
     avatar = models.CharField(default=default_avatar, verbose_name='头像')
 
     # 该用户发布过的评论
-    comments = models.ForeignKey('comment.Comment', on_delete=models.CASCADE, related_name='comments')
+    comments = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments')
 
     def __str__(self):
         return self.username

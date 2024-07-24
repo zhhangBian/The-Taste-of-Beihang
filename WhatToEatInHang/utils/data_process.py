@@ -8,6 +8,7 @@ from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.conf import settings
 
+
 def parse_data(request: HttpRequest) -> dict:
     """Parse request body and generate python dict
 
