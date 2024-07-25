@@ -10,7 +10,7 @@
         <div v-if="showBottomButtons" class="bottom-buttons">
           <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
           <button class="bottom-button" @click="handleClick('重新建议')">重新建议</button>
-          <button class="bottom-button" @click="handleClick('去广场看看')">去广场看看</button>
+          <button class="bottom-button" @click="handlePlazaClick">去广场看看</button>
         </div>
       </div>
     </div>
@@ -32,6 +32,10 @@ export default {
     },
     handleClick(message) {
       console.log(message);
+    },
+    handlePlazaClick() {
+      console.log('跳转到广场');
+      this.$router.push('/plaza');
     }
   }
 };
