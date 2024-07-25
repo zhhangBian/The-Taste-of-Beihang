@@ -12,12 +12,10 @@
     8. 修改头像
     9. 获取用户信息
 """
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate
 from django.contrib.auth.hashers import make_password
-from django.http import HttpRequest
 from django.shortcuts import redirect
-from django.utils import timezone
-from django.views.decorators.http import require_POST, require_GET, require_http_methods
+from django.views.decorators.http import require_POST, require_GET
 
 from utils.data_process import *
 from utils.response import *

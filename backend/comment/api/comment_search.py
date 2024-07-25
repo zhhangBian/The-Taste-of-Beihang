@@ -1,6 +1,5 @@
 # 获取评论的集合
 import re
-from random import random
 
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST

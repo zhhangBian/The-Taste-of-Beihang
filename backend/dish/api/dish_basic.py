@@ -1,10 +1,8 @@
-from django.http import HttpRequest
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 
 from restaurant.models import Restaurant
 from utils.data_process import parse_data
 from utils.response import fail_response, ErrorCode, success_response, response_wrapper
-from ..models import Dish
 
 
 @response_wrapper

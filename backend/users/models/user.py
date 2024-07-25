@@ -2,7 +2,6 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.conf import settings
 from comment.models import Comment
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"

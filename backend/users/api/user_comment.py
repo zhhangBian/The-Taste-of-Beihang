@@ -1,11 +1,7 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest
-from django.utils import timezone
-from django.views.decorators.http import require_POST, require_GET, require_http_methods
+from django.views.decorators.http import require_GET
 
 from users.models import User
-from comment.models import Comment
 from utils.response import *
 
 
