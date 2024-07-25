@@ -4,13 +4,13 @@
         <div class="svg-container">
           <img src="@/assets/background2.svg" alt="Background SVG" class="centered-svg">
         </div>
-        <div class="customFont">在BUAA吃什么？</div>  
+        <div class="customFont">在BUAA吃什么？</div>
         <div class="button-container">
-          <button class="top-button">吃什么?</button>
-          <div class="bottom-buttons">
-            <button class="bottom-button">就这个！</button>
-            <button class="bottom-button">重新建议</button>
-            <button class="bottom-button">去广场看看</button>
+          <button class="top-button" @click="handleTopButtonClick">吃什么?</button>
+          <div v-if="showBottomButtons" class="bottom-buttons">
+            <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
+            <button class="bottom-button" @click="handleClick('重新建议')">重新建议</button>
+            <button class="bottom-button" @click="handleClick('去广场看看')">去广场看看</button>
           </div>
         </div>
       </div>
@@ -19,12 +19,25 @@
   
   <script>
   export default {
-    name: 'CenteredSvgAndTitle'
+    name: 'CenteredSvgAndTitle',
+    data() {
+      return {
+        showBottomButtons: false
+      };
+    },
+    methods: {
+      handleTopButtonClick() {
+        this.showBottomButtons = true;
+        console.log('吃什么?');
+      },
+      handleClick(message) {
+        console.log(message);
+      }
+    }
   };
   </script>
   
   <style scoped>
-  
   .container {
     position: relative;
     width: 100vw;
@@ -32,6 +45,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* 防止出现滚动条 */
   }
   
   .content-center {
@@ -73,7 +87,7 @@
     position: relative;
   }
   
-  .button-container {  
+  .button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,38 +96,24 @@
     position: relative;
   }
   
-  .top-button {  
+  .top-button, .bottom-button {
     font-size: 28px;
-    padding: 20px 30px;
-    margin-bottom: 20px;
+    padding: 15px 30px; /* 统一按钮大小 */
+    margin: 10px;
     background-color: black;
     color: white;
     border: none;
     cursor: pointer;
     white-space: nowrap;
     text-align: center;
+    width: 200px; /* 统一按钮宽度 */
   }
   
   .bottom-buttons {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 20px;
-  }
-  
-  .bottom-button {
-    font-size: 28px;
-    padding: 10px 20px;
-    margin: 0 10px;
-    background-color: black;
-    color: white;
-    border: none;
-    cursor: pointer;
-    white-space: nowrap;
-    text-align: center;
-  }
-  
-  .bottom-button.medium {
-    padding: 1px 30px;
   }
   </style>
   
