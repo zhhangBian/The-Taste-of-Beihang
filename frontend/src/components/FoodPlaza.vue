@@ -46,7 +46,103 @@ export default {
           title: '麻辣香锅',
           details: '学六食堂 | 4.5分 | 平均20元'
         },
-        // 更多项目
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        {
+          id: 1,
+          image: 'https://placehold.co/400x300',
+          title: '麻辣香锅',
+          details: '学六食堂 | 4.5分 | 平均20元'
+        },
+        
       ],
     };
   },
