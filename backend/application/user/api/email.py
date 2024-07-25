@@ -5,9 +5,9 @@ from datetime import timedelta, timezone
 
 import jwt
 from django.core.mail import send_mail
-from django.views.decorators.http import require_GET, require_POST
+from django.views.decorators.http import require_POST
 from django.core.cache import cache
-from utils.data_process import parse_data
+from application.utils.data_process import parse_data
 from utils.response import response_wrapper, success_response, fail_response, ErrorCode
 from ..models import User
 from django.conf import settings

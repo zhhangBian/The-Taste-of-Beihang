@@ -32,7 +32,7 @@ class Comment(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant")
 
     agree_count = models.IntegerField(default=0)
-    agree_authors = models.ManyToManyField('users.User', related_name='agree_comments')
+    agree_authors = models.ManyToManyField('application.user.User', related_name='agree_comments')
 
     def __str__(self):
         return self.title

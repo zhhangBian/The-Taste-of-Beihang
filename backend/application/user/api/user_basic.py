@@ -17,7 +17,7 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST, require_GET
 
-from utils.data_process import *
+from application.utils.data_process import *
 from utils.response import *
 from .email import varify_captcha
 from ..models import User

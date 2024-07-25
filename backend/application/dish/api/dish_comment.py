@@ -1,5 +1,6 @@
 from django.views.decorators.http import require_GET
 
+from application.utils.data_process import parse_data
 from utils.response import success_response, response_wrapper
 from ..models import Dish
 
@@ -32,8 +33,11 @@ def serialize_dish_comments(dish: 'Dish') -> list:
 @response_wrapper
 @require_GET
 def get_dish_comments(request):
-    address = request.dish_address
-    name = request.dish_name
+    user = request.user
+    post_data = parse_data(request)
+
+    address = post_data.get("dish_address")
+    name = post_data.get("dish_name")
 
     dish = Dish.objects.get(name=name, address=address)
     comments_count = dish.comments.count()
