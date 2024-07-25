@@ -7,10 +7,11 @@ default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/i
 
 
 class Comment(models.Model):
+    # id = models.IntegerField(primary_key=True)
     title = models.CharField(max_length=50)
     content = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
-    image = models.CharField(default=default_img, verbose_name='图片')
+    # image = models.CharField(default=default_img, verbose_name='图片')
 
     grade = models.IntegerField(default=0,
                                 choices=(
@@ -18,10 +19,12 @@ class Comment(models.Model):
                                     (2, '二星'), (3, '三星'),
                                     (4, '四星'), (5, '五星')
                                 ))
-    avg_price = models.IntegerField(default=0)
+    price = models.FloatField(default=0)
+    flavour = models.FloatField(default=0)
+    waiting_time = models.FloatField(default=0)
 
     # 可能无法定位到具体的菜品
-    # dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="comments")
+    dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="comments")
 
     # 发布者
     author = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="comments")

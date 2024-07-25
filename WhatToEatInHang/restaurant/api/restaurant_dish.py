@@ -25,3 +25,5 @@ def get_recommendation(request):
         "place": place,
         "dish": dish,
     })
+
+

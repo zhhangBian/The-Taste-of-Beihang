@@ -16,6 +16,7 @@ class Restaurant(models.Model):
     name = models.IntegerField(choices=name_choice, default=0, verbose_name="用餐地点")
     description = models.CharField(max_length=500, default="这里可以吃饭")
     detail_addr = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
+    img = models.ImageField(upload_to='restaurant/', null=True, blank=True)
 
     def __str__(self):
         return self.name
