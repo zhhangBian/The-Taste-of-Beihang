@@ -13,22 +13,14 @@
       <div class="results-header">
         <span class="results-title">共114条搜索结果</span>
       </div>
-      <div class="grid">
-        <div class="card" v-for="item in items" :key="item.id">
-          <img :src="item.image" :alt="item.title" class="card-img">
-          <h2 class="card-title">{{ item.title }}</h2>
-          <p class="card-text">{{ item.details }}</p>
+      <div class="results-container">
+        <div class="grid">
+          <div class="card" v-for="item in items" :key="item.id">
+            <img :src="item.image" :alt="item.title" class="card-img">
+            <h2 class="card-title">{{ item.title }}</h2>
+            <p class="card-text">{{ item.details }}</p>
+          </div>
         </div>
-      </div>
-      <div class="pagination">
-        <button class="pagination-button" @click="prevPage">
-          <span>«</span>
-          <span>上一页</span>
-        </button>
-        <button class="pagination-button" @click="nextPage">
-          <span>下一页</span>
-          <span>»</span>
-        </button>
       </div>
     </div>
   </div>
@@ -40,6 +32,7 @@ export default {
     return {
       query: '',
       items: [
+        // 保留之前的搜索结果数据
         {
           id: 1,
           image: 'https://placehold.co/400x300',
@@ -47,102 +40,101 @@ export default {
           details: '学六食堂 | 4.5分 | 平均20元'
         },
         {
-          id: 1,
+          id: 2,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '宫保鸡丁',
+          details: '学五食堂 | 4.7分 | 平均25元'
         },
         {
-          id: 1,
+          id: 3,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '红烧排骨',
+          details: '学一食堂 | 4.8分 | 平均30元'
         },
         {
-          id: 1,
+          id: 4,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '鱼香肉丝',
+          details: '学四食堂 | 4.6分 | 平均22元'
         },
         {
-          id: 1,
+          id: 5,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '青椒炒肉',
+          details: '学二食堂 | 4.3分 | 平均18元'
         },
         {
-          id: 1,
+          id: 6,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '香菇鸡丁',
+          details: '学三食堂 | 4.4分 | 平均20元'
         },
         {
-          id: 1,
+          id: 7,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '糖醋里脊',
+          details: '学五食堂 | 4.5分 | 平均24元'
         },
         {
-          id: 1,
+          id: 8,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '蒜蓉炒虾',
+          details: '学六食堂 | 4.7分 | 平均28元'
         },
         {
-          id: 1,
+          id: 9,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '酸菜鱼',
+          details: '学一食堂 | 4.9分 | 平均35元'
         },
         {
-          id: 1,
+          id: 10,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '红烧狮子头',
+          details: '学四食堂 | 4.6分 | 平均26元'
         },
         {
-          id: 1,
+          id: 11,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '干锅花菜',
+          details: '学二食堂 | 4.4分 | 平均20元'
         },
         {
-          id: 1,
+          id: 12,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '蒜苔炒肉',
+          details: '学三食堂 | 4.3分 | 平均19元'
         },
         {
-          id: 1,
+          id: 13,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '辣子鸡丁',
+          details: '学五食堂 | 4.7分 | 平均27元'
         },
         {
-          id: 1,
+          id: 14,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '红烧茄子',
+          details: '学六食堂 | 4.5分 | 平均21元'
         },
         {
-          id: 1,
+          id: 15,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '番茄炒蛋',
+          details: '学一食堂 | 4.8分 | 平均15元'
         },
         {
-          id: 1,
+          id: 16,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '梅菜扣肉',
+          details: '学四食堂 | 4.9分 | 平均32元'
         },
         {
-          id: 1,
+          id: 17,
           image: 'https://placehold.co/400x300',
-          title: '麻辣香锅',
-          details: '学六食堂 | 4.5分 | 平均20元'
+          title: '土豆牛肉',
+          details: '学二食堂 | 4.6分 | 平均25元'
         },
-        
       ],
     };
   },
@@ -152,12 +144,6 @@ export default {
     },
     searchResults() {
       // 查询逻辑
-    },
-    prevPage() {
-      // 上一页逻辑
-    },
-    nextPage() {
-      // 下一页逻辑
     }
   }
 };
@@ -180,37 +166,21 @@ body {
 
 .container {
   display: flex;
-  flex-direction: column;
+  height: 100vh; /* 设置高度为视口高度 */
   padding: 1rem;
 }
 
-@media (min-width: 768px) {
-  .container {
-    flex-direction: row;
-  }
-}
-
 .sidebar {
-  width: 100%;
+  width: 20%;
   padding: 1rem;
   text-align: left; /* 确保内容左对齐 */
 }
 
-@media (min-width: 768px) {
-  .sidebar {
-    width: 20%;
-  }
-}
-
 .content {
-  width: 100%;
+  width: 80%;
   padding: 1rem;
-}
-
-@media (min-width: 768px) {
-  .content {
-    width: 80%;
-  }
+  display: flex;
+  flex-direction: column;
 }
 
 .title {
@@ -282,11 +252,16 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
 }
 
+.results-container {
+  flex: 1;
+  overflow: auto; /* 当内容超过高度时出现滚动条 */
+  margin-top: 1rem;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   gap: 1rem;
-  margin-top: 1rem;
 }
 
 @media (min-width: 640px) {
@@ -327,21 +302,6 @@ body {
 }
 
 .pagination {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1rem;
-}
-
-.pagination-button {
-  display: flex;
-  align-items: center;
-  color: hsl(240, 5.9%, 10%);
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.pagination-button span {
-  font-size: 1.25rem;
+  display: none; /* 隐藏分页按钮 */
 }
 </style>
