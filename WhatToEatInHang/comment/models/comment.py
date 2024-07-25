@@ -11,7 +11,7 @@ class Comment(models.Model):
     title = models.CharField(max_length=50)
     content = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now_add=True)
-    # image = models.CharField(default=default_img, verbose_name='图片')
+    image = models.CharField(default=default_img, verbose_name='图片')
 
     grade = models.IntegerField(default=0,
                                 choices=(
@@ -22,9 +22,6 @@ class Comment(models.Model):
     price = models.FloatField(default=0)
     flavour = models.FloatField(default=0)
     waiting_time = models.FloatField(default=0)
-
-    # 可能无法定位到具体的菜品
-    dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="comments")
 
     # 发布者
     author = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="comments")

@@ -62,5 +62,7 @@ def agree_comment(request: HttpRequest, comment_id: int):
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "评论不存在")
     if user in comment.agrees.all():
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "已点赞")
+
+    comment.agree_count.add(1)
     comment.agree_authors.add(user)
     return success_response({"message": "点赞成功！"})

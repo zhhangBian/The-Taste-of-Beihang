@@ -75,7 +75,7 @@ def user_signup(request: HttpRequest):
     password = post_data.get('password')
     email = post_data.get('email')
     # TODO：对于邮箱发送验证码的支持
-    # captcha = post_data.get('captcha')
+    captcha = post_data.get('captcha')
 
     # 检查是否有字段为空
     if username is None or password is None or email is None:
@@ -91,8 +91,8 @@ def user_signup(request: HttpRequest):
     if password == '':
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "密码不能为空")
     # 验证验证码
-    # if not varify_captcha(email, captcha):
-    #     return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
+    if not varify_captcha(email, captcha):
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
 
     # 创建新用户
     User.objects.create_user(username=username, email=email, password=password)
