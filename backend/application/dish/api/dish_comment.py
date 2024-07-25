@@ -1,8 +1,9 @@
 from django.views.decorators.http import require_GET
 
+from application.comment.models import Comment
+from application.dish.models import Dish
 from application.utils.data_process import parse_data
-from utils.response import success_response, response_wrapper
-from ..models import Dish
+from application.utils.response import *
 
 
 # 获取评论的集合
@@ -11,22 +12,24 @@ def serialize_dish_comments(dish: 'Dish') -> list:
     返回某一道菜的所有评论的信息序列
     """
     comments_list = []
-    dish_comments = dish.comments.all()
+    dish_comments = Comment.objects.filter(dish_name=dish.name)
 
     for comment in dish_comments:
         comment_dict = {
-            'name': comment.name,
+            'title': comment.title,
+            'content': comment.content,
+            'date': comment.date,
             'image': comment.image,
-            'address': comment.address,
+
+            'grade': comment.grade,
             'price': comment.price,
-            'description': comment.description,
-            'overall_rating': comment.overall_rating,
-            'flavor_rating': comment.flavor_rating,
+            'flavour': comment.flavour,
             'waiting_time': comment.waiting_time,
+
+            'author_id': comment.author_id,
         }
         comments_list.append(comment_dict)
 
-    # 这儿似乎是不能直接return Python的数据结构回来的
     return comments_list
 
 
@@ -40,7 +43,7 @@ def get_dish_comments(request):
     name = post_data.get("dish_name")
 
     dish = Dish.objects.get(name=name, address=address)
-    comments_count = dish.comments.count()
+    comments_count = dish.dish_comments.count()
 
     return success_response({
         "comments_count": comments_count,

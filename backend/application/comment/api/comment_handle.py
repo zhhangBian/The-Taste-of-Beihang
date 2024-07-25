@@ -1,10 +1,10 @@
 from django.views.decorators.http import require_POST
 
-from dish.models import Dish
-from restaurant.models import Restaurant
-from application.utils.data_process import parse_data
-from utils.response import success_response, response_wrapper
 from ..models import Comment
+from ...dish.models import Dish
+from ...restaurant.models import Restaurant
+from ...utils.data_process import parse_data
+from ...utils.response import response_wrapper, success_response
 
 
 @response_wrapper

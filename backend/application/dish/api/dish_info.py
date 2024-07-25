@@ -1,8 +1,8 @@
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
-from utils.response import fail_response, ErrorCode, success_response, response_wrapper
-from ..models import Dish
+from application.dish.models import Dish
+from application.utils.response import *
 
 
 @response_wrapper
@@ -15,10 +15,16 @@ def get_dish_basics(request: HttpRequest, dish_name: str):
     dishes_basics = [
         {
             "name": dish.name,
-            "img": dish.img,
+            "image": dish.image,
             "address": dish.address,
+
+            "prices": dish.price,
+            "description": dish.description,
             "overall_rating": dish.overall_rating,
-            "price": dish.price,
+            "flavor_rating": dish.flavor_rating,
+            "waiting_time": dish.waiting_time,
+
+            "restaurant_name": dish.restaurant_name,
         } for dish in dishes
     ]
 
@@ -38,7 +44,7 @@ def get_detail_info(request: HttpRequest, dish_name: str):
     dishes_detail = [
         {
             "name": dish.name,
-            "img": dish.img,
+            "image": dish.image,
             "address": dish.address,
             "overall_rating": dish.overall_rating,
             "price": dish.price,

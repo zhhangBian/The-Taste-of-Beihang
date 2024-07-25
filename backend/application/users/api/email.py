@@ -4,20 +4,21 @@ import random
 from datetime import timedelta, timezone
 
 import jwt
+from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
-from django.core.cache import cache
+
 from application.utils.data_process import parse_data
-from utils.response import response_wrapper, success_response, fail_response, ErrorCode
 from ..models import User
-from django.conf import settings
+from ...utils.response import *
 
 
 def generate_token(user: User, access_token_delta: int = 1) -> str:
     """generate jwt
 
         Args:
-            user (User): user
+            user (User): users
             access_token_delta (int, optional): time to expire. Defaults to 1 (hour).
     """
 

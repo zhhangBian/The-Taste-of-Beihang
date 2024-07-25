@@ -1,11 +1,10 @@
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
 
-from dish.models import Dish
 from application.utils.data_process import parse_data
 from ..models import Comment
-
-from utils.response import fail_response, ErrorCode, success_response, response_wrapper
+from ...dish.models import Dish
+from ...utils.response import response_wrapper, fail_response, ErrorCode, success_response
 
 
 @response_wrapper

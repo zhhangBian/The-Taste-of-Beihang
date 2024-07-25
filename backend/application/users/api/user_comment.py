@@ -1,8 +1,8 @@
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
-from users.models import User
-from utils.response import *
+from application.users.models import User
+from application.utils.response import *
 
 
 # 获取评论的集合
@@ -12,16 +12,18 @@ def serialize_comments(user: 'User') -> list:
 
     for comment in user_comments:
         comment_dict = {
-            'id': comment.id,
             'title': comment.title,
             'content': comment.content,
             'date': comment.date.strftime('%Y-%m-%d %H:%M:%S'),  # 格式化日期
             'image': comment.image,
+
             'grade': comment.grade,
-            'avg_price': comment.avg_price,
-            'author': comment.author.username,  # 假设我们只想要用户名
-            'restaurant': comment.restaurant.name,  # 假设 Restaurant 模型有一个 name 字段
-            'agree_count': comment.agree_count,
+            'price': comment.price,
+            'waiting_time': comment.waiting_time,
+
+            'author_id': comment.author_id,
+            'dish_name': comment.dish_name,
+            'restaurant_name': comment.restaurant_name,
         }
         comments_list.append(comment_dict)
 

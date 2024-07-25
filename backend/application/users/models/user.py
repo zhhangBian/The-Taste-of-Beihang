@@ -2,7 +2,8 @@
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from comment.models import Comment
+
+from application.comment.models import Comment
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
 
@@ -20,10 +21,23 @@ class User(AbstractUser):
     )
     gender = models.CharField(choices=gender_choices, max_length=32, default='保密', verbose_name='性别')
     # motto = models.CharField(max_length=256, default='这个人很懒，什么都没有留下', verbose_name='个性签名')
-    avatar = models.CharField(default=default_avatar, verbose_name='头像')
+    avatar = models.CharField(default=default_avatar, verbose_name='头像', max_length=500)
 
     # 该用户发布过的评论
-    comments = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comments')
+    comments = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='user_comments')
+
+    groups = models.ManyToManyField(
+        'auth.Group',
+        related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
+        related_query_name='custom_user',
+        # 其他参数...
+    )
+    user_permissions = models.ManyToManyField(
+        'auth.Permission',
+        related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
+        related_query_name='custom_user',
+        # 其他参数...
+    )
 
     def __str__(self):
         return self.username

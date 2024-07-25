@@ -4,10 +4,9 @@ import re
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST
 
-from comment.models import Comment
-from restaurant.models import Restaurant
+from application.comment.models import Comment
 from application.utils.data_process import parse_data
-from utils.response import success_response, response_wrapper
+from application.utils.response import success_response, response_wrapper
 
 
 def serialize_comments(comments) -> list:
@@ -23,11 +22,13 @@ def serialize_comments(comments) -> list:
             'content': comment.content,
             'date': comment.date.strftime('%Y-%m-%d %H:%M:%S'),  # 格式化日期
             'image': comment.image,
-            'grade': comment.grade,
-            'avg_price': comment.avg_price,
-            'author': comment.author.username,  # 假设我们只想要用户名
-            'restaurant': comment.restaurant.name,  # 假设 Restaurant 模型有一个 name 字段
-            'agree_count': comment.agree_count,
+            'price': comment.price,
+            'flavour': comment.flavour,
+            'waiting_time': comment.waiting_time,
+
+            'author_id': comment.author_id,
+            'dish_name': comment.dish_name,
+            'restaurant_name': comment.restaurant_name,  # 假设 Restaurant 模型有一个 name 字段
         }
         comments_list.append(comment_dict)
 
@@ -35,9 +36,6 @@ def serialize_comments(comments) -> list:
 
 
 def matches_search(comment, search_string):
-    """
-    搜索匹配，用作辅助函数
-    """
     # 将搜索字符串转换为正则表达式模式
     # 这里使用了 re.escape 来确保搜索字符串中的任何特殊字符都被正确处理
     escaped_search_string = re.escape(search_string)
@@ -69,16 +67,12 @@ def search_comment(request):
 @response_wrapper
 @require_POST
 def search_comment_restaurant(request: HttpRequest):
-    """
-    这是返回特定餐馆下的评论的接口吗？
-    """
     post_data = parse_data(request)
     search = post_data.get('search')
     restaurant_name = post_data.get('restaurant_name')
-    restaurant = Restaurant.objects.get(name=restaurant_name)
+    comments = Comment.objects.fliter(restaurant_name=restaurant_name)
 
-    comments_fit = list(filter(lambda comment: matches_search(comment, search),
-                               restaurant.comments.objects.all()))
+    comments_fit = list(filter(lambda comment: matches_search(comment, search), comments))
     comments_fit_serialized = serialize_comments(comments_fit)
 
     return success_response({

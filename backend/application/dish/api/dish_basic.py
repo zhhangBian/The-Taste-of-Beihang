@@ -1,9 +1,9 @@
 from django.views.decorators.http import require_POST
 
-from dish.models import Dish
-from restaurant.models import Restaurant
+from application.dish.models import Dish
+from application.restaurant.models import Restaurant
 from application.utils.data_process import parse_data
-from utils.response import fail_response, ErrorCode, success_response, response_wrapper
+from application.utils.response import *
 
 
 @response_wrapper
@@ -28,17 +28,19 @@ def get_dish(request):
     post_data = parse_data(request)
 
     restaurant_name = post_data.get('restaurant_name')
-    restaurant = Restaurant.objects.get(name=restaurant_name)
     dish_name = post_data.get('dish_name')
 
-    dish = Dish.objects.get(restaurant=restaurant, name=dish_name)
+    dish = Dish.objects.get(restaurant_name=restaurant_name, name=dish_name)
     return success_response({
         "name": dish.name,
         "image": dish.image,
         "address": dish.address,
+
         "prices": dish.price,
         "description": dish.description,
         "overall_rating": dish.overall_rating,
         "flavor_rating": dish.flavor_rating,
         "waiting_time": dish.waiting_time,
+
+        "restaurant_name": dish.restaurant_name,
     })

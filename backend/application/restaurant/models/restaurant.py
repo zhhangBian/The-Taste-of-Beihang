@@ -1,6 +1,6 @@
 from django.db import models
 
-from dish.models import Dish
+from application.dish.models import Dish
 
 name_choice = (
     (1, '学一'),
@@ -17,15 +17,14 @@ name_choice = (
 class Restaurant(models.Model):
     name = models.IntegerField(choices=name_choice, default=0, verbose_name="用餐地点")
     description = models.CharField(max_length=500, default="这里可以吃饭")
-    detail_addr = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
-    img = models.ImageField(upload_to='restaurant/', null=True, blank=True)
+    address = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
+    image = models.CharField(max_length=500, default="")
 
-    dishes = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dishes")
+    dishes = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="restaurant_dishes")
 
     def __str__(self):
         return self.name
 
     class Meta:
-        ordering = ['name', '-date_joined']
         verbose_name = '餐厅'
-        verbose_name_plural = '用户s'
+        verbose_name_plural = '餐厅s'

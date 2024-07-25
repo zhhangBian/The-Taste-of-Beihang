@@ -12,10 +12,10 @@ urlpatterns = [
     path('signup/', user_signup),
     path('change-password/', change_password),
     path('forget-password/', forget_password),
-    path('update-user/', update_user),
-    path('get-user-info/', get_user_info),
-    path('get-user-info/<int:user_id>/', get_user_info_by_id),
+    path('update-users/', update_user),
+    path('get-users-info/', get_user_info),
+    path('get-users-info/<int:user_id>/', get_user_info_by_id),
 
-    path('get-user-comments', get_user_comments),
-    path('get-user-comments-by-id/<int:user_id>', get_user_comments_by_id),
+    path('get-users-comments', get_user_comments),
+    path('get-users-comments-by-id/<int:user_id>', get_user_comments_by_id),
 ]
