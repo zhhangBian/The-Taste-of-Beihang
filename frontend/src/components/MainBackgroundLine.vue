@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import axios from "core-js/internals/queue";
+
 export default {
   name: 'CenteredSvgAndTitle',
   data() {
@@ -37,6 +39,15 @@ export default {
     handlePlazaClick() {
       console.log('跳转到广场');
       this.$router.push('/plaza');
+    },
+    get_recommendation() {
+      axios.get('/api/data/')
+          .then(response => {
+            this.items = response.data;
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          });
     }
   }
 };

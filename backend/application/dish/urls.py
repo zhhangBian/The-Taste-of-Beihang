@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('get-dish-basics/<str:dish_name>', get_dish_basics),
     path('get-detail-info/<str:dish_name>', get_detail_info),
+
+    path('get-dish-recommend',get_dish_recommend)
 ]
