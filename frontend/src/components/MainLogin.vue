@@ -28,6 +28,7 @@ top: 38px;
 right: 80px;  
 display: flex;  
 align-items: center;  
+z-index: 1000;
 }  
 
 .register-login-button {  
@@ -40,7 +41,8 @@ outline: none; /* 去除点击时的轮廓线 */
 padding: 5px 10px; /* 内边距，根据需要调整 */  
 /* 如果你想让按钮看起来更像是链接，可以添加下面的样式 */  
 text-decoration: none; /* 去除下划线 */  
-font-family: inherit; /* 继承父元素的字体 */  
+font-family: inherit; /* 继承父元素的字体 */ 
+z-index: 1000; 
 /* 注意：这里没有添加hover样式，你可以根据需要添加 */  
 }  
 
@@ -51,4 +53,17 @@ font-size: 18px; /* 分割线大小，可能需要根据实际调整以匹配按
 line-height: 0; /* 去除分割线的垂直空间 */  
 /* 注意：这里使用font-size和line-height来模拟分割线，因为纯CSS中没有直接创建垂直线的简便方法 */  
 }  
+
+.bottom-button {
+  font-size: 28px;
+  padding: 15px 30px; /* 统一按钮大小 */
+  margin: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  width: 200px; /* 统一按钮宽度 */
+}
 </style>
