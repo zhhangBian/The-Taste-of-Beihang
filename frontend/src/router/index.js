@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import {defineAsyncComponent} from 'vue'
+import { defineAsyncComponent } from 'vue';
 
 // 路由设置
 const router = createRouter({
@@ -11,7 +11,7 @@ const router = createRouter({
             name: 'home',
             component: defineAsyncComponent(() => import(`../HomePage.vue`)),
             meta: {
-                title: '主页',
+                title: '今天在BUAA吃什么？',
             },
         },
         {
@@ -39,5 +39,12 @@ const router = createRouter({
             },
         }
     ]
-})
-export default router
+});
+
+// 添加 beforeEach 导航守卫来设置页面标题
+router.beforeEach((to, from, next) => {
+    document.title = to.meta.title || '默认标题';
+    next();
+});
+
+export default router;
