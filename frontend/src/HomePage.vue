@@ -2,8 +2,7 @@
 <div class="home">  
     <MainBackground />
     <MainLogo />
-    <UserFavicon />
-    <MainLogin />
+    <MainUser />
     <MainBackgroundLine />
 </div>  
 </template>  
@@ -11,8 +10,7 @@
 import MainBackground from './components/MainBackground.vue';
 import MainBackgroundLine from './components/MainBackgroundLine.vue';
 import MainLogo from './components/MainLogo.vue'
-import UserFavicon from './components/UserFavicon.vue'
-import MainLogin from './components/MainLogin.vue'
+import MainUser from './components/MainUser.vue'
 
 export default {  
 name: 'HomePage',
@@ -20,8 +18,7 @@ components: {
     MainBackground,
     MainBackgroundLine,
     MainLogo,
-    UserFavicon,
-    MainLogin,
+    MainUser,
 }
 }; 
 </script>
