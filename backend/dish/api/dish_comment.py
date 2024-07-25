@@ -1,7 +1,6 @@
-from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
-from utils.response import fail_response, ErrorCode, success_response, response_wrapper
+from utils.response import success_response, response_wrapper
 from ..models import Dish
 
 
