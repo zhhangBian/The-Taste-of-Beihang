@@ -1,6 +1,7 @@
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
 
+from dish.models import Dish
 from restaurant.models import Restaurant
 from utils.data_process import parse_data
 from ..models import Comment
@@ -14,9 +15,12 @@ def create_comment(request):
     user = request.user
     post_data = parse_data(request)
 
-    # 基本的组织逻辑为：食堂-comment
+    # 基本的组织逻辑为：食堂-dish-comment
     restaurant_name = post_data.get('restaurant')
     restaurant = Restaurant.objects.get(name=restaurant_name)
+
+    dish_name = post_data.get('dish_name')
+    dish = Dish.objects.get(name=dish_name, restaurant=restaurant)
 
     # 创建一个新的评论实例
     comment = Comment(
@@ -29,6 +33,7 @@ def create_comment(request):
         waiting_time=post_data.get('waiting_time'),
 
         restaurant=restaurant,
+        dish=dish,
         author=user,
 
         agree_count=0,

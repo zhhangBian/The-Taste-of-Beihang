@@ -3,6 +3,10 @@
 
 from django.db import models
 
+from dish.models import Dish
+from restaurant.models import Restaurant
+from users.models import User
+
 default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241935479.jpg"
 
 
@@ -23,10 +27,9 @@ class Comment(models.Model):
     flavour = models.FloatField(default=0)
     waiting_time = models.FloatField(default=0)
 
-    # 发布者
-    author = models.ForeignKey('users.User', on_delete=models.CASCADE, related_name="comments")
-    # 发布的地点
-    restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, related_name="comments")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dish")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant")
 
     agree_count = models.IntegerField(default=0)
     agree_authors = models.ManyToManyField('users.User', related_name='agree_comments')
