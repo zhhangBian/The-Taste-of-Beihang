@@ -11,11 +11,11 @@
     name: 'MainLogin',  
     methods: {  
       testLogin() {  
-        console.log('登录按钮被点击');
+        console.log('登录按钮点击');
         this.$router.push('/login');
       },  
       testRegister() {  
-        console.log('注册按钮被点击');
+        console.log('注册按钮点击');
         this.$router.push('/login');
       },  
     },  
