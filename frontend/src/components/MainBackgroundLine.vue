@@ -4,9 +4,9 @@
       <div class="svg-container">
         <img src="@/assets/background2.svg" alt="Background SVG" class="centered-svg">
       </div>
-      <div class="customFont">在BUAA吃什么？</div>
+      <div class="customFont">今天应该在BUAA吃什么？</div>
       <div class="button-container">
-        <button class="top-button" @click="handleTopButtonClick">吃什么?</button>
+        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?</button>
         <div v-if="showBottomButtons" class="bottom-buttons">
           <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
           <button class="bottom-button" @click="handleClick('重新建议')">重新建议</button>
@@ -100,7 +100,7 @@ export default {
   position: relative;
 }
 
-.top-button, .bottom-button {
+.top-button {
   font-size: 28px;
   padding: 15px 30px; /* 统一按钮大小 */
   margin: 10px;
@@ -117,6 +117,19 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  flex-direction: row; /* 确保新按钮水平排列 */
+}
+
+.bottom-button {
+  font-size: 28px;
+  padding: 15px 30px; /* 统一按钮大小 */
+  margin: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: center;
+  width: 200px; /* 统一按钮宽度 */
 }
 </style>
