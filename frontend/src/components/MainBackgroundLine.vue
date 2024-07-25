@@ -6,7 +6,8 @@
       </div>
       <div class="customFont">今天应该在BUAA吃什么？</div>
       <div class="button-container">
-        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?</button>
+        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?
+        </button>
         <div v-if="showBottomButtons" class="bottom-buttons">
           <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
           <button class="bottom-button" @click="handleClick('重新建议')">重新建议</button>

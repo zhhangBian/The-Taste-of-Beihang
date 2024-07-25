@@ -5,7 +5,7 @@
       <p class="subtitle">按食堂搜索</p>
       <button class="filter-button" @click="filterResults">筛选</button>
       <p class="recommend-title">或者......</p>
-      <p class="recommend-subtitle">输入你的需求，<br />让我们为你推荐！</p>
+      <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
       <textarea class="textarea" placeholder="今天想吃什么？" v-model="query"></textarea>
       <button class="search-button" @click="searchResults">查询</button>
     </div>

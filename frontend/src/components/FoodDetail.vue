@@ -14,15 +14,18 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
+        <img :src="dish.image" alt="Delicious dish"
+             class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+          吃过的怎么说？</h2>
         <div class="mt-4 reviews-container">
           <div v-for="(review, index) in reviews" :key="index">
             <div class="review-item">
               <div class="flex items-center space-x-4">
                 <img :src="review.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
                 <div class="review-content">
-                  <p class="font-man font-bold">{{ review.name }} <span class="font-man text-zinc-400">{{ review.date }}</span></p>
+                  <p class="font-man font-bold">{{ review.name }} <span
+                      class="font-man text-zinc-400">{{ review.date }}</span></p>
                   <p class="font-man text-zinc-500">{{ review.summary }}</p>
                   <p class="font-man font-medium">{{ review.comment }}</p>
                 </div>
@@ -33,15 +36,20 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img src="https://placehold.co/400x300" alt="Hotpot dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
+        <img src="https://placehold.co/400x300" alt="Hotpot dish"
+             class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+          写下你的评论！</h2>
         <div class="mt-4">
           <div class="flex items-center space-x-2" v-for="(rating, index) in ratings" :key="index">
             <span class="font-man">{{ rating.label }}</span>
             <span>⭐⭐⭐⭐⭐</span>
           </div>
-          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none" placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
-          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man" @click="submitReview">提交</button>
+          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
+                    placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
+                  @click="submitReview">提交
+          </button>
         </div>
       </div>
     </div>
@@ -57,9 +65,9 @@ export default {
         location: '合一楼/学四食堂南侧',
         overallRating: 4.5,
         ratings: [
-          { label: '口味', score: 4.9, color: 'text-green-500' },
-          { label: '价格', score: 2.5, color: 'text-red-500' },
-          { label: '排队时长', score: 3.5, color: 'text-yellow-500' }
+          {label: '口味', score: 4.9, color: 'text-green-500'},
+          {label: '价格', score: 2.5, color: 'text-red-500'},
+          {label: '排队时长', score: 3.5, color: 'text-yellow-500'}
         ],
         image: 'https://placehold.co/400x300'
       },
@@ -129,10 +137,10 @@ export default {
         }
       ],
       ratings: [
-        { label: '总体评价' },
-        { label: '口味' },
-        { label: '价格' },
-        { label: '排队时长' }
+        {label: '总体评价'},
+        {label: '口味'},
+        {label: '价格'},
+        {label: '排队时长'}
       ],
       newReview: {
         comment: ''
