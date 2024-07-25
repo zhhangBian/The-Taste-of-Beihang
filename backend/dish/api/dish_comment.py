@@ -6,7 +6,10 @@ from ..models import Dish
 
 
 # 获取评论的集合
-def serialize_comments(dish: 'Dish') -> list:
+def serialize_dish_comments(dish: 'Dish') -> list:
+    """
+    返回某一道菜的所有评论的信息序列
+    """
     comments_list = []
     dish_comments = dish.comments.all()
 
@@ -23,6 +26,7 @@ def serialize_comments(dish: 'Dish') -> list:
         }
         comments_list.append(comment_dict)
 
+    # 这儿似乎是不能直接return Python的数据结构回来的
     return comments_list
 
 
@@ -37,5 +41,5 @@ def get_dish_comments(request):
 
     return success_response({
         "comments_count": comments_count,
-        "comments_list": serialize_comments(dish),
+        "comments_list": serialize_dish_comments(dish),
     })

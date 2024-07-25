@@ -1,6 +1,5 @@
 # 获取评论的集合
 import re
-from random import random
 
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST
@@ -12,6 +11,9 @@ from utils.response import success_response, response_wrapper
 
 
 def serialize_comments(comments) -> list:
+    """
+    获取评论的信息序列
+    """
     comments_list = []
 
     for comment in comments:
@@ -33,6 +35,9 @@ def serialize_comments(comments) -> list:
 
 
 def matches_search(comment, search_string):
+    """
+    搜索匹配，用作辅助函数
+    """
     # 将搜索字符串转换为正则表达式模式
     # 这里使用了 re.escape 来确保搜索字符串中的任何特殊字符都被正确处理
     escaped_search_string = re.escape(search_string)
@@ -45,10 +50,13 @@ def matches_search(comment, search_string):
 @response_wrapper
 @require_POST
 def search_comment(request):
+    """
+    根据request搜索comments，返回comments的信息序列
+    """
     post_data = parse_data(request)
-    search = post_data.get('search')
+    search_string = post_data.get('search')
 
-    comments_fit = list(filter(lambda comment: matches_search(comment, search),
+    comments_fit = list(filter(lambda comment: matches_search(comment, search_string),
                                Comment.objects.all()))
     comments_fit_serialized = serialize_comments(comments_fit)
 
@@ -61,6 +69,9 @@ def search_comment(request):
 @response_wrapper
 @require_POST
 def search_comment_restaurant(request: HttpRequest):
+    """
+    这是返回特定餐馆下的评论的接口吗？
+    """
     post_data = parse_data(request)
     search = post_data.get('search')
     restaurant_name = post_data.get('restaurant_name')
