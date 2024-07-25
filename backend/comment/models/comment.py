@@ -1,0 +1,41 @@
+# 对于菜品的评论
+# 由用户和菜共享
+
+from django.db import models
+
+from dish.models import Dish
+from restaurant.models import Restaurant
+from users.models import User
+
+default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241935479.jpg"
+
+
+class Comment(models.Model):
+    # id = models.IntegerField(primary_key=True)
+    title = models.CharField(max_length=50)
+    content = models.CharField(max_length=200)
+    date = models.DateTimeField(auto_now_add=True)
+    image = models.CharField(default=default_img, verbose_name='图片')
+
+    grade = models.IntegerField(default=0,
+                                choices=(
+                                    (0, '未评分'), (1, '一星'),
+                                    (2, '二星'), (3, '三星'),
+                                    (4, '四星'), (5, '五星')
+                                ))
+    price = models.FloatField(default=0)
+    flavour = models.FloatField(default=0)
+    waiting_time = models.FloatField(default=0)
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="comments")
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE, related_name="dish")
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant")
+
+    agree_count = models.IntegerField(default=0)
+    agree_authors = models.ManyToManyField('users.User', related_name='agree_comments')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        ordering = ['-date']
