@@ -3,6 +3,7 @@
 
 from django.db import models
 
+
 default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241935479.jpg"
 
 
@@ -24,8 +25,10 @@ class Comment(models.Model):
     waiting_time = models.FloatField(default=0)
 
     author_id = models.IntegerField(default=0)
-    dish_name = models.CharField(max_length=100)
-    restaurant_name = models.CharField(max_length=200)
+    # dish_name = models.CharField(max_length=100)
+    # restaurant_name = models.CharField(max_length=200)
+    dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, default=0)
+    restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, default=None)
 
     # agree_count = models.IntegerField(default=0)
     # agree_author_ids = models.ManyToManyField(int, related_name='agree_comments')
