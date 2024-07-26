@@ -1,24 +1,21 @@
-# frontend
+# The Taste Of BeiHang
 
-## Project setup
-```
-npm install
-```
+这是python课程的大作业。
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+选题为B：The Taste Of BeiHang
 
-### Compiles and minifies for production
-```
-npm run build
-```
+# 技术
 
-### Lints and fixes files
-```
-npm run lint
-```
+前端采用了`vue`。后端采用了`django`。
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 前端
+
+
+## 后端
+
+访问后端的admin数据库：
+```
+http://localhost:8000/admin
+WhatToEatInHang
+123456
+```
