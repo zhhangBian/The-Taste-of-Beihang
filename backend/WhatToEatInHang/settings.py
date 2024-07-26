@@ -25,11 +25,11 @@ INSTALLED_APPS = [
     'application.users',
     'application.restaurant',
     'application.comment',
-    'corsheaders',  # 注册上corsheaders
+    # 'corsheaders',  # 注册上corsheaders
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
