@@ -24,19 +24,17 @@ class User(AbstractUser):
     avatar = models.CharField(default=default_avatar, verbose_name='头像', max_length=500)
 
     # 该用户发布过的评论
-    comments = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='user_comments')
+    comments = models.ManyToManyField(Comment, related_name='user_comments')
 
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
         related_query_name='custom_user',
-        # 其他参数...
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
         related_query_name='custom_user',
-        # 其他参数...
     )
 
     def __str__(self):
@@ -47,3 +45,4 @@ class User(AbstractUser):
         ordering = ['-date_joined']
         verbose_name = '用户'
         verbose_name_plural = '用户'
+        swappable = "AUTH_USER_MODEL"
