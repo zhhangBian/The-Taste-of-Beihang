@@ -17,10 +17,11 @@ class Dish(models.Model):
     waiting_time = models.FloatField(verbose_name='等待时间')
 
     # dish唯一对应一个餐厅
-    restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, verbose_name='餐厅')
+    # restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, verbose_name='餐厅')
 
     # 一个菜品可以有多个评论
-    comments = models.ManyToManyField('comment.Comment', related_name='dish_comments', verbose_name='评论')
+    comments = models.ManyToManyField('comment.Comment', related_name='dish_comments', verbose_name='评论',
+                                      null=True, blank=True, default=None)
 
     def __str__(self):
         return self.name

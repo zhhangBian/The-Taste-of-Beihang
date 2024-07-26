@@ -25,8 +25,8 @@ class Comment(models.Model):
     author_id = models.IntegerField(default=0)
     # dish_name = models.CharField(max_length=100)
     # restaurant_name = models.CharField(max_length=200)
-    dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, default=0, verbose_name='菜品')
-    restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, default=None, verbose_name='餐厅')
+    # dish = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, default=0, verbose_name='菜品')
+    # restaurant = models.ForeignKey('restaurant.Restaurant', on_delete=models.CASCADE, default=None, verbose_name='餐厅')
 
     # agree_count = models.IntegerField(default=0)
     # agree_author_ids = models.ManyToManyField(int, related_name='agree_comments')

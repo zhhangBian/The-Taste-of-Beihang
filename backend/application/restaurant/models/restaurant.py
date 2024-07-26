@@ -18,10 +18,11 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
     image = models.CharField(max_length=500, default="")
 
-    dishes = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="restaurant_dishes")
+    dishes = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="restaurant_dishes",
+                               null=True, blank=True, default=None)
 
     def __str__(self):
-        return self.name
+        return dict(name_choice).get(self.name, "未知")
 
     class Meta:
         db_table = 'restaurant'
