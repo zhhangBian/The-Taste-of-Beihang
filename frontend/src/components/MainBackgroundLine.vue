@@ -4,13 +4,12 @@
       <div class="svg-container">
         <img src="@/assets/background2.svg" alt="Background SVG" class="centered-svg">
       </div>
-      <div class="customFont">{{ recommendation }}</div>
+      <div class="customFont" v-html="recommendation"></div>
       <div class="button-container">
-        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?
-        </button>
+        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?</button>
         <div v-if="showBottomButtons" class="bottom-buttons">
           <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
-          <button class="bottom-button" @click="handleClick('重新建议')">重新建议</button>
+          <button class="bottom-button" @click="handleClick('重新建议')">换一个</button>
           <button class="bottom-button" @click="handlePlazaClick">去广场看看</button>
         </div>
       </div>
@@ -27,7 +26,7 @@ export default {
   data() {
     return {
       showBottomButtons: false,
-      recommendation: '在新北吃屎',
+      recommendation: '今天在BUAA吃什么？', // 默认显示的内容
     };
   },
   methods: {
@@ -46,18 +45,19 @@ export default {
     },
     get_recommendation() {
       axios.get('http://127.0.0.1:8000/dish/get-dish-recommend')
-          .then(response => {
-            this.recommendation = response.data.recommendation;
-          })
-          .catch(error => {
-            console.error('Error fetching data: ', error);
-          });
+        .then(response => {
+          const { place, dish } = response.data;
+          this.recommendation = `在<span class="red-text">${place}</span>吃<span class="red-text">${dish}</span>`;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     }
   }
 };
 </script>
 
-<style scoped>
+<style>
 .container {
   position: relative;
   width: 100vw;
@@ -147,5 +147,9 @@ export default {
   white-space: nowrap;
   text-align: center;
   width: 200px; /* 统一按钮宽度 */
+}
+
+.red-text {
+  color: #5E17EB !important;
 }
 </style>
