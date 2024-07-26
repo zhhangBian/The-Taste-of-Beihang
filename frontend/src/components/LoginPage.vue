@@ -1,51 +1,47 @@
 <template>
   <div class="box">
     <div class="content" :class="{ 'add-class-content': !isLogin }">
-      <img class="login-img images" src="@/assets/login.jpg" alt="登录" :class="{ 'add-class-login-img': !isLogin, 'add-class-login-img-show': isLogin }">
-      <img class="register-img images" src="@/assets/register.jpg" alt="注册" :class="{ 'add-class-register-img': !isLogin }">
-      <div class="login-wrapper" :style="{ height: isLogin ? '70vh' : '80vh' }">
+      <img class="login-img images" src="@/assets/login2.png" alt="登录" :class="{ 'add-class-login-img': !isLogin, 'add-class-login-img-show': isLogin }">
+      <img class="register-img images" src="@/assets/reg2.png" alt="注册" :class="{ 'add-class-register-img': !isLogin }">
+      <div class="login-wrapper" :style="{ height: isLogin ? '75vh' : '85vh' }">
         <div class="top-tips">
-          <span class="cat-text">CAT IS LITTLE #FFF</span>
+          <span class="cat-text">食在北航，<br />带你解锁北航味道。</span>
+          <hr />
         </div>
-        <h1 class="h1-text">{{ isLogin ? '登录' : '注册' }}</h1>
+        <h1 class="h1-text">{{ isLogin ? '欢迎回来' : '注册新账户' }}</h1>
         <div class="form-container">
           <div class="login-form" v-show="isLogin">
-            <div class="user-form form-item">
-              <div class="text-tips">
-                <span>账号</span>
-              </div>
-              <input type="text">
+            <div class="inputBox">
+              <input type="text" required="required">
+              <label>账号</label>
+              <i></i>
             </div>
-            <div class="password-form form-item">
-              <div class="text-tips">
-                <span>密码</span>
-              </div>
-              <input type="password">
+            <div class="inputBox">
+              <input type="password" required="required">
+              <label>密码</label>
+              <i></i>
             </div>
             <button class="btn">登录</button>
-            <button class="toggle-btn" @click="toggleForm">没有账户？</button>
+            <button class="toggle-btn" @click="toggleForm">没有账户？注册</button>
           </div>
           <div class="register-form" v-show="!isLogin">
-            <div class="user-form form-item">
-              <div class="text-tips">
-                <span>账号</span>
-              </div>
-              <input type="text">
+            <div class="inputBox">
+              <input type="text" required="required">
+              <label>账号</label>
+              <i></i>
             </div>
-            <div class="password-form form-item">
-              <div class="text-tips">
-                <span>密码</span>
-              </div>
-              <input type="password">
+            <div class="inputBox">
+              <input type="password" required="required">
+              <label>密码</label>
+              <i></i>
             </div>
-            <div class="password-form form-item">
-              <div class="text-tips">
-                <span>确认密码</span>
-              </div>
-              <input type="password">
+            <div class="inputBox">
+              <input type="password" required="required">
+              <label>确认密码</label>
+              <i></i>
             </div>
             <button class="btn">注册</button>
-            <button class="toggle-btn" @click="toggleForm">已有账户？</button>
+            <button class="toggle-btn" @click="toggleForm">已有账户？登录</button>
           </div>
         </div>
       </div>
@@ -69,20 +65,33 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
+
 * {
   margin: 0;
   padding: 0;
+  font-family: 'Noto Sans SC', sans-serif;
 }
 
 .box {
-  background-color: rgb(51, 32, 108);
-  width: 100vw;
-  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('@/assets/background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: white;
+  overflow: hidden;
+  z-index: -1;
 }
+
 .box .content {
   width: 90vw;
   height: 85vh;
-  background-color: rgb(228, 218, 232);
+  background-color: white;
   border-radius: 40px;
   position: absolute;
   left: 50%;
@@ -94,60 +103,80 @@ export default {
   overflow: hidden;
   transition: 1s;
 }
+
 .box .content .images {
   margin-left: -150px;
   margin-right: 100px;
   position: absolute;
   left: 15%;
 }
+
 .box .content .login-img {
   width: 45%;
   height: 90%;
   border-radius: 15%;
 }
+
 .box .content .register-img {
   width: 45%;
   opacity: 0;
   border-radius: 15%;
 }
+
 .box .content .login-wrapper {
-  width: 30vw;
+  width: 33vw;
   height: 70vh;
   border-radius: 40px;
   -webkit-backdrop-filter: blur(1px);
-          backdrop-filter: blur(1px);
-  background: rgba(244, 240, 245, 0.6);
+  backdrop-filter: blur(1px);
+  background: white;
   padding: 60px;
   box-sizing: border-box;
   position: absolute;
   right: 10%;
   transition: 1s;
 }
+
 .box .content .login-wrapper .top-tips {
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  text-align: left;
+  margin-bottom: 0px;
 }
+
 .box .content .login-wrapper .top-tips .cat-text {
-  font-size: 25px;
-  font-weight: 600;
-}
-.box .content .login-wrapper h1 {
+  font-family: 'Noto Sans SC', sans-serif;
   font-size: 45px;
+  font-weight: 700;
+}
+
+.box .content .login-wrapper .top-tips hr {
+  width: 100%;
+  border: none;
+  border-top: 3px solid #ccc;
+  margin-top: 10px;
+}
+
+.box .content .login-wrapper h1 {
+  font-size: 30px;
   margin: 20px 0;
   text-align: left;
 }
+
 .box .content .login-wrapper .login-form,
 .box .content .login-wrapper .register-form {
   width: 100%;
 }
+
 .box .content .login-wrapper .login-form .form-item .text-tips,
 .box .content .login-wrapper .register-form .form-item .text-tips {
   color: rgb(123, 122, 123);
   margin: 5px;
   text-align: left;
 }
+
 .box .content .login-wrapper .login-form .form-item input,
 .box .content .login-wrapper .register-form .form-item input {
   width: 100%;
@@ -159,16 +188,18 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
 }
+
 .box .content .login-wrapper .login-form .form-item input:focus,
 .box .content .login-wrapper .register-form .form-item input:focus {
   outline: none;
   border: 1px solid rgb(79, 133, 226);
 }
+
 .box .content .login-wrapper .login-form .btn,
 .box .content .login-wrapper .register-form .btn {
   width: 100%;
   height: 50px;
-  margin: 20px 0;
+  margin: 10px 0;
   background-color: rgb(59, 58, 59);
   border: 0;
   border-radius: 5px;
@@ -177,6 +208,7 @@ export default {
   cursor: pointer;
   text-align: center;
 }
+
 .box .content .login-wrapper .login-form .toggle-btn,
 .box .content .login-wrapper .register-form .toggle-btn {
   width: 100%;
@@ -189,38 +221,39 @@ export default {
   cursor: pointer;
   text-align: center;
 }
+
 .form-container {
   display: block;
 }
 
 .add-class-content {
-  background-color: rgb(156, 148, 208) !important;
+  background-color: white !important;
   transition: 0.1s;
 }
 
 .add-class-login-img {
   -webkit-animation: disappear 0.3s forwards;
-          animation: disappear 0.3s forwards;
+  animation: disappear 0.3s forwards;
   -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
+  animation-timing-function: ease;
 }
 
 .add-class-login-img-show {
   -webkit-animation-delay: 1s;
-          animation-delay: 1s;
+  animation-delay: 1s;
   -webkit-animation: appear 1s forwards;
-          animation: appear 1s forwards;
+  animation: appear 1s forwards;
   -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
+  animation-timing-function: ease;
 }
 
 .add-class-register-img {
   -webkit-animation: appear 1s forwards;
-          animation: appear 1s forwards;
+  animation: appear 1s forwards;
   -webkit-animation-timing-function: ease;
-          animation-timing-function: ease;
+  animation-timing-function: ease;
   -webkit-animation-delay: 0.2s;
-          animation-delay: 0.2s;
+  animation-delay: 0.2s;
 }
 
 @-webkit-keyframes appear {
@@ -244,6 +277,7 @@ export default {
     opacity: 1;
   }
 }
+
 @-webkit-keyframes disappear {
   from {
     opacity: 1;
@@ -252,12 +286,89 @@ export default {
     opacity: 0;
   }
 }
+
 @keyframes disappear {
   from {
     opacity: 1;
   }
   to {
     opacity: 0;
+  }
+}
+
+/* 新增样式 */
+.inputBox {
+  position: relative;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 15px 0 10px; /* 增加上下内边距来提高输入框高度 */
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  color: #000;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  transition: 0.5s;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.inputBox label {
+  position: absolute;
+  left: 0;
+  top: 10px; /* 初始位置 */
+  padding: 10px 0 5px;
+  pointer-events: none;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: 0.5s;
+}
+
+.inputBox input:valid~label,
+.inputBox input:focus~label {
+  color: #b0a4e3;
+  transform: translateY(-30px); /* 向上移动 */
+  font-size: 0.65em;
+}
+
+.inputBox i {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: #000;
+  overflow: hidden;
+}
+
+.inputBox i::before {
+  content: '';
+  position: absolute;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #EEBD89, #D13ABD, #C973FF, #6CC6CB, #9FA5D5, #EAD6EE);
+  animation: runing 1s linear infinite;
+  transition: 0.5s;
+}
+
+.inputBox input:valid~i::before,
+.inputBox input:focus~i::before {
+  left: 0;
+}
+
+@keyframes runing {
+  0% {
+    background-position-x: 0;
+  }
+  100% {
+    background-position-x: 250px;
   }
 }
 </style>
