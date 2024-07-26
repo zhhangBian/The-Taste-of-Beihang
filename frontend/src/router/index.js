@@ -19,7 +19,7 @@ const router = createRouter({
             name: 'login',
             component: defineAsyncComponent(() => import(`../components/LoginPage.vue`)),
             meta: {
-                title: '登录注册',
+                title: '欢迎回来',
             },
         },
         {

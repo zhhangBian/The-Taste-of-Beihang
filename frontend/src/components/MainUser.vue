@@ -5,8 +5,6 @@
     </div>
     <div class="top-right-buttons">
       <button class="register-login-button" @click="testLogin">登录</button>
-      <span class="vertical-divider">|</span>
-      <button class="register-login-button" @click="testRegister">注册</button>
     </div>
   </div>
 </template>
@@ -18,10 +16,6 @@ export default {
     testLogin() {
       console.log('登录按钮点击');
       this.$router.push('/login');
-    },
-    testRegister() {
-      console.log('注册按钮点击');
-      this.$router.push('/register');
     },
   },
 };
