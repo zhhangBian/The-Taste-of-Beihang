@@ -8,7 +8,7 @@
           <span class="cat-text">食在北航，<br />带你解锁北航味道。</span>
           <hr />
         </div>
-        <h1 class="h1-text">{{ isLogin ? '欢迎回来' : '注册新账户' }}</h1>
+        <h1 class="h1-text">{{ isLogin ? '欢迎回来。' : '加入我们！' }}</h1>
         <div class="form-container">
           <div class="login-form" v-show="isLogin">
             <div class="inputBox">
