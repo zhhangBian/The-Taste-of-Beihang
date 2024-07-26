@@ -4,7 +4,7 @@
       <div class="svg-container">
         <img src="@/assets/background2.svg" alt="Background SVG" class="centered-svg">
       </div>
-      <div class="customFont">今天应该在BUAA吃什么？</div>
+      <div class="customFont">{{ recommendation }}</div>
       <div class="button-container">
         <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?
         </button>
@@ -19,31 +19,35 @@
 </template>
 
 <script>
-import axios from "core-js/internals/queue";
+import axios from 'axios';
 
 export default {
   name: 'CenteredSvgAndTitle',
+
   data() {
     return {
-      showBottomButtons: false
+      showBottomButtons: false,
+      recommendation: '在新北吃屎',
     };
   },
   methods: {
     handleTopButtonClick() {
       this.showBottomButtons = true;
       console.log('吃什么?');
+      this.get_recommendation();
     },
     handleClick(message) {
       console.log(message);
+      this.get_recommendation();
     },
     handlePlazaClick() {
       console.log('跳转到广场');
       this.$router.push('/plaza');
     },
     get_recommendation() {
-      axios.get('/api/data/')
+      axios.get('http://127.0.0.1:8000/dish/get-dish-recommend')
           .then(response => {
-            this.items = response.data;
+            this.recommendation = response.data.recommendation;
           })
           .catch(error => {
             console.error('Error fetching data: ', error);

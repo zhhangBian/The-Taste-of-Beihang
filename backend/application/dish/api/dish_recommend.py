@@ -11,7 +11,7 @@ dishes = ["麻辣香锅", "猪脚饭", "兰州拉面", "黄焖鸡米饭", "汉�
 
 @response_wrapper
 @require_GET
-def get_dish_recommend(request: HttpRequest, dish_name: str):
+def get_dish_recommend(request: HttpRequest):
     place = random.choice(places)
     dish = random.choice(dishes)
     recommendation = "在" + str(place) + "吃" + str(dish)
