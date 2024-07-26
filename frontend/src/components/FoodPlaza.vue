@@ -11,14 +11,14 @@
     </div>
     <div class="content">
       <div class="results-header">
-        <span class="results-title">共114条搜索结果</span>
+        <span class="results-title">共{{ comments_count }}条搜索结果</span>
       </div>
       <div class="results-container">
         <div class="grid">
-          <div class="card" v-for="item in items" :key="item.id">
-            <img :src="item.image" :alt="item.title" class="card-img">
-            <h2 class="card-title">{{ item.title }}</h2>
-            <p class="card-text">{{ item.details }}</p>
+          <div class="card" v-for="comment in comments_list" :key="comment.id">
+            <img :src="comment.image" :alt="comment.title" class="card-img">
+            <h2 class="card-title">{{ comment.title }}</h2>
+            <p class="card-text">{{ comment.details }}</p>
           </div>
         </div>
       </div>
@@ -27,11 +27,14 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       query: '',
-      items: [
+      comments_count: 114514,
+      comments_list: [
         // 保留之前的搜索结果数据
         {
           id: 1,
@@ -143,14 +146,21 @@ export default {
       // 筛选逻辑
     },
     searchResults() {
-      // 查询逻辑
+      axios.post('http://127.0.0.1:8000/comment/search-comment', {query: this.query})
+          .then(response => {
+            this.comments_count = response.data.comments_count;
+            this.comments_list = response.data.comments;
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          });
     }
   }
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=ZCOOL+KuaiLe&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=ZCOOL+KuaiLe&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
 

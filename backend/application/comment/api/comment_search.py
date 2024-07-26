@@ -60,7 +60,7 @@ def search_comment(request):
 
     return success_response({
         "comments": comments_fit_serialized,
-        "size": len(comments_fit_serialized)
+        "comments_count": len(comments_fit_serialized)
     })
 
 
@@ -77,5 +77,5 @@ def search_comment_restaurant(request: HttpRequest):
 
     return success_response({
         "comments": comments_fit_serialized,
-        "size": len(comments_fit_serialized)
+        "comments_count": len(comments_fit_serialized)
     })
