@@ -26,5 +26,6 @@ class Restaurant(models.Model):
         return self.name
 
     class Meta:
+        db_table = 'restaurant'
         verbose_name = '餐厅'
         verbose_name_plural = '餐厅s'

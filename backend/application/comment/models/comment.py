@@ -34,4 +34,5 @@ class Comment(models.Model):
         return self.title
 
     class Meta:
+        db_table = 'comments'
         ordering = ['-date']

@@ -43,6 +43,7 @@ class User(AbstractUser):
         return self.username
 
     class Meta:
+        db_table = 'users'
         ordering = ['-date_joined']
         verbose_name = '用户'
         verbose_name_plural = '用户'

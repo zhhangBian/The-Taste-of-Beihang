@@ -26,4 +26,5 @@ class Dish(models.Model):
         return self.name
 
     class Meta:
+        db_table = 'dish'
         ordering = ['-name']
