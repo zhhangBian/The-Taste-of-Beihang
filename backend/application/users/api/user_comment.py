@@ -1,8 +1,11 @@
-from django.http import HttpRequest, JsonResponse
+from django.contrib.auth import get_user_model
+from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
 from application.users.models import User
 from application.utils.response import *
+
+User = get_user_model()
 
 
 # 获取评论的集合

@@ -1,28 +1,19 @@
 # 代表了用户的基本接口
 
-"""
-关于用户基本信息的API：
-    1. 登录
-    2. 注册
-    3. 登出
-    4. 删除用户
-    5. 修改密码
-    6. 修改邮箱
-    7. 修改用户名
-    8. 修改头像
-    9. 获取用户信息
-"""
-from django.contrib.auth import authenticate
+
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import redirect
-from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.http import require_POST
 
 from application.utils.data_process import *
+from .auth import *
 from .email import varify_captcha
 from ..models import User
 from ...utils.response import *
 
 name_not_allow = ['default', 'delete']
+User = get_user_model()
 
 
 # 用户登录
@@ -47,16 +38,18 @@ def user_login(request: HttpRequest):
     if user is not None:
         request.session['is_login'] = True
         request.session['user_id'] = user.id
-        request.session['username'] = user.name
-        return redirect('/index/')
+        request.session['username'] = user.username
+        return success_response({
+            "message": "登录成功"
+        })
     elif User.objects.filter(username=username).exists():
-        # 密码错误
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "密码错误！")
     else:
-        # 登录失败
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "用户名或邮箱不存在！")
 
 
+@response_wrapper
+@require_GET
 def user_logoff(request):
     # 如果不是登陆状态，无法登出
     if request.session.get('is_login'):
@@ -73,7 +66,7 @@ def user_signup(request: HttpRequest):
     password = post_data.get('password')
     email = post_data.get('email')
     # TODO：对于邮箱发送验证码的支持
-    captcha = post_data.get('captcha')
+    # captcha = post_data.get('captcha')
 
     # 检查是否有字段为空
     if username is None or password is None or email is None:
@@ -89,8 +82,8 @@ def user_signup(request: HttpRequest):
     if password == '':
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "密码不能为空")
     # 验证验证码
-    if not varify_captcha(email, captcha):
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
+    # if not varify_captcha(email, captcha):
+    #     return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
 
     # 创建新用户
     User.objects.create_user(username=username, email=email, password=password)

@@ -1,46 +1,53 @@
 <template>
   <div class="box">
     <div class="content" :class="{ 'add-class-content': !isLogin }">
-      <img class="login-img images" src="@/assets/login2.png" alt="登录" :class="{ 'add-class-login-img': !isLogin, 'add-class-login-img-show': isLogin }">
-      <img class="register-img images" src="@/assets/reg2.png" alt="注册" :class="{ 'add-class-register-img': !isLogin }">
+      <img class="login-img images" src="@/assets/login2.png" alt="登录"
+           :class="{ 'add-class-login-img': !isLogin, 'add-class-login-img-show': isLogin }">
+      <img class="register-img images" src="@/assets/reg2.png" alt="注册"
+           :class="{ 'add-class-register-img': !isLogin }">
       <div class="login-wrapper" :style="{ height: isLogin ? '75vh' : '85vh' }">
         <div class="top-tips">
-          <span class="cat-text">食在北航，<br />带你解锁北航味道。</span>
-          <hr />
+          <span class="cat-text">食在北航，<br/>带你解锁北航味道。</span>
+          <hr/>
         </div>
         <h1 class="h1-text">{{ isLogin ? '欢迎回来。' : '加入我们！' }}</h1>
         <div class="form-container">
           <div class="login-form" v-show="isLogin">
             <div class="inputBox">
-              <input type="text" required="required">
+              <input type="text" v-model="username" required="required">
               <label>账号</label>
               <i></i>
             </div>
             <div class="inputBox">
-              <input type="password" required="required">
+              <input type="password" v-model="password" required="required">
               <label>密码</label>
               <i></i>
             </div>
-            <button class="btn">登录</button>
+            <button class="btn" @click="login">登录</button>
             <button class="toggle-btn" @click="toggleForm">没有账户？注册</button>
           </div>
           <div class="register-form" v-show="!isLogin">
             <div class="inputBox">
-              <input type="text" required="required">
+              <input type="text" v-model="username" required="required">
               <label>账号</label>
               <i></i>
             </div>
             <div class="inputBox">
-              <input type="password" required="required">
+              <input type="password" v-model="password" required="required">
               <label>密码</label>
               <i></i>
             </div>
             <div class="inputBox">
-              <input type="password" required="required">
+              <input type="password" v-model="confirmPassword" required="required">
               <label>确认密码</label>
               <i></i>
             </div>
-            <button class="btn">注册</button>
+            <div class="inputBox">
+              <input type="email" v-model="email" required="required">
+              <label>邮箱</label>
+              <i></i>
+            </div>
+            <button class="btn" @click="signup">注册</button>
             <button class="toggle-btn" @click="toggleForm">已有账户？登录</button>
           </div>
         </div>
@@ -50,15 +57,55 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      isLogin: true
+      isLogin: true,
+      username: '',
+      password: '',
+      confirmPassword: '',
+      email: ''
     };
   },
   methods: {
     toggleForm() {
       this.isLogin = !this.isLogin;
+    },
+    login() {
+      axios.post('http://127.0.0.1:8000/users/login/', {
+        username: this.username,
+        password: this.password,
+
+      })
+          .then(response => {
+            console.log(response.data);
+            this.$router.push('/plaza');
+          })
+          .catch(error => {
+            console.error(error);
+            alert(error.response.data.message)
+          });
+    },
+    signup() {
+      if (this.password !== this.confirmPassword) {
+        alert('密码不匹配');
+        return;
+      }
+      axios.post('http://127.0.0.1:8000/users/signup/', {
+        username: this.username,
+        password: this.password,
+        email: this.email,
+      })
+          .then(response => {
+            console.log(response.data);
+            alert(response.data.message);
+          })
+          .catch(error => {
+            console.error(error);
+            alert(error.response.data.message)
+          });
     }
   }
 };
@@ -330,8 +377,8 @@ export default {
   transition: 0.5s;
 }
 
-.inputBox input:valid~label,
-.inputBox input:focus~label {
+.inputBox input:valid ~ label,
+.inputBox input:focus ~ label {
   color: #b0a4e3;
   transform: translateY(-30px); /* 向上移动 */
   font-size: 0.65em;
@@ -358,8 +405,8 @@ export default {
   transition: 0.5s;
 }
 
-.inputBox input:valid~i::before,
-.inputBox input:focus~i::before {
+.inputBox input:valid ~ i::before,
+.inputBox input:focus ~ i::before {
   left: 0;
 }
 

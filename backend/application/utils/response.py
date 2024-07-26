@@ -91,7 +91,7 @@ def fail_response(code, error_msg=None) -> dict:
         data={
             'code': status_code,
             'detailed_error_code': detailed_code,
-            'error_msg': error_msg
+            'message': error_msg
         })
 
 

@@ -1,41 +1,16 @@
 # 代表了和邮件相关的操作
 
 import random
-from datetime import timedelta, timezone
 
-import jwt
 from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 
 from application.utils.data_process import parse_data
+from .auth import generate_token
 from ..models import User
 from ...utils.response import *
-
-
-def generate_token(user: User, access_token_delta: int = 1) -> str:
-    """generate jwt
-
-        Args:
-            user (User): users
-            access_token_delta (int, optional): time to expire. Defaults to 1 (hour).
-    """
-
-    current_time = timezone.now()
-    access_token_payload = {
-        "user_id": user.id,
-        "exp": current_time + timedelta(hours=access_token_delta),
-        "iat": current_time,
-        "type": "access_token",
-    }
-
-    def byte2str(b):
-        if type(b) is str:
-            return b
-        return b.decode('utf-8')
-
-    return byte2str(jwt.encode(access_token_payload, settings.SECRET_KEY, algorithm="HS256"))
 
 
 @response_wrapper
