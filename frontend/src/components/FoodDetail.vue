@@ -60,7 +60,8 @@
         <div class="mt-4">
           <div class="flex items-center space-x-2" v-for="(rating, index) in ratings" :key="index">
             <span class="font-man">{{ rating.label }}</span>
-            <span>⭐⭐⭐⭐⭐</span>
+            <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1" @input="updateRating(index, $event)">
+            <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
           </div>
           <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none" placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
           <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man" @click="submitReview">提交</button>
@@ -156,10 +157,10 @@ export default {
       favoriteComments: [],
       likedComments: [],
       ratings: [
-        { label: '总体评价' },
-        { label: '口味' },
-        { label: '价格' },
-        { label: '排队时长' }
+        { label: '总体评价', value: 0 },
+        { label: '口味', value: 0 },
+        { label: '价格', value: 0 },
+        { label: '排队时长', value: 0 }
       ],
       newReview: {
         content: ''
@@ -244,6 +245,9 @@ export default {
         this.likedComments.push(commentId);
         console.log(`已喜欢评论${commentId}`);
       }
+    },
+    updateRating(index, event) {
+      this.ratings[index].value = parseFloat(event.target.value);
     }
   },
   mounted() {
@@ -504,5 +508,34 @@ body {
 .icon {
   height: 1rem; /* Adjust the size as needed */
   width: 1rem;  /* Adjust the size as needed */
+}
+
+.range {
+  width: 100px;
+  height: 5px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #ddd;
+  outline: none;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #4CAF50;
+  border-radius: 50%;
+  cursor: pointer;
 }
 </style>
