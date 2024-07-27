@@ -26,10 +26,8 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish"
-             class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
-          吃过的怎么说？</h2>
+        <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
         <div class="mt-4 reviews-container">
           <div v-for="(comment, index) in comments" :key="index">
             <div class="review-item">
@@ -37,14 +35,13 @@
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
                 <div class="review-content flex-1">
                   <div class="flex items-center justify-between">
-                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span
-                        class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span></p>
+                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span></p>
                     <div class="flex space-x-2 ml-auto">
-                      <button @click="toggleLike(comment.id)" class="bg-transparent text-black py-1 px-2 rounded-lg">
-                        {{ likedComments.includes(comment.id) ? '取消喜欢' : '喜欢' }}
+                      <button @click="toggleLike(comment.id)" class="icon-button">
+                        <img :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')" alt="Like/Unlike" class="icon">
                       </button>
-                      <button @click="toggleFavorite(comment.id)" class="bg-transparent text-black py-1 px-2 rounded-lg">
-                        {{ favoriteComments.includes(comment.id) ? '取消收藏' : '收藏' }}
+                      <button @click="toggleFavorite(comment.id)" class="icon-button">
+                        <img :src="favoriteComments.includes(comment.id) ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" alt="Subscribe/Unsubscribe" class="icon">
                       </button>
                     </div>
                   </div>
@@ -58,20 +55,15 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img src="https://placehold.co/400x300" alt="Hotpot dish"
-             class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
-          写下你的评论！</h2>
+        <img src="https://placehold.co/400x300" alt="Hotpot dish" class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
         <div class="mt-4">
           <div class="flex items-center space-x-2" v-for="(rating, index) in ratings" :key="index">
             <span class="font-man">{{ rating.label }}</span>
             <span>⭐⭐⭐⭐⭐</span>
           </div>
-          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
-                    placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
-          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
-                  @click="submitReview">提交
-          </button>
+          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none" placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man" @click="submitReview">提交</button>
         </div>
       </div>
     </div>
@@ -164,10 +156,10 @@ export default {
       favoriteComments: [],
       likedComments: [],
       ratings: [
-        {label: '总体评价'},
-        {label: '口味'},
-        {label: '价格'},
-        {label: '排队时长'}
+        { label: '总体评价' },
+        { label: '口味' },
+        { label: '价格' },
+        { label: '排队时长' }
       ],
       newReview: {
         content: ''
@@ -186,16 +178,16 @@ export default {
           "dish_name": this.dish.name
         }
       })
-          .then(response => {
-            this.dish.overallRating = response.data.overallRating;
-            this.dish.flavorRating = response.data.flavorRating;
-            this.dish.priceRating = response.data.priceRating;
-            this.dish.timeRating = response.data.timeRating;
-            this.comments = response.data.comments_list;
-          })
-          .catch(error => {
-            console.error('Error fetching comments:', error);
-          });
+        .then(response => {
+          this.dish.overallRating = response.data.overallRating;
+          this.dish.flavorRating = response.data.flavorRating;
+          this.dish.priceRating = response.data.priceRating;
+          this.dish.timeRating = response.data.timeRating;
+          this.comments = response.data.comments_list;
+        })
+        .catch(error => {
+          console.error('Error fetching comments:', error);
+        });
     },
     formatDate(dateString) {
       const date = new Date(dateString);
@@ -402,6 +394,10 @@ body {
   gap: 16px;
 }
 
+.space-x-2 {
+  gap: 8px;
+}
+
 .w-full {
   width: 100%;
 }
@@ -494,5 +490,18 @@ body {
 
 .padding-2 {
   padding: 0.1rem; /* 增加内边距 */
+}
+
+.icon-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.icon {
+  height: 1rem; /* Adjust the size as needed */
+  width: 1rem;  /* Adjust the size as needed */
 }
 </style>
