@@ -10,7 +10,6 @@ from application.utils.response import *
 @response_wrapper
 @require_GET
 def get_dish_comments(request):
-    user = request.user
     post_data = parse_data(request)
 
     address = post_data.get("dish_address")

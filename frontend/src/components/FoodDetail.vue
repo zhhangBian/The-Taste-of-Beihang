@@ -28,7 +28,7 @@
                   <p class="font-man font-bold">{{ comment.name }} <span
                       class="font-man text-zinc-400">{{ comment.date }}</span></p>
                   <p class="font-man text-zinc-500">{{ comment.title }}</p>
-                  <p class="font-man font-medium">{{ comment.context }}</p>
+                  <p class="font-man font-medium">{{ comment.content }}</p>
                 </div>
               </div>
             </div>
@@ -87,63 +87,63 @@ export default {
           date: '昨天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 3.0 | 排队时长 3.0',
-          context: '感觉不如新北二楼的麻辣香锅'
+          content: '感觉不如新北二楼的麻辣香锅'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '传奇co助教myk',
           date: '10天前吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.9 | 口味 4.0 | 价格 3.5 | 排队时长 3.2',
-          context: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
+          content: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         },
         {
           name: '时间的彷徨',
           date: '前天吃过',
           avatar: 'https://placehold.co/50x50',
           title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
-          context: '觉得这家不好吃的都是sb'
+          content: '觉得这家不好吃的都是sb'
         }
       ],
       ratings: [
@@ -153,7 +153,7 @@ export default {
         {label: '排队时长'}
       ],
       newReview: {
-        context: ''
+        content: ''
       }
     };
   },
@@ -166,14 +166,19 @@ export default {
       const address = this.dish.location;
       const name = this.dish.title;
 
-      axios.post('http://127.0.0.1:8000/dish/get-dish-comments', {query: this.query})
+      axios.get(`http://127.0.0.1:8000/dish/get-dish-comments`, {
+        params: {
+          dish_address: address,
+          dish_name: name
+        }
+      })
           .then(response => {
             this.grade = response.data.grade;
             this.price = response.data.price;
             this.flavor = response.data.flavor;
             this.waiting_time = response.data.waiting_time;
 
-            this.this.comments = response.data.comments_list;
+            this.comments = response.data.comments_list;
           })
           .catch(error => {
             console.error('Error fetching comments:', error);
