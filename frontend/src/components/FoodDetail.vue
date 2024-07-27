@@ -6,32 +6,32 @@
         <p class="text-2xl font-noto mb-9">{{ dish.location }}</p>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">总体评价</h2>
-          <p :class="getColor(dish.overallRating)" class="text-7xl font-serif">{{ dish.overallRating }}</p>
+          <p :class="getColor(dish.overallRating)" class="text-7xl font-serif">{{ dish.overallRating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">口味</h2>
-          <p :class="getColor(dish.flavorRating)" class="text-7xl font-noto">{{ dish.flavorRating }}</p>
+          <p :class="getColor(dish.flavorRating)" class="text-7xl font-noto">{{ dish.flavorRating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">价格</h2>
-          <p :class="getColor(dish.priceRating)" class="text-7xl font-noto">{{ dish.priceRating }}</p>
+          <p :class="getColor(dish.priceRating)" class="text-7xl font-noto">{{ dish.priceRating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">排队时长</h2>
-          <p :class="getColor(dish.timeRating)" class="text-7xl font-noto">{{ dish.timeRating }}</p>
+          <p :class="getColor(dish.timeRating)" class="text-7xl font-noto">{{ dish.timeRating.toFixed(1) }}</p>
         </div>
       </div>
       <div class="col-span-2">
         <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
         <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
         <div class="mt-4 reviews-container">
-          <div v-for="(comment, index) in comments" :key="comment.id">
+          <div v-for="(comment, index) in comments" :key="index">
             <div class="review-item">
               <div class="flex items-center space-x-4">
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
                 <div class="review-content">
-                  <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过</span></p>
-                  <p class="font-man text-zinc-500">{{ comment.title }}</p>
+                  <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}前吃过</span></p>
+                  <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
                   <p class="font-man font-medium">{{ comment.context }}</p>
                 </div>
               </div>
@@ -58,7 +58,7 @@
 
 <script>
 import axios from "axios";
-import { formatDistanceToNow, parse } from 'date-fns';
+import { formatDistance } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
 export default {
@@ -76,36 +76,63 @@ export default {
       comments: [
         {
           name: 'Jew',
-          date: '2023-07-25 14:35:00',
+          date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
           overallRating: 4.0,
           flavorRating: 4.0,
           priceRating: 2.0,
           timeRating: 3.0,
-          title: '总体评价 4.0 | 口味 4.0 | 价格 2.0 | 排队时长 3.0',
           context: '感觉不如新北二楼的麻辣香锅'
         },
         {
           name: '时间的彷徨',
-          date: '2024-06-01 12:20:00',
+          date: '2024-06-18 12:20:00',
           avatar: 'https://placehold.co/50x50',
           overallRating: 4.0,
           flavorRating: 4.0,
           priceRating: 4.0,
           timeRating: 4.0,
-          title: '总体评价 4.0 | 口味 4.0 | 价格 4.0 | 排队时长 4.0',
           context: '觉得这家不好吃的都是sb'
         },
         {
           name: '传奇co助教myk',
-          date: '2024-07-27 16:45:00',
+          date: '2024-01-27 16:45:00',
           avatar: 'https://placehold.co/50x50',
           overallRating: 4.9,
           flavorRating: 4.0,
           priceRating: 3.5,
           timeRating: 3.2,
-          title: '总体评价 4.9 | 口味 4.0 | 价格 3.5 | 排队时长 3.2',
           context: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
+        },
+        {
+          name: '张三',
+          date: '2024-05-18 09:15:00',
+          avatar: 'https://placehold.co/50x50',
+          overallRating: 3.8,
+          flavorRating: 4.2,
+          priceRating: 3.0,
+          timeRating: 2.5,
+          context: '味道还不错，但是排队时间有点长。'
+        },
+        {
+          name: '李四',
+          date: '2024-04-22 11:45:00',
+          avatar: 'https://placehold.co/50x50',
+          overallRating: 2.5,
+          flavorRating: 3.0,
+          priceRating: 1.5,
+          timeRating: 2.0,
+          context: '价格有点贵，性价比不高。'
+        },
+        {
+          name: '王五',
+          date: '2024-07-10 19:30:00',
+          avatar: 'https://placehold.co/50x50',
+          overallRating: 4.7,
+          flavorRating: 4.8,
+          priceRating: 3.5,
+          timeRating: 3.7,
+          context: '总体感觉很好，推荐大家尝试！'
         }
       ],
       ratings: [
@@ -138,17 +165,21 @@ export default {
         });
     },
     formatDate(dateString) {
-      const date = parse(dateString, 'yyyy-MM-dd HH:mm:ss', new Date());
-      return formatDistanceToNow(date, { addSuffix: true, locale: zhCN });
+      const date = new Date(dateString);
+      const now = new Date();
+      return formatDistance(date, now, { addSuffix: false, locale: zhCN });
     },
     getColor(score) {
       if (score >= 4.0) {
         return 'text-green-500';
-      } else if (score >= 3.5) {
+      } else if (score >= 3.0) {
         return 'text-yellow-500';
       } else {
         return 'text-red-500';
       }
+    },
+    getCommentTitle(comment) {
+      return `总体评价 ${comment.overallRating.toFixed(1)} | 口味 ${comment.flavorRating.toFixed(1)} | 价格 ${comment.priceRating.toFixed(1)} | 排队时长 ${comment.timeRating.toFixed(1)}`;
     }
   },
   mounted() {
