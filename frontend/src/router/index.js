@@ -43,7 +43,7 @@ const router = createRouter({
             name: 'user',
             component: defineAsyncComponent(() => import(`../components/UserPage.vue`)),
             meta: {
-                title: '详情',
+                title: '我的',
             },
         }
     ]
