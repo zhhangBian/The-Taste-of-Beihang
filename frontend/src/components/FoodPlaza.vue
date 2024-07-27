@@ -35,7 +35,6 @@ export default {
       query: '',
       comments_count: 114514,
       comments_list: [
-        // 保留之前的搜索结果数据
         {
           id: 1,
           image: 'https://placehold.co/400x300',
@@ -146,14 +145,19 @@ export default {
       // 筛选逻辑
     },
     searchResults() {
-      axios.post('http://127.0.0.1:8000/comment/search-comment', {query: this.query})
-          .then(response => {
-            this.comments_count = response.data.comments_count;
-            this.comments_list = response.data.comments;
-          })
-          .catch(error => {
-            console.error('Error fetching data: ', error);
+      axios.post('http://127.0.0.1:8000/comment/search-comment', { query: this.query })
+        .then(response => {
+          this.comments_count = response.data.comments_count;
+          this.comments_list = response.data.comments.map(comment => {
+            return {
+              ...comment,
+              details: `${comment.location} | ${comment.score}分 | 平均${comment.price}元`
+            };
           });
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     }
   }
 };
@@ -168,8 +172,6 @@ body {
   font-family: 'Noto Sans SC', sans-serif;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
   background-color: hsl(0, 0%, 100%);
   color: hsl(240, 10%, 3.9%);
 }
@@ -177,18 +179,24 @@ body {
 .container {
   display: flex;
   height: 100vh; /* 设置高度为视口高度 */
-  padding: 1rem;
 }
 
 .sidebar {
   width: 20%;
   padding: 1rem;
-  text-align: left; /* 确保内容左对齐 */
+  height: 100vh;
+  overflow-y: auto; /* 当内容超过高度时出现滚动条 */
+  overflow-x: hidden; /* 隐藏水平滚动条 */
+  box-sizing: border-box; /* 包括padding在内的高度 */
+  text-align: left; /* 确保文字左对齐 */
 }
 
 .content {
   width: 80%;
   padding: 1rem;
+  height: 100vh;
+  overflow-y: auto; /* 当内容超过高度时出现滚动条 */
+  box-sizing: border-box; /* 包括padding在内的高度 */
   display: flex;
   flex-direction: column;
 }
@@ -231,6 +239,7 @@ body {
 
 .textarea {
   width: 100%;
+  box-sizing: border-box; /* 确保宽度包括padding和border */
   height: 20rem;
   margin-top: 1rem;
   padding: 0.5rem;
@@ -242,6 +251,7 @@ body {
 
 .search-button {
   margin-top: 1rem;
+  width: 100%; /* 确保按钮宽度适应sidebar */
   background-color: black;
   color: white;
   padding: 0.5rem 1rem;
@@ -264,7 +274,7 @@ body {
 
 .results-container {
   flex: 1;
-  overflow: auto; /* 当内容超过高度时出现滚动条 */
+  overflow-y: auto; /* 当内容超过高度时出现滚动条 */
   margin-top: 1rem;
 }
 
@@ -301,13 +311,17 @@ body {
 
 .card-title {
   margin-top: 0.5rem;
-  font-size: 1.25rem;
+  margin-bottom: 0.25rem; /* 减少与详情文本的间距 */
+  font-size: 2.25rem;
   font-weight: 700;
+  text-align: left;
   font-family: 'Noto Sans SC', sans-serif;
 }
 
 .card-text {
-  font-size: 1rem;
+  margin-top: 0.25rem; /* 减少与标题的间距 */
+  font-size: 1.25rem;
+  text-align: left;
   font-family: 'Noto Sans SC', sans-serif;
 }
 
