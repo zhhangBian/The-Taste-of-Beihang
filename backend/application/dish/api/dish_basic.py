@@ -2,7 +2,6 @@ from django.views.decorators.http import require_POST
 
 from application.dish.models import Dish
 from application.restaurant.models import Restaurant
-from application.utils.data_process import parse_data
 from application.utils.response import *
 
 
@@ -10,8 +9,8 @@ from application.utils.response import *
 @require_POST
 def creat_dish(request):
     user = request.user
-    post_data = parse_data(request)
-    name = post_data.get('name')
+    
+    name = request.GET('name')
 
     if Restaurant.objects.filter(name=name).exists():
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "餐厅已存在！")
@@ -25,10 +24,10 @@ def creat_dish(request):
 @require_POST
 def get_dish(request):
     user = request.user
-    post_data = parse_data(request)
+    
 
-    restaurant_name = post_data.get('restaurant_name')
-    dish_name = post_data.get('dish_name')
+    restaurant_name = request.GET('restaurant_name')
+    dish_name = request.GET('dish_name')
 
     dish = Dish.objects.get(restaurant_name=restaurant_name, name=dish_name)
     return success_response({

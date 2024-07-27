@@ -3,17 +3,17 @@ from django.views.decorators.http import require_GET
 from application.comment.models import Comment
 from application.dish.models import Dish
 from application.users.api import User
-from application.utils.data_process import parse_data
 from application.utils.response import *
 
 
 @response_wrapper
 @require_GET
 def get_dish_comments(request):
-    post_data = parse_data(request)
+    address = request.GET.get("dish_address")
+    name = request.GET.get("dish_name")
 
-    address = post_data.get("dish_address")
-    name = post_data.get("dish_name")
+    print(address)
+    print(name)
 
     dish = Dish.objects.get(name=name, address=address)
     comments_count = dish.dish_comments.count()

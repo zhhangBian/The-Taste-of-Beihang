@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
 
-from application.utils.data_process import parse_data
+
 from ..models import Comment
 from ...dish.models import Dish
 from ...utils.response import response_wrapper, fail_response, ErrorCode, success_response
@@ -28,19 +28,18 @@ def get_comment_basics(request: HttpRequest, comment_id: int):
 @require_POST
 def creat_comment(request):
     user = request.user
-    post_data = parse_data(request)
 
-    dish_name = post_data.get('dish_name')
-    title = post_data.get('title')
-    content = post_data.get('content')
-    grade = post_data.get('grade')
+    dish_name = request.GET('dish_name')
+    title = request.GET('title')
+    content = request.GET('content')
+    grade = request.GET('grade')
     if grade not in [0, 1, 2, 3, 4, 5]:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "评分不合法！")
-    price = post_data.get('price')
+    price = request.GET('price')
     if price < 0 or price > 9999:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "价格不合理！")
-    flavour = post_data.get('flavour')
-    waiting_time = post_data.get('waiting_time')
+    flavour = request.GET('flavour')
+    waiting_time = request.GET('waiting_time')
 
     if Dish.objects.filter(name=dish_name).exists():
         dish = Dish.objects.filter(name=dish_name)

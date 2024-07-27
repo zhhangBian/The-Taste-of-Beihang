@@ -3,7 +3,6 @@ from django.views.decorators.http import require_POST
 from ..models import Comment
 from ...dish.models import Dish
 from ...restaurant.models import Restaurant
-from ...utils.data_process import parse_data
 from ...utils.response import response_wrapper, success_response
 
 
@@ -11,24 +10,24 @@ from ...utils.response import response_wrapper, success_response
 @require_POST
 def create_comment(request):
     user = request.user
-    post_data = parse_data(request)
+    
 
     # 基本的组织逻辑为：食堂-dish-comment
-    restaurant_name = post_data.get('restaurant')
+    restaurant_name = request.GET('restaurant')
     restaurant = Restaurant.objects.get(name=restaurant_name)
 
-    dish_name = post_data.get('dish_name')
+    dish_name = request.GET('dish_name')
     dish = Dish.objects.get(name=dish_name, restaurant=restaurant)
 
     # 创建一个新的评论实例
     comment = Comment(
-        title=post_data.get('title'),
-        content=post_data.get('content'),
+        title=request.GET('title'),
+        content=request.GET('content'),
         # img之后处理
-        grade=post_data.get('grade'),
-        price=post_data.get('price'),
-        flavour=post_data.get('flavour'),
-        waiting_time=post_data.get('waiting_time'),
+        grade=request.GET('grade'),
+        price=request.GET('price'),
+        flavour=request.GET('flavour'),
+        waiting_time=request.GET('waiting_time'),
 
         restaurant=restaurant,
         dish=dish,

@@ -3,10 +3,10 @@
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
+from django.http import HttpRequest
 from django.shortcuts import redirect
 from django.views.decorators.http import require_POST
 
-from application.utils.data_process import *
 from .auth import *
 from .email import varify_captcha
 from ..models import User
@@ -20,9 +20,8 @@ User = get_user_model()
 @response_wrapper
 @require_POST
 def user_login(request: HttpRequest):
-    post_data = parse_data(request)
-    username = post_data.get('username')
-    password = post_data.get('password')
+    username = request.GET.get('username')
+    password = request.GET.get('password')
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=username, password=password)
 
@@ -61,12 +60,12 @@ def user_logoff(request):
 @response_wrapper
 @require_POST
 def user_signup(request: HttpRequest):
-    post_data = parse_data(request)
-    username = post_data.get('username')
-    password = post_data.get('password')
-    email = post_data.get('email')
+    
+    username = request.GET('username')
+    password = request.GET('password')
+    email = request.GET('email')
     # TODO：对于邮箱发送验证码的支持
-    # captcha = post_data.get('captcha')
+    # captcha = request.GET('captcha')
 
     # 检查是否有字段为空
     if username is None or password is None or email is None:
@@ -95,9 +94,9 @@ def user_signup(request: HttpRequest):
 @response_wrapper
 @require_POST
 def change_password(request: HttpRequest):
-    post_data = parse_data(request)
-    old_password = post_data.get('old_password')
-    new_password = post_data.get('new_password')
+    
+    old_password = request.GET('old_password')
+    new_password = request.GET('new_password')
 
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=request.user.username, password=old_password)
@@ -116,10 +115,10 @@ def change_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def forget_password(request: HttpRequest):
-    post_data = parse_data(request)
-    email = post_data.get('email')
-    captcha = post_data.get('captcha')
-    new_password = post_data.get('password')
+    
+    email = request.GET('email')
+    captcha = request.GET('captcha')
+    new_password = request.GET('password')
     user = User.objects.filter(email=email).first()
     if user is None:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "邮箱未注册")
@@ -137,9 +136,9 @@ def update_user(request: HttpRequest):
     # 获取用户
     user = request.user
     # 获取数据
-    post_data = parse_data(request)
-    username = post_data.get('username')
-    motto = post_data.get('motto')
+    
+    username = request.GET('username')
+    motto = request.GET('motto')
 
     # 检查用户名是否已存在
     if username and User.objects.filter(username=username).exists():

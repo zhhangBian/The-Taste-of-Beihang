@@ -5,7 +5,6 @@ from django.http import HttpRequest
 from django.views.decorators.http import require_POST
 
 from application.comment.models import Comment
-from application.utils.data_process import parse_data
 from application.utils.response import success_response, response_wrapper
 
 
@@ -51,8 +50,8 @@ def search_comment(request):
     """
     根据request搜索comments，返回comments的信息序列
     """
-    post_data = parse_data(request)
-    search_string = post_data.get('search')
+    
+    search_string = request.GET('search')
 
     comments_fit = list(filter(lambda comment: matches_search(comment, search_string),
                                Comment.objects.all()))
@@ -67,9 +66,9 @@ def search_comment(request):
 @response_wrapper
 @require_POST
 def search_comment_restaurant(request: HttpRequest):
-    post_data = parse_data(request)
-    search = post_data.get('search')
-    restaurant_name = post_data.get('restaurant_name')
+    
+    search = request.GET('search')
+    restaurant_name = request.GET('restaurant_name')
     comments = Comment.objects.fliter(restaurant_name=restaurant_name)
 
     comments_fit = list(filter(lambda comment: matches_search(comment, search), comments))
