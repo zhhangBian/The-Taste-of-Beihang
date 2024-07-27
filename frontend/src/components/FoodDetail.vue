@@ -30,7 +30,7 @@
               <div class="flex items-center space-x-4">
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
                 <div class="review-content">
-                  <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}前吃过</span></p>
+                  <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过</span></p>
                   <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
                   <p class="font-man font-medium">{{ comment.context }}</p>
                 </div>
@@ -58,8 +58,6 @@
 
 <script>
 import axios from "axios";
-import { formatDistance } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
 
 export default {
   data() {
@@ -96,7 +94,7 @@ export default {
         },
         {
           name: '传奇co助教myk',
-          date: '2024-01-27 16:45:00',
+          date: '2024-07-27 16:45:00',
           avatar: 'https://placehold.co/50x50',
           overallRating: 4.9,
           flavorRating: 4.0,
@@ -167,7 +165,26 @@ export default {
     formatDate(dateString) {
       const date = new Date(dateString);
       const now = new Date();
-      return formatDistance(date, now, { addSuffix: false, locale: zhCN });
+      const diffInSeconds = Math.floor((now - date) / 1000);
+
+      const intervals = {
+        年: 31536000,
+        个月: 2592000,
+        天: 86400,
+        小时: 3600,
+        分钟: 60,
+        秒: 1
+      };
+
+      let counter;
+      for (const [key, value] of Object.entries(intervals)) {
+        counter = Math.floor(diffInSeconds / value);
+        if (counter > 0) {
+          return `${counter} ${key}前`;
+        }
+      }
+
+      return '刚刚';
     },
     getColor(score) {
       if (score >= 4.0) {
