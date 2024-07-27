@@ -33,6 +33,11 @@
               <i></i>
             </div>
             <div class="inputBox">
+              <input type="email" v-model="email" required="required">
+              <label>邮箱</label>
+              <i></i>
+            </div>
+            <div class="inputBox">
               <input type="password" v-model="password" required="required">
               <label>密码</label>
               <i></i>
@@ -40,11 +45,6 @@
             <div class="inputBox">
               <input type="password" v-model="confirmPassword" required="required">
               <label>确认密码</label>
-              <i></i>
-            </div>
-            <div class="inputBox">
-              <input type="email" v-model="email" required="required">
-              <label>邮箱</label>
               <i></i>
             </div>
             <button class="btn" @click="signup">注册</button>
