@@ -11,6 +11,12 @@
         <option value="学五食堂">学五食堂</option>
         <option value="学六食堂">学六食堂</option>
       </select>
+      <select v-model="selectedDish" @change="filterResults">
+        <option value="所有菜品">所有菜品</option>
+        <option value="香锅">香锅</option>
+        <option value="汉堡">汉堡</option>
+        <option value="鸡">鸡</option>
+      </select>
       <p class="recommend-title">或者......</p>
       <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
       <textarea class="textarea" placeholder="今天想吃什么？" v-model="query"></textarea>
@@ -41,6 +47,7 @@ export default {
     return {
       query: '',
       selectedCanteen: '全选',
+      selectedDish: '所有菜品',
       comments_count: 114514,
       comments_list: [
         {
@@ -184,11 +191,17 @@ export default {
   },
   computed: {
     filteredComments() {
-      if (this.selectedCanteen === '全选') {
-        return this.comments_list;
-      } else {
-        return this.comments_list.filter(comment => comment.location === this.selectedCanteen);
+      let filtered = this.comments_list;
+
+      if (this.selectedCanteen !== '全选') {
+        filtered = filtered.filter(comment => comment.location.includes(this.selectedCanteen));
       }
+
+      if (this.selectedDish !== '所有菜品') {
+        filtered = filtered.filter(comment => comment.title.includes(this.selectedDish));
+      }
+
+      return filtered;
     }
   },
   methods: {
