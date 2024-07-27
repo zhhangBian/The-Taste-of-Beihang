@@ -35,9 +35,19 @@
             <div class="review-item">
               <div class="flex items-center space-x-4">
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
-                <div class="review-content">
-                  <p class="font-man font-bold">{{ comment.name }} &ensp;<span
-                      class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过</span></p>
+                <div class="review-content flex-1">
+                  <div class="flex items-center justify-between">
+                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span
+                        class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span></p>
+                    <div class="flex space-x-2 ml-auto">
+                      <button @click="toggleLike(comment.id)" class="bg-transparent text-black py-1 px-2 rounded-lg">
+                        {{ likedComments.includes(comment.id) ? '取消喜欢' : '喜欢' }}
+                      </button>
+                      <button @click="toggleFavorite(comment.id)" class="bg-transparent text-black py-1 px-2 rounded-lg">
+                        {{ favoriteComments.includes(comment.id) ? '取消收藏' : '收藏' }}
+                      </button>
+                    </div>
+                  </div>
                   <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
                   <p class="font-man font-medium">{{ comment.content }}</p>
                 </div>
@@ -85,6 +95,7 @@ export default {
       },
       comments: [
         {
+          id: 1,
           name: 'Jew',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
@@ -95,6 +106,7 @@ export default {
           content: '感觉不如新北二楼的麻辣香锅'
         },
         {
+          id: 2,
           name: '时间的彷徨',
           date: '2024-06-18 12:20:00',
           avatar: 'https://placehold.co/50x50',
@@ -105,6 +117,7 @@ export default {
           content: '觉得这家不好吃的都是sb'
         },
         {
+          id: 3,
           name: '传奇co助教myk',
           date: '2024-07-27 16:45:00',
           avatar: 'https://placehold.co/50x50',
@@ -115,6 +128,7 @@ export default {
           content: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
         },
         {
+          id: 4,
           name: '张三',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
@@ -125,6 +139,7 @@ export default {
           content: '味道还不错，但是排队时间有点长。'
         },
         {
+          id: 5,
           name: '李四',
           date: '2024-04-22 11:45:00',
           avatar: 'https://placehold.co/50x50',
@@ -135,6 +150,7 @@ export default {
           content: '价格有点贵，性价比不高。'
         },
         {
+          id: 6,
           name: '王五',
           date: '2024-07-10 19:30:00',
           avatar: 'https://placehold.co/50x50',
@@ -145,6 +161,8 @@ export default {
           content: '总体感觉很好，推荐大家尝试！'
         }
       ],
+      favoriteComments: [],
+      likedComments: [],
       ratings: [
         {label: '总体评价'},
         {label: '口味'},
@@ -214,6 +232,26 @@ export default {
     },
     getCommentTitle(comment) {
       return `总体评价 ${comment.overallRating.toFixed(1)} | 口味 ${comment.flavorRating.toFixed(1)} | 价格 ${comment.priceRating.toFixed(1)} | 排队时长 ${comment.timeRating.toFixed(1)}`;
+    },
+    toggleFavorite(commentId) {
+      const index = this.favoriteComments.indexOf(commentId);
+      if (index !== -1) {
+        this.favoriteComments.splice(index, 1);
+        console.log(`取消收藏评论${commentId}`);
+      } else {
+        this.favoriteComments.push(commentId);
+        console.log(`已收藏评论${commentId}`);
+      }
+    },
+    toggleLike(commentId) {
+      const index = this.likedComments.indexOf(commentId);
+      if (index !== -1) {
+        this.likedComments.splice(index, 1);
+        console.log(`取消喜欢评论${commentId}`);
+      } else {
+        this.likedComments.push(commentId);
+        console.log(`已喜欢评论${commentId}`);
+      }
     }
   },
   mounted() {
