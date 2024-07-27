@@ -248,6 +248,7 @@ export default {
   },
   mounted() {
     this.fetchComments();
+    document.title = `详情 - ${this.dish.name}`;
   }
 };
 </script>
