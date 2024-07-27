@@ -58,8 +58,8 @@
         <img src="https://placehold.co/400x300" alt="Hotpot dish" class="w-full h-auto rounded-lg decreased-height">
         <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
         <div class="mt-4">
-          <div class="flex items-center space-x-2" v-for="(rating, index) in ratings" :key="index">
-            <span class="font-man">{{ rating.label }}</span>
+          <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
+            <span class="font-man rating-label">{{ rating.label }}</span>
             <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1" @input="updateRating(index, $event)">
             <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
           </div>
@@ -537,5 +537,13 @@ body {
   background: #4CAF50;
   border-radius: 50%;
   cursor: pointer;
+}
+
+.rating-container {
+  align-items: center;
+}
+
+.rating-label {
+  width: 80px; /* 调整这个宽度来对齐文字 */
 }
 </style>
