@@ -33,6 +33,11 @@
               <i></i>
             </div>
             <div class="inputBox">
+              <input type="email" v-model="email" required="required">
+              <label>邮箱</label>
+              <i></i>
+            </div>
+            <div class="inputBox">
               <input type="password" v-model="password" required="required">
               <label>密码</label>
               <i></i>
@@ -40,11 +45,6 @@
             <div class="inputBox">
               <input type="password" v-model="confirmPassword" required="required">
               <label>确认密码</label>
-              <i></i>
-            </div>
-            <div class="inputBox">
-              <input type="email" v-model="email" required="required">
-              <label>邮箱</label>
               <i></i>
             </div>
             <button class="btn" @click="signup">注册</button>
@@ -69,6 +69,14 @@ export default {
       email: ''
     };
   },
+  watch: {
+    isLogin(newVal) {
+      document.title = newVal ? '欢迎回来' : '加入我们';
+    }
+  },
+  created() {
+    document.title = this.isLogin ? '欢迎回来' : '加入我们';
+  },
   methods: {
     toggleForm() {
       this.isLogin = !this.isLogin;
@@ -77,7 +85,6 @@ export default {
       axios.post('http://127.0.0.1:8000/users/login/', {
         username: this.username,
         password: this.password,
-
       })
           .then(response => {
             console.log(response.data);
@@ -85,7 +92,7 @@ export default {
           })
           .catch(error => {
             console.error(error);
-            alert(error.response.data.message)
+            alert(error.response.data.message);
           });
     },
     signup() {
@@ -104,7 +111,7 @@ export default {
           })
           .catch(error => {
             console.error(error);
-            alert(error.response.data.message)
+            alert(error.response.data.message);
           });
     }
   }
