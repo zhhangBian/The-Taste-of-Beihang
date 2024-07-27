@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 .home {
-  position: relative;
+  position: fixed;
   width: 100vw;
   height: 100vh;
   display: flex;
