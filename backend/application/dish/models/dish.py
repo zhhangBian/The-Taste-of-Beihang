@@ -10,10 +10,10 @@ class Dish(models.Model):
     name = models.CharField(max_length=100, verbose_name='菜品名称', default="菜品名称")
     image = models.CharField(default=default_img, verbose_name='图片', max_length=500)
 
-    address = models.CharField(max_length=100, verbose_name='餐厅地址')
-    restaurant_name = models.CharField(default="默认地址", verbose_name='菜品餐厅', max_length=500)
+    address = models.CharField(default="默认地址", max_length=100, verbose_name='餐厅地址')
+    restaurant_name = models.CharField(default="默认餐厅", verbose_name='菜品餐厅', max_length=500)
 
-    description = models.TextField(max_length=500, verbose_name='描述', default=0)
+    description = models.TextField(max_length=500, verbose_name='描述', default="暂时还没有描述。/")
 
     price = models.FloatField(verbose_name='价格', default=0)
     overall_rating = models.FloatField(verbose_name='总体评分', default=0)

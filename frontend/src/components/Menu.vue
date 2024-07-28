@@ -2,19 +2,19 @@
   <div class="menu-wrapper">
     <div class="content">
       <div class="person-info" @click="navigateToUserCenter">
-        <img src="../assets/kobe.jpg" alt="" />
+        <img :src="avatar" alt=""/>
         <div class="person-name">
-          <div class="name">时间的彷徨</div>
-          <span class="detail">我是sb</span>
+          <div class="name">{{ this.username }}</div>
+          <span class="detail">{{ this.moto }}</span>
         </div>
       </div>
       <div class="menu-content">
         <div class="menu-list">
           <div
-            class="menu-list-item"
-            v-for="item in menuData"
-            :key="item.id"
-            @click="navigateTo(item.path)"
+              class="menu-list-item"
+              v-for="item in menuData"
+              :key="item.id"
+              @click="navigateTo(item.path)"
           >
             <div class="block"></div>
             <span class="iconfont" :class="item.iconFont"></span>
@@ -37,12 +37,15 @@
 export default {
   data() {
     return {
+      username: "时间的彷徨",
+      moto: "i am sb!",
+      avatar: "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif",
       menuData: [
-        { id: 1, menuName: '首页', iconFont: 'icon-caidan', path: '/' },
-        { id: 2, menuName: '美食广场', iconFont: 'icon-weizhi', path: '/plaza' },
-        { id: 3, menuName: '我的收藏', iconFont: 'icon-category', path: '/collection' },
-        { id: 4, menuName: '用餐记录', iconFont: 'icon-bingtu', path: '/record' },
-        { id: 5, menuName: '个人中心', iconFont: 'icon-shezhi', path: '/user' },
+        {id: 1, menuName: '首页', iconFont: 'icon-caidan', path: '/'},
+        {id: 2, menuName: '美食广场', iconFont: 'icon-weizhi', path: '/plaza'},
+        {id: 3, menuName: '我的收藏', iconFont: 'icon-category', path: '/collection'},
+        {id: 4, menuName: '用餐记录', iconFont: 'icon-bingtu', path: '/record'},
+        {id: 5, menuName: '个人中心', iconFont: 'icon-shezhi', path: '/user'},
       ],
     };
   },
@@ -53,6 +56,10 @@ export default {
     navigateToUserCenter() {
       this.navigateTo('/user');
     },
+    getAvatarUrl() {
+      console.log(this.avatar)
+      return this.avatar;
+    }
   },
 };
 </script>

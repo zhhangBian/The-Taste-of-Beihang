@@ -20,7 +20,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'WhatToEatInHang',  # 注册上你的app名字
+    'WhatToEatInHang',
     'application.dish',
     'application.users',
     'application.restaurant',

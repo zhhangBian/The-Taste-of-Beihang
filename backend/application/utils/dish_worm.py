@@ -1,15 +1,13 @@
 import os
-import urllib
-from datetime import time
 
-import requests
-import pandas as pd
-import sqlite3
-from bs4 import BeautifulSoup
-from urllib.request import urlretrieve
 import django
-os.environ.setdefault('DJANGO_SETTING_MODULE', 'WhatToEatInHang.settings')
+import requests
+from bs4 import BeautifulSoup
+
+# 设置环境变量并初始化 Django
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WhatToEatInHang.settings')
 django.setup()
+
 from application.dish.models import Dish
 import random
 
@@ -23,7 +21,7 @@ def generate_random_float(a, b):
     if havePointFive:
         return float(f"{chosen_int}.0")
     else:
-        return float(f"{chosen_int}.5")  # 返回整数加0.5的形式
+        return float(f"{chosen_int}.5")
 
 
 def generate_random_real_float(a, b):
@@ -32,8 +30,8 @@ def generate_random_real_float(a, b):
 
 def import_data(data):
     dish, created = Dish.objects.update_or_create(
-        name=data['name'],
-        img=data['img'],
+        name=data['title'],
+        image=data['img_url'],
         address=data['location'],
         price=generate_random_float(8, 18),
         description=data['description'],
@@ -64,10 +62,8 @@ def download_img(url, save_dir):
     response.raise_for_status()
 
     soup = BeautifulSoup(response.text, 'html.parser')
-
     titles = soup.findAll('p', class_='contentFont', string=lambda x: x and x.startswith('#'))
 
-    i = 0
     for title_tag in titles:
         # 查找img元素
         img_tag = title_tag.find_next_sibling('p', class_='contentImage').img
@@ -100,7 +96,6 @@ def download_img(url, save_dir):
         # 打印结果
         print(item)
         import_data(item)
-        break
 
 
 url = 'https://m.thepaper.cn/baijiahao_26628231'
