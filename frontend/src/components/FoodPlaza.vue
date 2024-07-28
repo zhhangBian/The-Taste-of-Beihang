@@ -17,6 +17,15 @@
         <option value="汉堡">汉堡</option>
         <option value="鸡">鸡</option>
       </select>
+      <div v-if="selectedCanteen !== '全选'" class="favorite">
+        <p>收藏{{ selectedCanteen }}</p> 
+        <img 
+          :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" 
+          class="favorite-icon" 
+          @click="toggleSubscription"
+          :alt="isSubscribed ? 'Subscribed' : 'Unsubscribed'"
+        />
+      </div>
       <p class="recommend-title">或者......</p>
       <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
       <textarea class="textarea" placeholder="今天想吃什么？" v-model="query"></textarea>
@@ -24,11 +33,11 @@
     </div>
     <div class="content">
       <div class="results-header">
-        <span class="results-title">共{{ comments_count }}条搜索结果</span>
+        <span class="results-title">共{{ filteredComments.length }}条搜索结果</span>
       </div>
       <div class="results-container">
         <div class="grid">
-          <div class="card" v-for="comment in comments_list" :key="comment.id">
+          <div class="card" v-for="comment in filteredComments" :key="comment.id">
             <img :src="comment.image" :alt="comment.title" class="card-img">
             <h2 class="card-title">{{ comment.title }}</h2>
             <p class="card-text">
@@ -49,7 +58,6 @@ export default {
       query: '',
       selectedCanteen: '全选',
       selectedDish: '所有菜品',
-      comments_count: 114514,
       comments_list: [
         {
           id: 1,
@@ -188,6 +196,8 @@ export default {
           price: 25
         },
       ],
+      isFavorite: false,
+      isSubscribed: false,
     };
   },
   computed: {
@@ -201,14 +211,18 @@ export default {
       if (this.selectedDish !== '所有菜品') {
         filtered = filtered.filter(comment => comment.title.includes(this.selectedDish));
       }
-      this.comments_count = filtered.length;
-      this.comments_list = filtered;
+
       return filtered;
     }
   },
   methods: {
     filterResults() {
-      // 方法中无需额外处理
+      // 筛选逻辑不需要额外处理，因为筛选在computed中已经实现
+    },
+    toggleSubscription() {
+      this.isSubscribed = !this.isSubscribed;
+      const action = this.isSubscribed ? 'subscribed to' : 'unsubscribed from';
+      console.log(`${action} ${this.selectedCanteen}`);
     },
     searchResults() {
       console.log('Selected Canteen:', this.selectedCanteen);
@@ -220,7 +234,6 @@ export default {
         dish_name: this.selectedDish
       })
         .then(response => {
-          this.comments_count = response.data.comments_count;
           this.comments_list = response.data.comments;
           this.filterResults(); // 调用筛选方法
         })
@@ -333,6 +346,24 @@ select {
   font-family: 'Noto Sans SC', sans-serif;
   border: none;
   cursor: pointer;
+}
+
+.favorite {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+.favorite p {
+  margin: 0;
+}
+
+.favorite-icon {
+  margin-left: 1rem;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
 }
 
 .results-header {
