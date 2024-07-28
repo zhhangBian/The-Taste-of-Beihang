@@ -41,7 +41,7 @@ const router = createRouter({
         {
             path: '/user',
             name: 'user',
-            component: defineAsyncComponent(() => import(`../components/UserInfo.vue`)),
+            component: defineAsyncComponent(() => import(`../components/UserPage.vue`)),
             meta: {
                 title: '我的',
             },

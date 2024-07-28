@@ -7,13 +7,31 @@
           <div class="card">
             <h2 class="subtitle">个人信息</h2>
             <hr class="card-divider" />
-            <p><strong>昵称:</strong> {{ user.name }}</p>
-            <p><strong>账号（UID）:</strong> {{ user.uid }}</p>
-            <p><strong>性别:</strong> {{ user.gender }}</p>
-            <p><strong>学院:</strong> {{ user.college }}</p>
-            <p><strong>个性签名:</strong> {{ user.signature }}</p>
-            <p><strong>头像:</strong> <img :src="user.avatar" alt="user-avatar" class="avatar" /></p>
-            <button class="edit-button" @click="editProfile">修改个人信息</button>
+            <div class="input-group">
+              <label for="name"><strong>昵称</strong></label>
+              <input type="text" id="name" v-model="user.name" />
+            </div>
+            <div class="input-group">
+              <label for="uid"><strong>账号（UID）</strong></label>
+              <input type="text" id="uid" v-model="user.uid" disabled />
+            </div>
+            <div class="input-group">
+              <label for="college"><strong>学院</strong></label>
+              <input type="text" id="college" v-model="user.college" />
+            </div>
+            <div class="input-group">
+              <label for="signature"><strong>个性签名</strong></label>
+              <input type="text" id="signature" v-model="user.signature" />
+            </div>
+            <div class="input-group">
+              <label><strong>头像</strong></label>
+              <img :src="user.avatar" alt="user-avatar" class="avatar" />
+            </div>
+            <div class="button-group">
+              <input type="file" @change="onFileChange" style="display: none;" ref="fileInput">
+              <button class="upload-button" @click="triggerFileUpload">上传头像</button>
+              <button class="edit-button" @click="editProfile">完成信息修改</button>
+            </div>
           </div>
         </div>
         <div class="stats-section">
@@ -22,7 +40,7 @@
             <hr class="card-divider" />
             <div class="stats-content">
               <div class="stats-left">
-                <p><strong>点菜率:</strong> {{ stats.orderRate }}%</p>
+                <p><strong>点亮菜品:</strong> {{ stats.orderRate }}%</p>
                 <p><strong>累计就餐:</strong> {{ stats.totalMeals }}</p>
                 <p><strong>累计消费:</strong> {{ stats.totalSpend }}元</p>
                 <p><strong>累计收藏:</strong> {{ stats.totalFavorites }}</p>
@@ -58,7 +76,6 @@
         user: {
           name: '时间的彷徨',
           uid: 'zxwswd114514',
-          gender: '男',
           college: '计算机学院',
           signature: '我是sb我是sb我是sb我是sb',
           avatar: 'https://placehold.co/100x100'
@@ -85,7 +102,7 @@
           return '早上好';
         } else if (hour >= 11 && hour < 14) {
           return '中午好';
-        } else if (hour >= 14 && hour < 21) {
+        } else if (hour >= 14 && hour < 23) {
           return '晚上好';
         } else {
           return '晚安';
@@ -98,6 +115,19 @@
     methods: {
       editProfile() {
         alert('点击了修改个人信息');
+      },
+      triggerFileUpload() {
+        this.$refs.fileInput.click();
+      },
+      onFileChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            this.user.avatar = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
       }
     }
   }
@@ -168,16 +198,6 @@
     font-size: 1.1rem;
   }
   
-  .stats-content {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  
-  .stats-left, .stats-right {
-    width: 48%; /* Slightly less than half to account for gap */
-  }
-  
   .card-divider {
     margin: 8px 0;
     border: none;
@@ -186,23 +206,43 @@
   
   .avatar {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 125px;
+    height: 125px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 16px;
   }
   
-  .edit-button {
+  .button-group {
+    display: flex;
+    justify-content: center; /* 居中对齐按钮 */
+    gap: 8px;
     margin-top: 16px;
-    background-color: var(--secondary, #e0e0e0);
-    color: var(--secondary-foreground, #1a1a1a);
+  }
+  
+  .edit-button, .upload-button {
+    background-color: #000;
+    color: #fff;
     padding: 8px 16px;
     border-radius: 0.25rem;
     cursor: pointer;
     border: none;
     transition: background-color 0.3s;
+    display: inline-block;
   }
   
-  .edit-button:hover {
-    background-color: var(--secondary-hover, #cfcfcf);
+  .edit-button:hover, .upload-button:hover {
+    background-color: #333;
+  }
+  
+  .stats-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .stats-left, .stats-right {
+    width: 48%;
   }
   
   .charts {
@@ -224,6 +264,30 @@
     width: 200px;
     height: 200px;
     border-radius: 50%;
+  }
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+    margin: 8px 0;
+  }
+  
+  .input-group label {
+    display: inline-block;
+    width: 120px;
+  }
+  
+  .input-group input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+  }
+  
+  .input-group input[disabled] {
+    background-color: #f5f5f5;
+    color: #aaa;
   }
   </style>
   
