@@ -25,7 +25,7 @@ const router = createRouter({
         {
             path: '/plaza',
             name: 'plaza',
-            component: defineAsyncComponent(() => import(`../components/FoodPlaza.vue`)),
+            component: defineAsyncComponent(() => import(`../components/PlazaPage.vue`)),
             meta: {
                 title: '美食广场',
             },
@@ -46,14 +46,6 @@ const router = createRouter({
                 title: '我的',
             },
         },
-        {
-            path: '/man',
-            name: 'man',
-            component: defineAsyncComponent(() => import(`../components/Menu.vue`)),
-            meta: {
-                title: '我的',
-            },
-        }
     ]
 });
 

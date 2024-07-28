@@ -1,219 +1,140 @@
 <template>
-    <div class="menu-wrapper">
-      <div class="content">
-        <div class="person-info" @click="navigateToUserCenter">
-          <img src="../assets/kobe.jpg" alt="" />
-          <div class="person-name">
-            <div class="name">时间的彷徨</div>
-            <span class="detail">我是sb</span>
-          </div>
+  <div class="menu-wrapper">
+    <div class="content">
+      <div class="person-info" @click="navigateToUserCenter">
+        <img src="../assets/kobe.jpg" alt="" />
+        <div class="person-name">
+          <div class="name">时间的彷徨</div>
+          <span class="detail">我是sb</span>
         </div>
-        <div class="menu-content">
-          <div class="menu-list">
-            <div
-              class="menu-list-item"
-              v-for="item in menuData"
-              :key="item.id"
-              @click="navigateTo(item.path)"
-            >
-              <div class="block"></div>
-              <span class="iconfont" :class="item.iconFont"></span>
-              <div class="item-name">{{ item.menuName }}</div>
-            </div>
-          </div>
-        </div>
-        <div class="logout" @click="navigateTo('/logout')">
-          <div class="menu-list-item">
+      </div>
+      <div class="menu-content">
+        <div class="menu-list">
+          <div
+            class="menu-list-item"
+            v-for="item in menuData"
+            :key="item.id"
+            @click="navigateTo(item.path)"
+          >
             <div class="block"></div>
-            <span class="iconfont icon-jinru"></span>
-            <div class="item-name">登出</div>
+            <span class="iconfont" :class="item.iconFont"></span>
+            <div class="item-name">{{ item.menuName }}</div>
           </div>
         </div>
       </div>
+      <div class="logout" @click="navigateTo('/logout')">
+        <div class="menu-list-item">
+          <div class="block"></div>
+          <span class="iconfont icon-jinru"></span>
+          <div class="item-name">登出</div>
+        </div>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        menuData: [
-          {
-            id: 1,
-            menuName: '首页',
-            iconFont: 'icon-caidan',
-            path: '/',
-          },
-          {
-            id: 2,
-            menuName: '美食广场',
-            iconFont: 'icon-weizhi',
-            path: '/plaza',
-          },
-          {
-            id: 3,
-            menuName: '我的收藏',
-            iconFont: 'icon-category',
-            path: '/collection',
-          },
-          {
-            id: 4,
-            menuName: '用餐记录',
-            iconFont: 'icon-bingtu',
-            path: '/record',
-          },
-          {
-            id: 5,
-            menuName: '个人中心',
-            iconFont: 'icon-shezhi',
-            path: '/user',
-          },
-        ],
-      };
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      menuData: [
+        { id: 1, menuName: '首页', iconFont: 'icon-caidan', path: '/' },
+        { id: 2, menuName: '美食广场', iconFont: 'icon-weizhi', path: '/plaza' },
+        { id: 3, menuName: '我的收藏', iconFont: 'icon-category', path: '/collection' },
+        { id: 4, menuName: '用餐记录', iconFont: 'icon-bingtu', path: '/record' },
+        { id: 5, menuName: '个人中心', iconFont: 'icon-shezhi', path: '/user' },
+      ],
+    };
+  },
+  methods: {
+    navigateTo(path) {
+      this.$router.push(path);
     },
-    methods: {
-      navigateTo(path) {
-        this.$router.push(path);
-      },
-      navigateToUserCenter() {
-        this.navigateTo('/user');
-      },
+    navigateToUserCenter() {
+      this.navigateTo('/user');
     },
-  };
-  </script>
-  
-  <style lang="scss" scoped>
-  @import url(../assets/iconfont/iconfont.css);
-  @import url(../assets/themecss/theme.scss);
-  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
-  
-  .iconfont {
-    font-family: "iconfont" !important;
-    font-style: normal;
-    font-size: 25px;
-    color: var(--theme-text-color);
-    vertical-align: middle;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+@import url(../assets/iconfont/iconfont.css);
+@import url(../assets/themecss/theme.scss);
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-style: normal;
+  font-size: 25px;
+  color: var(--theme-text-color);
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 90px;
+  border-radius: 20px;
+  background-color: #e6e3e3;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: width 0.6s;
+  overflow: hidden;
+
+  &:hover {
+    width: 220px;
   }
-  
-  .menu-wrapper {
+
+  .content {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 90px;
-    border-radius: 20px;
-    background-color: #e6e3e3;
-    padding: 20px;
-    box-sizing: border-box;
-    transition: width 0.6s;
-    overflow: hidden;
-  
-    .content {
-      display: flex;
-      flex-direction: column;
+    flex-grow: 1;
+
+    .person-info {
+      margin-top: 20px;
+      white-space: nowrap;
+      text-align: left;
+      cursor: pointer;
+
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid #fff;
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+        vertical-align: middle;
+      }
+
+      .person-name {
+        margin-left: 15px;
+        vertical-align: middle;
+        opacity: 0;
+        transition: opacity 0.6s;
+        overflow: hidden;
+        color: var(--theme-info-text-color);
+        display: inline-block;
+        font-family: 'Noto Sans SC';
+
+        .name {
+          font-size: 24px;
+          font-weight: 800;
+        }
+
+        .detail {
+          font-size: 12px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .menu-content {
+      margin-top: 20px;
       flex-grow: 1;
-  
-      .person-info {
-        margin-top: 20px;
-        white-space: nowrap;
-        text-align: left;
-        cursor: pointer; /* Add cursor pointer to indicate clickable */
-  
-        img {
-          width: 50px;
-          height: 50px;
-          border-radius: 50%;
-          border: 2px solid #fff;
-          box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
-          vertical-align: middle;
-        }
-  
-        .person-name {
-          margin-left: 15px;
-          vertical-align: middle;
-          opacity: 0;
-          transition: opacity 0.6s;
-          overflow: hidden;
-          color: var(--theme-info-text-color);
-          display: inline-block;
-          font-family: 'Noto Sans SC';
-  
-          .name {
-            font-size: 24px;
-            font-weight: 800;
-          }
-  
-          .detail {
-            font-size: 12px;
-            font-weight: 500;
-          }
-        }
-      }
-  
-      .menu-content {
-        margin-top: 20px;
-        flex-grow: 1;
-  
-        .menu-list {
-          .menu-list-item {
-            cursor: pointer;
-            width: 100%;
-            height: 50px;
-            font-size: 18px;
-            position: relative;
-            text-align: left;
-            border-radius: 10px;
-            padding-left: 10px;
-            white-space: nowrap;
-  
-            .block {
-              width: 6px;
-              height: 25px;
-              background: rgb(101, 57, 225);
-              position: absolute;
-              right: -10px;
-              top: 13px;
-              transition: opacity 0.5s;
-              border-top-left-radius: 4px;
-              border-bottom-left-radius: 4px;
-              opacity: 0;
-            }
-  
-            .item-name {
-              line-height: 50px;
-              display: inline-block;
-              margin-left: 10px;
-              font-size: 18px;
-              color: var(--theme-text-color);
-              font-weight: 100;
-              transition: opacity 0.6s;
-              opacity: 0;
-              text-align: left;
-            }
-  
-            &:hover {
-              background-color: var(--theme-hover-menu-color);
-  
-              .item-name {
-                color: var(--theme-hover-color);
-              }
-  
-              .iconfont {
-                color: var(--theme-hover-color);
-              }
-  
-              .block {
-                opacity: 1;
-              }
-            }
-          }
-        }
-      }
-  
-      .logout {
-        margin-top: auto;
-  
+
+      .menu-list {
         .menu-list-item {
           cursor: pointer;
           width: 100%;
@@ -224,7 +145,7 @@
           border-radius: 10px;
           padding-left: 10px;
           white-space: nowrap;
-  
+
           .block {
             width: 6px;
             height: 25px;
@@ -237,7 +158,7 @@
             border-bottom-left-radius: 4px;
             opacity: 0;
           }
-  
+
           .item-name {
             line-height: 50px;
             display: inline-block;
@@ -249,18 +170,18 @@
             opacity: 0;
             text-align: left;
           }
-  
+
           &:hover {
             background-color: var(--theme-hover-menu-color);
-  
+
             .item-name {
               color: var(--theme-hover-color);
             }
-  
+
             .iconfont {
               color: var(--theme-hover-color);
             }
-  
+
             .block {
               opacity: 1;
             }
@@ -268,28 +189,75 @@
         }
       }
     }
-  
-    &:hover {
-      width: 220px;
-  
-      .content {
-        .person-info {
-          .person-name {
+
+    .logout {
+      margin-top: auto;
+
+      .menu-list-item {
+        cursor: pointer;
+        width: 100%;
+        height: 50px;
+        font-size: 18px;
+        position: relative;
+        text-align: left;
+        border-radius: 10px;
+        padding-left: 10px;
+        white-space: nowrap;
+
+        .block {
+          width: 6px;
+          height: 25px;
+          background: rgb(101, 57, 225);
+          position: absolute;
+          right: -10px;
+          top: 13px;
+          transition: opacity 0.5s;
+          border-top-left-radius: 4px;
+          border-bottom-left-radius: 4px;
+          opacity: 0;
+        }
+
+        .item-name {
+          line-height: 50px;
+          display: inline-block;
+          margin-left: 10px;
+          font-size: 18px;
+          color: var(--theme-text-color);
+          font-weight: 100;
+          transition: opacity 0.6s;
+          opacity: 0;
+          text-align: left;
+        }
+
+        &:hover {
+          background-color: var(--theme-hover-menu-color);
+
+          .item-name {
+            color: var(--theme-hover-color);
+          }
+
+          .iconfont {
+            color: var(--theme-hover-color);
+          }
+
+          .block {
             opacity: 1;
           }
         }
-  
-        .menu-content {
-          .menu-list {
-            .menu-list-item {
-              .item-name {
-                opacity: 1;
-              }
-            }
-          }
+      }
+    }
+  }
+
+  &:hover {
+    .content {
+      .person-info {
+        .person-name {
+          opacity: 1;
         }
-  
-        .logout {
+      }
+
+      .menu-content {
+        .menu-list {
           .menu-list-item {
             .item-name {
               opacity: 1;
@@ -297,7 +265,15 @@
           }
         }
       }
+
+      .logout {
+        .menu-list-item {
+          .item-name {
+            opacity: 1;
+          }
+        }
+      }
     }
   }
-  </style>
-  
+}
+</style>
