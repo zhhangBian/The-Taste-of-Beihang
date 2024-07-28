@@ -47,7 +47,7 @@ export default {
       axios.get('http://127.0.0.1:8000/dish/get-dish-recommend')
         .then(response => {
           const { place, dish } = response.data;
-          this.recommendation = `在<span class="red-text">${place}</span>吃<span class="red-text">${dish}</span>`;
+          this.recommendation = `在<span style="color: #5E17EB;">${place}</span>吃<span style="color: #5E17EB;">${dish}</span>`;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
@@ -149,7 +149,4 @@ export default {
   width: 200px; /* 统一按钮宽度 */
 }
 
-.red-text {
-  color: #5E17EB !important;
-}
 </style>
