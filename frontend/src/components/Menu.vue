@@ -84,7 +84,7 @@ export default {
   flex-direction: column;
   height: 100vh;
   width: 90px;
-  border-radius: 20px;
+  border-radius: 0 0 0 0;
   background-color: #e6e3e3;
   padding: 20px;
   box-sizing: border-box;
