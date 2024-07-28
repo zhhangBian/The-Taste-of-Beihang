@@ -134,12 +134,15 @@
   </script>
   
   <style scoped>
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
+  
   .container {
     display: flex;
     flex-direction: column;
     padding: 24px;
     background-color: var(--background, #fff);
     color: var(--foreground, #1a1a1a);
+    font-family: 'Noto Sans SC', sans-serif; /* 应用全局字体 */
   }
   
   .main-title {
@@ -215,7 +218,7 @@
   
   .button-group {
     display: flex;
-    justify-content: center; /* 居中对齐按钮 */
+    justify-content: center;
     gap: 8px;
     margin-top: 16px;
   }
@@ -224,11 +227,12 @@
     background-color: #000;
     color: #fff;
     padding: 8px 16px;
-    border-radius: 0.25rem;
+    border-radius: 0;
     cursor: pointer;
     border: none;
     transition: background-color 0.3s;
     display: inline-block;
+    font-family: 'Noto Sans SC', sans-serif; /* 设置按钮的字体 */
   }
   
   .edit-button:hover, .upload-button:hover {
@@ -283,6 +287,7 @@
     border: 1px solid #ccc;
     border-radius: 0.25rem;
     font-size: 1rem;
+    font-family: 'Noto Sans SC', sans-serif; /* 设置输入框的字体 */
   }
   
   .input-group input[disabled] {
