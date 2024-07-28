@@ -26,7 +26,7 @@
         <div class="menu-list-item">
           <div class="block"></div>
           <span class="iconfont icon-jinru"></span>
-          <div class="item-name">登出</div>
+          <div class="item-name">退出登录</div>
         </div>
       </div>
     </div>
@@ -92,7 +92,7 @@ export default {
   overflow: hidden;
 
   &:hover {
-    width: 220px;
+    width: 250px; /* 调整这个宽度 */
   }
 
   .content {
@@ -116,7 +116,7 @@ export default {
       }
 
       .person-name {
-        margin-left: 15px;
+        margin-left: 10px;
         vertical-align: middle;
         opacity: 0;
         transition: opacity 0.6s;
