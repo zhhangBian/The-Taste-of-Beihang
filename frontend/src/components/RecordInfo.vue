@@ -174,7 +174,7 @@ const search = () => {
 
 <style scoped>
 .main-title {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
     font-weight: bold;
     margin-bottom: 8px;
     text-align: left !important;
