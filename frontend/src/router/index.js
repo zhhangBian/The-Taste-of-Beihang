@@ -33,7 +33,7 @@ const router = createRouter({
         {
             path: '/detail',
             name: 'detail',
-            component: defineAsyncComponent(() => import(`../components/FoodDetail.vue`)),
+            component: defineAsyncComponent(() => import(`../components/DetailPage.vue`)),
             meta: {
                 title: '详情',
             },

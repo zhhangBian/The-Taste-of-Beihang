@@ -40,9 +40,6 @@
                       <button @click="toggleLike(comment.id)" class="icon-button">
                         <img :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')" alt="Like/Unlike" class="icon">
                       </button>
-                      <button @click="toggleFavorite(comment.id)" class="icon-button">
-                        <img :src="favoriteComments.includes(comment.id) ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" alt="Subscribe/Unsubscribe" class="icon">
-                      </button>
                     </div>
                   </div>
                   <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
@@ -154,7 +151,6 @@ export default {
           content: '总体感觉很好，推荐大家尝试！'
         }
       ],
-      favoriteComments: [],
       likedComments: [],
       ratings: [
         { label: '总体评价', value: 0 },
@@ -225,16 +221,6 @@ export default {
     },
     getCommentTitle(comment) {
       return `总体评价 ${comment.overallRating.toFixed(1)} | 口味 ${comment.flavorRating.toFixed(1)} | 价格 ${comment.priceRating.toFixed(1)} | 排队时长 ${comment.timeRating.toFixed(1)}`;
-    },
-    toggleFavorite(commentId) {
-      const index = this.favoriteComments.indexOf(commentId);
-      if (index !== -1) {
-        this.favoriteComments.splice(index, 1);
-        console.log(`取消收藏评论${commentId}`);
-      } else {
-        this.favoriteComments.push(commentId);
-        console.log(`已收藏评论${commentId}`);
-      }
     },
     toggleLike(commentId) {
       const index = this.likedComments.indexOf(commentId);
