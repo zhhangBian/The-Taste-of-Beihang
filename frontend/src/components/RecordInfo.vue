@@ -14,7 +14,7 @@
                 <el-table-column prop="location" label="地点" width="200"/>
                 <el-table-column prop="dishName" label="菜品名称" width="300"/>
                 <el-table-column prop="cost" label="花费（元）" width="200"/>
-                <el-table-column label="操作">
+                <el-table-column label="">
                     <template #default="scope">
                         <el-button link type="primary" size="small" @click="handleEdit(scope.row, scope.$index)">编辑
                         </el-button>
@@ -25,13 +25,15 @@
         </div>
 
         <!-- 分页组件 -->
-        <el-pagination
-            background
-            layout="total, prev, pager, next, jumper"
-            :total="total"
-            v-model:current-page="currentPage"
-            :page-size="pageSize">
-        </el-pagination>
+        <div class="pagination-container">
+            <el-pagination
+                background
+                layout="total, prev, pager, next, jumper"
+                :total="total"
+                v-model:current-page="currentPage"
+                :page-size="pageSize">
+            </el-pagination>
+        </div>
 
         <!--弹窗-->
         <el-dialog v-model="dialogFormVisible" title="添加就餐记录" width="60%">
@@ -192,5 +194,12 @@ const search = () => {
 .table-container {
     margin-top: 20px;
     overflow-y: auto;
+}
+
+/* 分页组件的容器，添加距离 */
+.pagination-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: left;
 }
 </style>
