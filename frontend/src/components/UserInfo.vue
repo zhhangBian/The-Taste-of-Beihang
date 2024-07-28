@@ -149,7 +149,7 @@
     font-size: 3.5rem;
     font-weight: bold;
     margin-bottom: 8px;
-    text-align: left;
+    text-align: left !important;
   }
   
   .divider {
@@ -186,7 +186,7 @@
     font-weight: 700;
     margin-top: 4px;
     margin-bottom: 4px;
-    text-align: left;
+    text-align: left !important;
   }
   
   .card, .chart-card {
@@ -197,7 +197,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 24px;
     flex: 1;
-    text-align: left;
+    text-align: left !important;
     font-size: 1.1rem;
   }
   
