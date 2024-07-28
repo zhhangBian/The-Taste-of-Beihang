@@ -23,7 +23,7 @@
   <style scoped>
   .container {
     display: flex;
-    height: 100vh;
+    height: auto;
   }
   
   /* 侧边栏样式 */
