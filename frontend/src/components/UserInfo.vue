@@ -138,24 +138,24 @@
   
   .container {
     display: flex;
+    height: auto;
+    width: auto;
     flex-direction: column;
-    padding: 24px;
     background-color: var(--background, #fff);
     color: var(--foreground, #1a1a1a);
     font-family: 'Noto Sans SC', sans-serif; /* 应用全局字体 */
   }
   
   .main-title {
-    font-size: 3.5rem;
+    font-size: 2.4rem;
     font-weight: bold;
-    margin-bottom: 8px;
     text-align: left !important;
+    margin:0 0 0;
   }
   
   .divider {
     border: none;
     border-top: 2px solid #000;
-    margin-bottom: 16px;
     width: 100%;
     background-color: black;
   }
@@ -168,7 +168,6 @@
   }
   
   .profile-section {
-    flex: 1;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -182,21 +181,22 @@
   }
   
   .subtitle {
+    display: flex;
+    justify-content: flex-start; /* 水平方向从容器的开头开始排列 */
+  align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
     font-size: 2rem;
     font-weight: 700;
-    margin-top: 4px;
-    margin-bottom: 4px;
     text-align: left !important;
   }
   
   .card, .chart-card {
     background-color: var(--card, #fff);
-    padding: 20px;
+    padding: 0 20px;
     border-radius: 0.5rem;
     border: 1px solid #ccc;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 24px;
-    flex: 1;
+    flex: 0;
     text-align: left !important;
     font-size: 1.1rem;
   }
@@ -240,31 +240,35 @@
   }
   
   .stats-content {
+    box-sizing: border-box;
     display: flex;
     flex-direction: row;
+    padding: 0 0 0 0;
     justify-content: space-between;
   }
   
   .stats-left, .stats-right {
+    padding: 0 0 0 0;
     width: 48%;
   }
   
   .charts {
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
   }
   
   .chart-container {
     text-align: center;
+    padding :0 0;
   }
   
   .chart-title {
+    margin-top:10px;
     font-weight: 600;
   }
   
   .chart-image {
-    margin-top: 8px;
+    margin-top: 1px;
     width: 200px;
     height: 200px;
     border-radius: 50%;
