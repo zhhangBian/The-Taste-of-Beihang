@@ -7,49 +7,37 @@
               <img src="@/assets/kobe.jpg" alt="Profile Image">
             </span>
             <div class="text logo-text">
-              <span class="name">Phoenix</span>
-              <span class="profession">Web Developer</span>
+              <span class="name font-man">时间的彷徨</span>
+              <span class="subtitle font-man">Lover of zlr</span>
             </div>
           </div>
-          <i class="bx bx-chevron-right toggle" @click="toggleSidebar"></i>
+          <img :src="toggleIcon" class="toggle" @click="toggleSidebar" alt="Toggle Icon">
         </header>
         <div class="menu-bar">
           <div class="menu">
-            <ul class="menu-links">
+              <ul class="menu-links">
               <li class="nav-link">
                 <a href="#">
-                  <i class="bx bx-home-alt icon"></i>
-                  <span class="text nav-text">Dashboard</span>
+                  <img src="@/assets/homeicon.svg" class="icon plazaicon" alt="Home Icon">
+                  <span class="text nav-text font-man">首页</span>
                 </a>
               </li>
               <li class="nav-link">
                 <a href="#">
-                  <i class='bx bx-bar-chart-alt-2 icon'></i>
-                  <span class="text nav-text">Revenue</span>
+                  <img src="@/assets/plazaicon.svg" class="icon plazaicon" alt="Plaza Icon">
+                  <span class="text nav-text font-man">美食广场</span>
                 </a>
               </li>
               <li class="nav-link">
                 <a href="#">
-                  <i class='bx bx-bell icon'></i>
-                  <span class="text nav-text">Notifications</span>
+                  <img src="@/assets/subicon.svg" class="icon plazaicon" alt="Subscribe Icon">
+                  <span class="text nav-text font-man">我的收藏</span>
                 </a>
               </li>
               <li class="nav-link">
                 <a href="#">
-                  <i class='bx bx-pie-chart-alt icon'></i>
-                  <span class="text nav-text">Analytics</span>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="#">
-                  <i class='bx bx-heart icon'></i>
-                  <span class="text nav-text">Likes</span>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="#">
-                  <i class='bx bx-wallet icon'></i>
-                  <span class="text nav-text">Wallets</span>
+                  <img src="@/assets/recordicon.svg" class="icon plazaicon" alt="Record Icon">
+                  <span class="text nav-text font-man">我的就餐记录</span>
                 </a>
               </li>
             </ul>
@@ -57,8 +45,8 @@
           <div class="bottom-content">
             <li>
               <a href="#">
-                <i class="bx bx-log-out icon"></i>
-                <span class="text nav-text">Logout</span>
+                <img src="@/assets/logouticon.svg" class="icon plazaicon" alt="Logout Icon">
+                <span class="text nav-text font-man">登出</span>
               </a>
             </li>
           </div>
@@ -71,8 +59,9 @@
   export default {
     data() {
       return {
-        isSidebarClosed: false,
+        isSidebarClosed: true,
         isDarkMode: false,
+        toggleIcon: require('@/assets/arrowright.svg'),
       };
     },
     methods: {
@@ -88,7 +77,7 @@
   
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-  
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
   * {
     margin: 0;
     padding: 0;
@@ -163,7 +152,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 19px;
   }
   
   .sidebar .text, .sidebar .icon {
@@ -172,10 +161,11 @@
   }
   
   .sidebar .text {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 500;
     white-space: nowrap;
     opacity: 1;
+    text-align: left;
   }
   
   .sidebar.close .text {
@@ -200,9 +190,10 @@
     margin-top: 2px;
     font-size: 18px;
     font-weight: 600;
+    color: black;
   }
   
-  header .image-text .profession {
+  header .image-text .subtitle {
     font-size: 16px;
     margin-top: -2px;
     display: block;
@@ -372,8 +363,13 @@
     font-weight: 600;
     color: var(--text-color);
   }
+
+  .plazaicon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .font-man {
+  font-family: 'Noto Sans SC', sans-serif;
+}
   </style>
-  
-  <!-- 添加下面的链接到 public/index.html 文件 -->
-  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-  

@@ -33,7 +33,7 @@
               <i></i>
             </div>
             <div class="inputBox">
-              <input type="email" v-model="email" required="required">
+              <input type="text" v-model="email" required="required">
               <label>邮箱</label>
               <i></i>
             </div>
@@ -202,7 +202,7 @@ export default {
 
 .box .content .login-wrapper .top-tips .cat-text {
   font-family: 'Noto Sans SC', sans-serif;
-  font-size: 45px;
+  font-size: 42px;
   font-weight: 700;
 }
 
