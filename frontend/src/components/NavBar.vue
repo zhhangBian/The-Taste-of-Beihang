@@ -7,19 +7,19 @@
               <img src="@/assets/kobe.jpg" alt="Profile Image">
             </span>
             <div class="text logo-text">
-              <span class="name">Phoenix</span>
-              <span class="profession">Web Developer</span>
+              <span class="name font-man">时间的彷徨</span>
+              <span class="subtitle font-man">Lover of zlr</span>
             </div>
           </div>
-          <i class="bx bx-chevron-right toggle" @click="toggleSidebar"></i>
+          <img :src="toggleIcon" class="toggle" @click="toggleSidebar" alt="Toggle Icon">
         </header>
         <div class="menu-bar">
           <div class="menu">
             <ul class="menu-links">
               <li class="nav-link">
                 <a href="#">
-                  <i class="bx bx-home-alt icon"></i>
-                  <span class="text nav-text">Dashboard</span>
+                  <img src="@/assets/plazaicon.svg" class="icon plazaicon" alt="Dashboard Icon">
+                  <span class="text nav-text font-man">美食广场</span>
                 </a>
               </li>
               <li class="nav-link">
@@ -71,8 +71,9 @@
   export default {
     data() {
       return {
-        isSidebarClosed: false,
+        isSidebarClosed: true,
         isDarkMode: false,
+        toggleIcon: require('@/assets/arrowright.svg'),
       };
     },
     methods: {
@@ -88,7 +89,7 @@
   
   <style>
   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-  
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
   * {
     margin: 0;
     padding: 0;
@@ -163,7 +164,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 19px;
   }
   
   .sidebar .text, .sidebar .icon {
@@ -172,10 +173,11 @@
   }
   
   .sidebar .text {
-    font-size: 17px;
+    font-size: 19px;
     font-weight: 500;
     white-space: nowrap;
     opacity: 1;
+    text-align: left;
   }
   
   .sidebar.close .text {
@@ -200,9 +202,10 @@
     margin-top: 2px;
     font-size: 18px;
     font-weight: 600;
+    color: black;
   }
   
-  header .image-text .profession {
+  header .image-text .subtitle {
     font-size: 16px;
     margin-top: -2px;
     display: block;
@@ -372,8 +375,13 @@
     font-weight: 600;
     color: var(--text-color);
   }
+
+  .plazaicon {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .font-man {
+  font-family: 'Noto Sans SC', sans-serif;
+}
   </style>
-  
-  <!-- 添加下面的链接到 public/index.html 文件 -->
-  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
-  
