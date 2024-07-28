@@ -10,11 +10,23 @@
         </div>
         <div class="menu-content">
           <div class="menu-list">
-            <div class="menu-list-item" v-for="item in menuData" :key="item.id">
+            <div
+              class="menu-list-item"
+              v-for="item in menuData"
+              :key="item.id"
+              @click="navigateTo(item.path)"
+            >
               <div class="block"></div>
               <span class="iconfont" :class="item.iconFont"></span>
               <div class="item-name">{{ item.menuName }}</div>
             </div>
+          </div>
+        </div>
+        <div class="logout" @click="navigateTo('/logout')">
+          <div class="menu-list-item">
+            <div class="block"></div>
+            <span class="iconfont icon-jinru"></span>
+            <div class="item-name">登出</div>
           </div>
         </div>
       </div>
@@ -28,70 +40,40 @@
         menuData: [
           {
             id: 1,
-            menuName: "首页",
-            iconFont: "icon-caidan",
+            menuName: '首页',
+            iconFont: 'icon-caidan',
+            path: '/',
           },
           {
             id: 2,
-            menuName: "美食广场",
-            iconFont: "icon-weizhi",
+            menuName: '美食广场',
+            iconFont: 'icon-weizhi',
+            path: '/plaza',
           },
-        //   {
-        //     id: 2,
-        //     menuName: "Products",
-        //     iconFont: "icon-gouwu",
-        //   },
           {
             id: 3,
-            menuName: "我的收藏",
-            iconFont: "icon-category",
+            menuName: '我的收藏',
+            iconFont: 'icon-category',
+            path: '/collection',
           },
           {
             id: 4,
-            menuName: "用餐记录",
-            iconFont: "icon-bingtu",
+            menuName: '用餐记录',
+            iconFont: 'icon-bingtu',
+            path: '/record',
           },
-        //   {
-        //     id: 4,
-        //     menuName: "Orders",
-        //     iconFont: "icon-order-fill",
-        //   },
-        //   {
-        //     id: 5,
-        //     menuName: "Customers",
-        //     iconFont: "icon-denglu-yonghuzu",
-        //   },
-        //   {
-        //     id: 6,
-        //     menuName: "Sales Offers",
-        //     iconFont: "icon-liwu",
-        //   },
           {
             id: 5,
-            menuName: "个人中心",
-            iconFont: "icon-shezhi",
-          },
-          {
-            id: 6,
-            menuName: "登出",
-            iconFont: "icon-jinru",
+            menuName: '个人中心',
+            iconFont: 'icon-shezhi',
+            path: '/user',
           },
         ],
-        themeDark: false,
       };
     },
-    mounted() {
-      document.body.setAttribute("theme-color", "light");
-    },
     methods: {
-      changeDark() {
-        if (!this.theme) {
-          document.body.setAttribute("theme-color", "dark");
-          this.theme = !this.theme;
-        } else {
-          document.body.setAttribute("theme-color", "light");
-          this.theme = !this.theme;
-        }
+      navigateTo(path) {
+        this.$router.push(path);
       },
     },
   };
@@ -100,6 +82,8 @@
   <style lang="scss" scoped>
   @import url(../assets/iconfont/iconfont.css);
   @import url(../assets/themecss/theme.scss);
+  @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
+  
   .iconfont {
     font-family: "iconfont" !important;
     font-style: normal;
@@ -109,40 +93,29 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  
   .menu-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     width: 90px;
     border-radius: 20px;
     background-color: #e6e3e3;
     padding: 20px;
     box-sizing: border-box;
-    transition: 0.6s;
+    transition: width 0.6s;
     overflow: hidden;
-    .menu-title {
-      padding-bottom: 20px;
-      box-sizing: border-box;
-      border-bottom: 1px solid rgb(229, 233, 236);
-      margin-bottom: 20px;
-      .title-text {
-        margin-left: 10px;
-        font-family: "BasketBall";
-        font-size: 30px;
-        vertical-align: middle;
-        opacity: 0;
-        transition: 0.6s;
-        color: var(--theme-info-text-color);
-      }
-      .icon-24gf-bag {
-        font-size: 30px;
-        padding-left: 10px;
-        color: rgb(103, 56, 223);
-      }
-    }
+  
     .content {
-      // text-align: center;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+  
       .person-info {
         margin-top: 20px;
         white-space: nowrap;
         text-align: left;
+  
         img {
           width: 50px;
           height: 50px;
@@ -151,25 +124,33 @@
           box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
           vertical-align: middle;
         }
+  
         .person-name {
           margin-left: 15px;
           vertical-align: middle;
           opacity: 0;
-          transition: 0.6s;
+          transition: opacity 0.6s;
           overflow: hidden;
           color: var(--theme-info-text-color);
           display: inline-block;
+          font-family: 'Noto Sans SC';
+  
           .name {
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 24px;
+            font-weight: 800;
           }
+  
           .detail {
             font-size: 12px;
+            font-weight: 500;
           }
         }
       }
+  
       .menu-content {
         margin-top: 20px;
+        flex-grow: 1;
+  
         .menu-list {
           .menu-list-item {
             cursor: pointer;
@@ -181,6 +162,7 @@
             border-radius: 10px;
             padding-left: 10px;
             white-space: nowrap;
+  
             .block {
               width: 6px;
               height: 25px;
@@ -188,11 +170,12 @@
               position: absolute;
               right: -10px;
               top: 13px;
-              transition: 0.5s;
+              transition: opacity 0.5s;
               border-top-left-radius: 4px;
               border-bottom-left-radius: 4px;
               opacity: 0;
             }
+  
             .item-name {
               line-height: 50px;
               display: inline-block;
@@ -200,89 +183,111 @@
               font-size: 18px;
               color: var(--theme-text-color);
               font-weight: 100;
-              transition: 0.6s;
+              transition: opacity 0.6s;
               opacity: 0;
               text-align: left;
             }
+  
             &:hover {
               background-color: var(--theme-hover-menu-color);
+  
               .item-name {
                 color: var(--theme-hover-color);
               }
+  
               .iconfont {
                 color: var(--theme-hover-color);
               }
+  
               .block {
                 opacity: 1;
-              }
-            }
-            .btn {
-              position: absolute;
-              top: 50%;
-              transform: translateY(-50%);
-              display: inline-block;
-              opacity: 0;
-              margin-left: 10px;
-              .check-ipt {
-                display: none;
-              }
-              .check-lable {
-                display: inline-block;
-                width: 40px;
-                height: 20px;
-                border-radius: 20px;
-                background: rgb(101, 58, 223);
-                /* border: 1px solid #eee; */
-                cursor: pointer;
-                position: relative;
-                overflow: hidden;
-              }
-              .check-lable::before {
-                display: inline-block;
-                content: "";
-                width: 15px;
-                height: 15px;
-                border-radius: 50%;
-                background: white;
-                position: absolute;
-                left: 3px;
-                top: 50%;
-                transform: translateY(-50%);
-                transition: all 0.3s;
-              }
-  
-              .check-ipt:checked + .check-lable::before {
-                left: 20px;
-                background: rgb(32, 30, 43);
-              }
-              .check-ipt:checked + .check-lable::after {
-                width: 100%;
               }
             }
           }
         }
       }
-    }
-    &:hover {
-      width: 220px;
-      .menu-title {
-        .title-text {
-          opacity: 1;
-        }
-      }
   
-      .person-info {
-        .person-name {
-          opacity: 1;
-        }
-      }
-      .menu-content {
-        .menu-list {
-          .menu-list-item {
+      .logout {
+        margin-top: auto;
+  
+        .menu-list-item {
+          cursor: pointer;
+          width: 100%;
+          height: 50px;
+          font-size: 18px;
+          position: relative;
+          text-align: left;
+          border-radius: 10px;
+          padding-left: 10px;
+          white-space: nowrap;
+  
+          .block {
+            width: 6px;
+            height: 25px;
+            background: rgb(101, 57, 225);
+            position: absolute;
+            right: -10px;
+            top: 13px;
+            transition: opacity 0.5s;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            opacity: 0;
+          }
+  
+          .item-name {
+            line-height: 50px;
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 18px;
+            color: var(--theme-text-color);
+            font-weight: 100;
+            transition: opacity 0.6s;
+            opacity: 0;
+            text-align: left;
+          }
+  
+          &:hover {
+            background-color: var(--theme-hover-menu-color);
+  
             .item-name {
+              color: var(--theme-hover-color);
+            }
+  
+            .iconfont {
+              color: var(--theme-hover-color);
+            }
+  
+            .block {
               opacity: 1;
             }
-            .btn {
+          }
+        }
+      }
+    }
+  
+    &:hover {
+      width: 220px;
+  
+      .content {
+        .person-info {
+          .person-name {
+            opacity: 1;
+          }
+        }
+  
+        .menu-content {
+          .menu-list {
+            .menu-list-item {
+              .item-name {
+                opacity: 1;
+              }
+            }
+          }
+        }
+  
+        .logout {
+          .menu-list-item {
+            .item-name {
               opacity: 1;
             }
           }
@@ -291,3 +296,4 @@
     }
   }
   </style>
+  
