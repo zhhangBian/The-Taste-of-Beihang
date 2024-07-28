@@ -511,7 +511,7 @@ body {
 }
 
 .range {
-  width: 100px;
+  width: 300px;
   height: 5px;
   -webkit-appearance: none;
   appearance: none;
