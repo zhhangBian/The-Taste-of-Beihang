@@ -1,4 +1,5 @@
 import os
+import re
 
 import django
 import requests
@@ -28,9 +29,38 @@ def generate_random_real_float(a, b):
     return round(random.uniform(a, b), 1)
 
 
+def find_row_by_value(column_name, value):
+    matching_row = df[df[column_name] == value]
+    if not matching_row.empty:
+        return matching_row.iloc[0]
+    else:
+        return None
+
+
+import pandas as pd
+
+df = pd.read_csv("图片链接.csv")
+
+
+def get_rom_number(value, rol_name):
+    for i in range(1, len(df[rol_name])):
+        if df[rol_name][i] == value:
+            return i
+    return 0
+
+
+def clean_string(text):
+    # 正则表达式匹配所有非中文和非英文字符
+    pattern = r'[^\u4e00-\u9fffA-Za-z]'
+    # 使用re.sub()替换所有匹配的字符为空字符串
+    cleaned_text = re.sub(pattern, '', text)
+    return cleaned_text
+
+
 def import_data(data):
     dish, created = Dish.objects.update_or_create(
-        name=data['title'],
+        name=clean_string(data['title']),
+        # image=df['image'][get_rom_number(data['title'], 'title')],
         image=data['img_url'],
         address=data['location'],
         price=generate_random_float(8, 18),

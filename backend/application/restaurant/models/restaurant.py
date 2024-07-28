@@ -20,9 +20,8 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
     image = models.CharField(max_length=500, default="")
 
-    dishes = models.ForeignKey(Dish, on_delete=models.CASCADE,
-                               related_name="restaurant_dishes",
-                               null=True, blank=True, default=None)
+    dishes = models.ManyToManyField(Dish, related_name="restaurant_dishes",
+                                    blank=True, default=None)
 
     def __str__(self):
         return dict(name_choice).get(self.name, "未知")

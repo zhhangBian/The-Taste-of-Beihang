@@ -18,10 +18,10 @@
         <option value="鸡">鸡</option>
       </select>
       <div v-if="selectedCanteen !== '全选'" class="favorite">
-        <p>收藏{{ selectedCanteen }}</p> 
-        <img 
-          :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" 
-          class="favorite-icon" 
+        <p>收藏{{ selectedCanteen }}</p>
+        <img
+          :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')"
+          class="favorite-icon"
           @click="toggleSubscription"
           :alt="isSubscribed ? 'Subscribed' : 'Unsubscribed'"
         />
@@ -38,10 +38,12 @@
       <div class="results-container">
         <div class="grid">
           <div class="card" v-for="comment in filteredComments" :key="comment.id">
-            <img :src="comment.image" :alt="comment.title" class="card-img">
+            <img :src="getImage(comment.image)" :alt="comment.title" class="card-img">
             <h2 class="card-title">{{ comment.title }}</h2>
             <p class="card-text">
-              {{ `${comment.location} | ${comment.score}分 | 平均${comment.price}元` }}</p>
+              {{
+                `${comment.restaurant_name} | ${comment.grade}分 | 平均${comment.price}元`
+              }}</p>
           </div>
         </div>
       </div>
@@ -63,136 +65,136 @@ export default {
           id: 1,
           image: 'https://placehold.co/400x300',
           title: '麻辣香锅',
-          location: '学六食堂',
-          score: 4.5,
+          restaurant_name: '学六食堂',
+          grade: 4.5,
           price: 20
         },
         {
           id: 2,
           image: 'https://placehold.co/400x300',
           title: '宫保鸡丁',
-          location: '学五食堂',
-          score: 4.7,
+          restaurant_name: '学五食堂',
+          grade: 4.7,
           price: 25
         },
         {
           id: 3,
           image: 'https://placehold.co/400x300',
           title: '红烧排骨',
-          location: '学一食堂',
-          score: 4.8,
+          restaurant_name: '学一食堂',
+          grade: 4.8,
           price: 30
         },
         {
           id: 4,
           image: 'https://placehold.co/400x300',
           title: '鱼香肉丝',
-          location: '学四食堂',
-          score: 4.6,
+          restaurant_name: '学四食堂',
+          grade: 4.6,
           price: 22
         },
         {
           id: 5,
           image: 'https://placehold.co/400x300',
           title: '青椒炒肉',
-          location: '学二食堂',
-          score: 4.3,
+          restaurant_name: '学二食堂',
+          grade: 4.3,
           price: 18
         },
         {
           id: 6,
           image: 'https://placehold.co/400x300',
           title: '香菇鸡丁',
-          location: '学三食堂',
-          score: 4.4,
+          restaurant_name: '学三食堂',
+          grade: 4.4,
           price: 20
         },
         {
           id: 7,
           image: 'https://placehold.co/400x300',
           title: '糖醋里脊',
-          location: '学五食堂',
-          score: 4.5,
+          restaurant_name: '学五食堂',
+          grade: 4.5,
           price: 24
         },
         {
           id: 8,
           image: 'https://placehold.co/400x300',
           title: '蒜蓉炒虾',
-          location: '学六食堂',
-          score: 4.7,
+          restaurant_name: '学六食堂',
+          grade: 4.7,
           price: 28
         },
         {
           id: 9,
           image: 'https://placehold.co/400x300',
           title: '酸菜鱼',
-          location: '学一食堂',
-          score: 4.9,
+          restaurant_name: '学一食堂',
+          grade: 4.9,
           price: 35
         },
         {
           id: 10,
           image: 'https://placehold.co/400x300',
           title: '红烧狮子头',
-          location: '学四食堂',
-          score: 4.6,
+          restaurant_name: '学四食堂',
+          grade: 4.6,
           price: 26
         },
         {
           id: 11,
           image: 'https://placehold.co/400x300',
           title: '干锅花菜',
-          location: '学二食堂',
-          score: 4.4,
+          restaurant_name: '学二食堂',
+          grade: 4.4,
           price: 20
         },
         {
           id: 12,
           image: 'https://placehold.co/400x300',
           title: '蒜苔炒肉',
-          location: '学三食堂',
-          score: 4.3,
+          restaurant_name: '学三食堂',
+          grade: 4.3,
           price: 19
         },
         {
           id: 13,
           image: 'https://placehold.co/400x300',
           title: '辣子鸡丁',
-          location: '学五食堂',
-          score: 4.7,
+          restaurant_name: '学五食堂',
+          grade: 4.7,
           price: 27
         },
         {
           id: 14,
           image: 'https://placehold.co/400x300',
           title: '红烧茄子',
-          location: '学六食堂',
-          score: 4.5,
+          restaurant_name: '学六食堂',
+          grade: 4.5,
           price: 21
         },
         {
           id: 15,
           image: 'https://placehold.co/400x300',
           title: '番茄炒蛋',
-          location: '学一食堂',
-          score: 4.8,
+          restaurant_name: '学一食堂',
+          grade: 4.8,
           price: 15
         },
         {
           id: 16,
           image: 'https://placehold.co/400x300',
           title: '梅菜扣肉',
-          location: '学四食堂',
-          score: 4.9,
+          restaurant_name: '学四食堂',
+          grade: 4.9,
           price: 32
         },
         {
           id: 17,
           image: 'https://placehold.co/400x300',
           title: '土豆牛肉',
-          location: '学二食堂',
-          score: 4.6,
+          restaurant_name: '学二食堂',
+          grade: 4.6,
           price: 25
         },
       ],
@@ -205,7 +207,7 @@ export default {
       let filtered = this.comments_list;
 
       if (this.selectedCanteen !== '全选') {
-        filtered = filtered.filter(comment => comment.location.includes(this.selectedCanteen));
+        filtered = filtered.filter(comment => comment.restaurant_name.includes(this.selectedCanteen));
       }
 
       if (this.selectedDish !== '所有菜品') {
@@ -216,6 +218,9 @@ export default {
     }
   },
   methods: {
+    getImage(url) {
+      return url
+    },
     filterResults() {
       // 筛选逻辑不需要额外处理，因为筛选在computed中已经实现
     },
@@ -241,6 +246,10 @@ export default {
           console.error('Error fetching data: ', error);
         });
     }
+  },
+  mounted() {
+    // 页面加载时自动查询
+    this.searchResults();
   }
 };
 </script>

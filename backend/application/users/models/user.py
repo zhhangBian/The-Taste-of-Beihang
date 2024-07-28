@@ -24,17 +24,19 @@ class User(AbstractUser):
     avatar = models.CharField(default=default_avatar, verbose_name='头像', max_length=500)
 
     # 该用户发布过的评论
-    comments = models.ManyToManyField(Comment, related_name='user_comments')
+    comments = models.ManyToManyField(Comment, related_name='user_comments', blank=True)
 
     groups = models.ManyToManyField(
         'auth.Group',
         related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
         related_query_name='custom_user',
+        blank=True,
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         related_name='custom_users',  # 这里将 related_name 改为 'custom_users'
         related_query_name='custom_user',
+        blank=True,
     )
 
     def __str__(self):

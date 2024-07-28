@@ -1,6 +1,6 @@
 # 获取评论的集合
+import difflib
 import json
-import re
 
 from django.views.decorators.http import require_POST
 
@@ -37,13 +37,8 @@ def serialize_comments(comments) -> list:
 
 
 def matches_search(comment, search_string):
-    # 将搜索字符串转换为正则表达式模式
-    # 这里使用了 re.escape 来确保搜索字符串中的任何特殊字符都被正确处理
-    escaped_search_string = re.escape(search_string)
-    pattern = f"{escaped_search_string}(?={escaped_search_string})"
-
-    # 使用正则表达式搜索评论标题
-    return bool(re.search(pattern, comment.title, re.IGNORECASE))
+    return (difflib.SequenceMatcher(None, comment.title, search_string).ratio() > 0.3) or (
+            comment.title in search_string) or (search_string in comment.title)
 
 
 @response_wrapper
