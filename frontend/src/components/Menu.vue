@@ -1,15 +1,11 @@
 <template>
     <div class="menu-wrapper">
-      <div class="menu-title">
-        <span class="iconfont icon-24gf-bag"></span>
-        <span class="title-text">Maos'menu</span>
-      </div>
       <div class="content">
         <div class="person-info">
-          <img src="../assets/head_portrait.jpg" alt="" />
+          <img src="../assets/kobe.jpg" alt="" />
           <div class="person-name">
-            <div class="name">MAOS</div>
-            <span class="detail">前端小白</span>
+            <div class="name">时间的彷徨</div>
+            <span class="detail">我是sb</span>
           </div>
         </div>
         <div class="menu-content">
@@ -18,19 +14,6 @@
               <div class="block"></div>
               <span class="iconfont" :class="item.iconFont"></span>
               <div class="item-name">{{ item.menuName }}</div>
-            </div>
-            <div class="menu-list-item">
-              <div class="block"></div>
-              <span class="iconfont icon-yueliang"></span>
-              <div class="item-name">Dark Mode</div>
-              <div class="btn">
-                <input class="check-ipt" type="checkbox" id="checks" />
-                <label
-                  class="check-lable"
-                  for="checks"
-                  @click="changeDark"
-                ></label>
-              </div>
             </div>
           </div>
         </div>
@@ -45,52 +28,52 @@
         menuData: [
           {
             id: 1,
-            menuName: "Dashboard",
+            menuName: "首页",
             iconFont: "icon-caidan",
           },
           {
             id: 2,
-            menuName: "Products",
-            iconFont: "icon-gouwu",
+            menuName: "美食广场",
+            iconFont: "icon-weizhi",
           },
+        //   {
+        //     id: 2,
+        //     menuName: "Products",
+        //     iconFont: "icon-gouwu",
+        //   },
           {
             id: 3,
-            menuName: "Categories",
+            menuName: "我的收藏",
             iconFont: "icon-category",
           },
           {
             id: 4,
-            menuName: "Orders",
-            iconFont: "icon-order-fill",
-          },
-          {
-            id: 5,
-            menuName: "Customers",
-            iconFont: "icon-denglu-yonghuzu",
-          },
-          {
-            id: 6,
-            menuName: "Sales Offers",
-            iconFont: "icon-liwu",
-          },
-          {
-            id: 7,
-            menuName: "Dealership",
+            menuName: "用餐记录",
             iconFont: "icon-bingtu",
           },
+        //   {
+        //     id: 4,
+        //     menuName: "Orders",
+        //     iconFont: "icon-order-fill",
+        //   },
+        //   {
+        //     id: 5,
+        //     menuName: "Customers",
+        //     iconFont: "icon-denglu-yonghuzu",
+        //   },
+        //   {
+        //     id: 6,
+        //     menuName: "Sales Offers",
+        //     iconFont: "icon-liwu",
+        //   },
           {
-            id: 8,
-            menuName: "Locations",
-            iconFont: "icon-weizhi",
-          },
-          {
-            id: 9,
-            menuName: "Settings",
+            id: 5,
+            menuName: "个人中心",
             iconFont: "icon-shezhi",
           },
           {
-            id: 10,
-            menuName: "Logout",
+            id: 6,
+            menuName: "登出",
             iconFont: "icon-jinru",
           },
         ],
@@ -129,7 +112,7 @@
   .menu-wrapper {
     width: 90px;
     border-radius: 20px;
-    background-color: var(--bg-color);
+    background-color: #e6e3e3;
     padding: 20px;
     box-sizing: border-box;
     transition: 0.6s;
@@ -159,6 +142,7 @@
       .person-info {
         margin-top: 20px;
         white-space: nowrap;
+        text-align: left;
         img {
           width: 50px;
           height: 50px;
@@ -193,6 +177,7 @@
             height: 50px;
             font-size: 18px;
             position: relative;
+            text-align: left;
             border-radius: 10px;
             padding-left: 10px;
             white-space: nowrap;
@@ -217,6 +202,7 @@
               font-weight: 100;
               transition: 0.6s;
               opacity: 0;
+              text-align: left;
             }
             &:hover {
               background-color: var(--theme-hover-menu-color);
