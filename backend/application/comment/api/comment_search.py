@@ -1,11 +1,11 @@
 # 获取评论的集合
+import json
 import re
 
-from django.http import HttpRequest
 from django.views.decorators.http import require_POST
 
 from application.comment.models import Comment
-from application.utils.response import success_response, response_wrapper
+from application.utils.response import response_wrapper, success_response
 
 
 def serialize_comments(comments) -> list:
@@ -21,13 +21,15 @@ def serialize_comments(comments) -> list:
             'content': comment.content,
             'date': comment.date.strftime('%Y-%m-%d %H:%M:%S'),  # 格式化日期
             'image': comment.image,
+
+            'grade': comment.grade,
             'price': comment.price,
             'flavour': comment.flavour,
             'waiting_time': comment.waiting_time,
 
-            'author_id': comment.author_id,
+            'restaurant_name': comment.restaurant_name,
             'dish_name': comment.dish_name,
-            'restaurant_name': comment.restaurant_name,  # 假设 Restaurant 模型有一个 name 字段
+            'author_id': comment.author_id,
         }
         comments_list.append(comment_dict)
 
@@ -47,31 +49,26 @@ def matches_search(comment, search_string):
 @response_wrapper
 @require_POST
 def search_comment(request):
-    """
-    根据request搜索comments，返回comments的信息序列
-    """
-    
-    search_string = request.GET('search')
+    body = json.loads(request.body.decode('utf-8'))
+    search_string = body.get('search', '')
+    restaurant_name = body.get('restaurant_name', '全选')
+    dish_name = body.get('dish_name', '全选')
 
-    comments_fit = list(filter(lambda comment: matches_search(comment, search_string),
-                               Comment.objects.all()))
-    comments_fit_serialized = serialize_comments(comments_fit)
+    print(search_string)
+    print(restaurant_name)
+    print(dish_name)
 
-    return success_response({
-        "comments": comments_fit_serialized,
-        "comments_count": len(comments_fit_serialized)
-    })
+    comments = Comment.objects.all()
 
+    if restaurant_name != '全选':
+        comments = comments.filter(restaurant_name=restaurant_name)
+    if dish_name != '所有菜品':
+        comments = comments.filter(dish_name=dish_name)
 
-@response_wrapper
-@require_POST
-def search_comment_restaurant(request: HttpRequest):
-    
-    search = request.GET('search')
-    restaurant_name = request.GET('restaurant_name')
-    comments = Comment.objects.fliter(restaurant_name=restaurant_name)
-
-    comments_fit = list(filter(lambda comment: matches_search(comment, search), comments))
+    comments_fit = []
+    for comment in comments:
+        if matches_search(comment, search_string):
+            comments_fit.append(comment)
     comments_fit_serialized = serialize_comments(comments_fit)
 
     return success_response({

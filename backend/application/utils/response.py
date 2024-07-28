@@ -2,7 +2,6 @@ import warnings
 from enum import unique, Enum
 
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
 
 
 @unique
@@ -49,13 +48,13 @@ def _api_response(success, data) -> dict:
     return {'success': success, 'data': data}
 
 
-def success_response(data) -> dict:
+def success_response(data) -> JsonResponse:
     """
     wrap a success response dict obj
     :param data: requested data
     :return: an api response dictionary
     """
-    return _api_response(True, data)
+    return JsonResponse(data, status=200)
 
 
 def fail_response(code, error_msg=None) -> dict:
@@ -101,6 +100,7 @@ def response_wrapper(func):
     :param func: a api-function
     :return: wrapped function
     """
+
     def _inner(*args, **kwargs):
         _response = func(*args, **kwargs)
         if isinstance(_response, dict):

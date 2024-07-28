@@ -7,6 +7,7 @@ default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/i
 
 
 class Comment(models.Model):
+    id = models.AutoField(primary_key=True, auto_created=True, verbose_name='评论ID', editable=False)
     title = models.CharField(max_length=50, verbose_name='标题')
     content = models.TextField(max_length=200, verbose_name='内容')
     date = models.DateTimeField(auto_now_add=True, verbose_name='日期')
@@ -22,6 +23,8 @@ class Comment(models.Model):
     flavour = models.FloatField(default=0, verbose_name='风味')
     waiting_time = models.FloatField(default=0, verbose_name='等待时间')
 
+    restaurant_name = models.CharField(max_length=200, verbose_name="所属食堂", default="默认食堂")
+    dish_name = models.CharField(max_length=200, verbose_name="对应菜品", default="菜品")
     author_id = models.IntegerField(default=0)
 
     # agree_count = models.IntegerField(default=0)

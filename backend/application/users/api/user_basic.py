@@ -131,7 +131,7 @@ def forget_password(request: HttpRequest):
 
 
 @response_wrapper
-@require_http_methods(['PUT'])
+@require_POST
 def update_user(request: HttpRequest):
     # 获取用户
     user = request.user

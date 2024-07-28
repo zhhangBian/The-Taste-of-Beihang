@@ -1,5 +1,7 @@
 from django.db import models
 
+from application.dish.models import Dish
+
 name_choice = (
     (1, '学一'),
     (2, '学二'),
@@ -18,7 +20,8 @@ class Restaurant(models.Model):
     address = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
     image = models.CharField(max_length=500, default="")
 
-    dishes = models.ForeignKey('dish.Dish', on_delete=models.CASCADE, related_name="restaurant_dishes",
+    dishes = models.ForeignKey(Dish, on_delete=models.CASCADE,
+                               related_name="restaurant_dishes",
                                null=True, blank=True, default=None)
 
     def __str__(self):

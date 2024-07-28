@@ -24,14 +24,15 @@
     </div>
     <div class="content">
       <div class="results-header">
-        <span class="results-title">共{{ filteredComments.length }}条搜索结果</span>
+        <span class="results-title">共{{ comments_count }}条搜索结果</span>
       </div>
       <div class="results-container">
         <div class="grid">
-          <div class="card" v-for="comment in filteredComments" :key="comment.id">
+          <div class="card" v-for="comment in comments_list" :key="comment.id">
             <img :src="comment.image" :alt="comment.title" class="card-img">
             <h2 class="card-title">{{ comment.title }}</h2>
-            <p class="card-text">{{ `${comment.location} | ${comment.score}分 | 平均${comment.price}元` }}</p>
+            <p class="card-text">
+              {{ `${comment.location} | ${comment.score}分 | 平均${comment.price}元` }}</p>
           </div>
         </div>
       </div>
@@ -209,14 +210,21 @@ export default {
       // 筛选逻辑不需要额外处理
     },
     searchResults() {
-      axios.post('http://127.0.0.1:8000/comment/search-comment', { query: this.query })
-        .then(response => {
-          this.comments_count = response.data.comments_count;
-          this.comments_list = response.data.comments;
-        })
-        .catch(error => {
-          console.error('Error fetching data: ', error);
-        });
+      console.log('Selected Canteen:', this.selectedCanteen);
+      console.log('Selected Dish:', this.selectedDish);
+
+      axios.post('http://127.0.0.1:8000/comment/search-comment', {
+        search: this.query,
+        restaurant_name: this.selectedCanteen,
+        dish_name: this.selectedDish
+      })
+          .then(response => {
+            this.comments_count = response.data.comments_count;
+            this.comments_list = response.data.comments;
+          })
+          .catch(error => {
+            console.error('Error fetching data: ', error);
+          });
     }
   }
 };
