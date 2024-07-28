@@ -201,13 +201,14 @@ export default {
       if (this.selectedDish !== '所有菜品') {
         filtered = filtered.filter(comment => comment.title.includes(this.selectedDish));
       }
-
+      this.comments_count = filtered.length;
+      this.comments_list = filtered;
       return filtered;
     }
   },
   methods: {
     filterResults() {
-      // 筛选逻辑不需要额外处理
+      // 方法中无需额外处理
     },
     searchResults() {
       console.log('Selected Canteen:', this.selectedCanteen);
@@ -218,13 +219,14 @@ export default {
         restaurant_name: this.selectedCanteen,
         dish_name: this.selectedDish
       })
-          .then(response => {
-            this.comments_count = response.data.comments_count;
-            this.comments_list = response.data.comments;
-          })
-          .catch(error => {
-            console.error('Error fetching data: ', error);
-          });
+        .then(response => {
+          this.comments_count = response.data.comments_count;
+          this.comments_list = response.data.comments;
+          this.filterResults(); // 调用筛选方法
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     }
   }
 };
