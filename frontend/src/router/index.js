@@ -45,6 +45,14 @@ const router = createRouter({
             meta: {
                 title: '我的',
             },
+        },
+        {
+            path: '/man',
+            name: 'man',
+            component: defineAsyncComponent(() => import(`../components/NavBar.vue`)),
+            meta: {
+                title: '我的',
+            },
         }
     ]
 });
