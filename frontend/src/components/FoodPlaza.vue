@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="sidebar">
-      <h1 class="title">美食广场</h1>
+      <h5 class="title">美食广场</h5>
       <select v-model="selectedCanteen" @change="filterResults">
         <option value="全选">所有食堂</option>
         <option value="学一食堂">学一食堂</option>
@@ -274,8 +274,9 @@ body {
 
 .sidebar {
   width: 20%;
-  padding: 1rem;
   height: 100vh;
+  margin: 0;
+  padding: 0;
   overflow-y: auto; /* 当内容超过高度时出现滚动条 */
   overflow-x: hidden; /* 隐藏水平滚动条 */
   box-sizing: border-box; /* 包括padding在内的高度 */
@@ -294,7 +295,7 @@ body {
 
 .title {
   font-family: 'Ma Shan Zheng', sans-serif;
-  font-size: 4.5rem;
+  font-size: 3.4rem;
   border-bottom: 2px solid #f5f5f5;
   padding-bottom: 0.25rem;
   margin-bottom: 1rem; /* 增加与下拉选择表单的距离 */
@@ -323,23 +324,23 @@ select {
 
 .recommend-title {
   margin-top: 2rem;
-  font-size: 3rem;
+  font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .recommend-subtitle {
-  font-size: 1.875rem;
+  font-size: 1.4rem;
   margin-top: 0;
 }
 
 .textarea {
   width: 100%;
   box-sizing: border-box; /* 确保宽度包括padding和border */
-  height: 20rem;
-  margin-top: 1rem;
+  height: 17rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  font-size:1.2rem;
   resize: none;
   font-family: 'Noto Sans SC', sans-serif;
   border: 1px solid #ccc;

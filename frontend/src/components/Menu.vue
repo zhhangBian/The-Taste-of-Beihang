@@ -44,7 +44,7 @@ export default {
         {id: 1, menuName: '首页', iconFont: 'icon-caidan', path: '/'},
         {id: 2, menuName: '美食广场', iconFont: 'icon-weizhi', path: '/plaza'},
         {id: 3, menuName: '我的收藏', iconFont: 'icon-category', path: '/collection'},
-        {id: 4, menuName: '用餐记录', iconFont: 'icon-bingtu', path: '/record'},
+        {id: 4, menuName: '就餐记录', iconFont: 'icon-bingtu', path: '/record'},
         {id: 5, menuName: '个人中心', iconFont: 'icon-shezhi', path: '/user'},
       ],
     };
@@ -84,7 +84,7 @@ export default {
   flex-direction: column;
   height: 100vh;
   width: 90px;
-  border-radius: 20px;
+  border-radius: 0 0 0 0;
   background-color: #e6e3e3;
   padding: 20px;
   box-sizing: border-box;

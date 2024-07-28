@@ -2,7 +2,12 @@
   <div class="bg-white text-black">
     <div class="container">
       <div class="col-span-1">
-        <h1 class="text-8xl font-mashan border-b border-gray pb-1 mb-1">{{ dish.name }}</h1>
+        <h1 class="text-8xl font-mashan border-b border-gray pb-1 mb-1 flex items-center">
+          {{ dish.name }}
+          <button @click="toggleSubscription" class="icon-button ml-4">
+            <img :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" alt="Subscription status" class="icon enlarged-icon">
+          </button>
+        </h1>
         <p class="text-2xl font-noto mb-9">{{ dish.address }}</p>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">总体评价</h2>
@@ -152,6 +157,7 @@ export default {
         }
       ],
       likedComments: [],
+      isSubscribed: false,  // 初始化订阅状态为未订阅
       ratings: [
         { label: '总体评价', value: 0 },
         { label: '口味', value: 0 },
@@ -231,6 +237,12 @@ export default {
         this.likedComments.push(commentId);
         console.log(`已喜欢评论${commentId}`);
       }
+    },
+    toggleSubscription() {
+      this.isSubscribed = !this.isSubscribed;
+      const message = this.isSubscribed ? `已收藏 ${this.dish.name}` : `取消收藏 ${this.dish.name}`;
+      console.log(message);
+      alert(message);
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);
@@ -492,10 +504,15 @@ body {
 }
 
 .icon {
-  height: 1rem; /* Adjust the size as needed */
-  width: 1rem;  /* Adjust the size as needed */
+  height: 1rem; /* 调整大小 */
+  width: 1rem;  /* 调整大小 */
+  vertical-align: bottom; /* 保持图标底部与文字底部对齐 */
 }
 
+.enlarged-icon {
+  height: 1.5rem; /* 调整图标放大后的高度 */
+  width: 1.5rem;  /* 调整图标放大后的宽度 */
+}
 .range {
   width: 300px;
   height: 5px;
