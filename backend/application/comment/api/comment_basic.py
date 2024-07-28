@@ -11,7 +11,10 @@ from ...utils.response import response_wrapper, fail_response, ErrorCode, succes
 
 @response_wrapper
 @require_GET
-def get_comment_basics(request: HttpRequest, comment_id: int):
+def get_comment_basics(request: HttpRequest):
+    body = json.loads(request.body.decode('utf-8'))
+    comment_id = body.get('comment_id', '')
+
     comment = Comment.objects.get(id=comment_id)
     if comment is None:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '评论不存在')
@@ -78,7 +81,9 @@ def creat_comment(request):
 
 @response_wrapper
 @require_POST
-def agree_comment(request: HttpRequest, comment_id: int):
+def agree_comment(request: HttpRequest):
+    body = json.loads(request.body.decode('utf-8'))
+    comment_id = body.get('comment_id', '')
     comment = Comment.objects.get(id=comment_id)
     user = request.user
     if comment is None:
