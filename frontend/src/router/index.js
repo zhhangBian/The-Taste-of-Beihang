@@ -46,6 +46,14 @@ const router = createRouter({
                 title: '我的',
             },
         },
+        {
+            path: '/record',
+            name: 'record',
+            component: defineAsyncComponent(() => import(`../components/RecordPage.vue`)),
+            meta: {
+                title: '就餐记录',
+            },
+        },
     ]
 });
 
