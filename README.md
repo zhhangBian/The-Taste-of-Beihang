@@ -16,6 +16,6 @@
 访问后端的admin数据库：
 ```
 http://localhost:8000/admin
-WhatToEatInHang
+root
 123456
 ```
