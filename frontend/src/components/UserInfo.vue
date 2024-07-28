@@ -46,7 +46,7 @@
                 <p><strong>累计收藏:</strong> {{ stats.totalFavorites }}</p>
               </div>
               <div class="stats-right">
-                <p><strong>点赞评论数:</strong> {{ stats.totalLikes }}</p>
+                <p><strong>已点赞的评论数:</strong> {{ stats.totalLikes }}</p>
                 <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）</p>
                 <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）</p>
               </div>
