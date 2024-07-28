@@ -266,6 +266,8 @@ body {
 .sidebar {
   width: 20%;
   height: 100vh;
+  margin: 0;
+  padding: 0;
   overflow-y: auto; /* 当内容超过高度时出现滚动条 */
   overflow-x: hidden; /* 隐藏水平滚动条 */
   box-sizing: border-box; /* 包括padding在内的高度 */
@@ -319,17 +321,17 @@ select {
 }
 
 .recommend-subtitle {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   margin-top: 0;
 }
 
 .textarea {
   width: 100%;
   box-sizing: border-box; /* 确保宽度包括padding和border */
-  height: 20rem;
-  margin-top: 1rem;
+  height: 17rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
+  font-size:1.2rem;
   resize: none;
   font-family: 'Noto Sans SC', sans-serif;
   border: 1px solid #ccc;
