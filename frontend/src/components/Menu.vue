@@ -109,7 +109,7 @@ export default {
       }
 
       .person-name {
-        margin-left: 15px;
+        margin-left: 10px;
         vertical-align: middle;
         opacity: 0;
         transition: opacity 0.6s;
