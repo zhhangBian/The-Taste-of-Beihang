@@ -139,7 +139,7 @@ export default {
   background-attachment: fixed;
   background-color: white;
   overflow: hidden;
-  z-index: -1;
+  z-index: 1;
 }
 
 .box .content {
