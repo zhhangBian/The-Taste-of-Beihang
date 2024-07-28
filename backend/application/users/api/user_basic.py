@@ -1,5 +1,5 @@
 # 代表了用户的基本接口
-
+import json
 
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.hashers import make_password
@@ -20,8 +20,9 @@ User = get_user_model()
 @response_wrapper
 @require_POST
 def user_login(request: HttpRequest):
-    username = request.GET.get('username')
-    password = request.GET.get('password')
+    body = json.loads(request.body.decode('utf-8'))
+    username = body.get('username')
+    password = body.get('password')
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=username, password=password)
 
@@ -60,10 +61,10 @@ def user_logoff(request):
 @response_wrapper
 @require_POST
 def user_signup(request: HttpRequest):
-    
-    username = request.GET('username')
-    password = request.GET('password')
-    email = request.GET('email')
+    body = json.loads(request.body.decode('utf-8'))
+    username = body.get('username')
+    password = body.get('password')
+    email = body.get('email')
     # TODO：对于邮箱发送验证码的支持
     # captcha = request.GET('captcha')
 
@@ -94,9 +95,9 @@ def user_signup(request: HttpRequest):
 @response_wrapper
 @require_POST
 def change_password(request: HttpRequest):
-    
-    old_password = request.GET('old_password')
-    new_password = request.GET('new_password')
+    body = json.loads(request.body.decode('utf-8'))
+    old_password = body.get('old_password')
+    new_password = body.get('new_password')
 
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=request.user.username, password=old_password)
@@ -115,10 +116,11 @@ def change_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def forget_password(request: HttpRequest):
-    
-    email = request.GET('email')
-    captcha = request.GET('captcha')
-    new_password = request.GET('password')
+    body = json.loads(request.body.decode('utf-8'))
+    email = body.get('email')
+    captcha = body.get('captcha')
+    new_password = body.get('password')
+
     user = User.objects.filter(email=email).first()
     if user is None:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "邮箱未注册")
@@ -135,10 +137,10 @@ def forget_password(request: HttpRequest):
 def update_user(request: HttpRequest):
     # 获取用户
     user = request.user
-    # 获取数据
-    
-    username = request.GET('username')
-    motto = request.GET('motto')
+
+    body = json.loads(request.body.decode('utf-8'))
+    username = body.get('username')
+    motto = body.get('motto')
 
     # 检查用户名是否已存在
     if username and User.objects.filter(username=username).exists():
@@ -165,23 +167,29 @@ def get_user_info(request):
     return success_response({
         "id": user.id,
         "username": user.username,
+
         "email": user.email,
-        "avatar": user.avatar,
+        "gender": user.gender,
         "motto": user.motto,
+        "avatar": user.avatar,
     })
 
 
 @response_wrapper
 @require_GET
-def get_user_info_by_id(request: HttpRequest, user_id: int):
-    target_user = User.objects.filter(id=user_id).first()
-    if target_user is None:
+def get_user_info_by_id(request: HttpRequest):
+    body = json.loads(request.body.decode('utf-8'))
+    user_id = body.get('user_id')
+    user = User.objects.filter(id=user_id).first()
+    if user is None:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "用户不存在！")
 
     return success_response({
-        "id": target_user.id,
-        "username": target_user.username,
-        "email": target_user.email,
-        "avatar": target_user.avatar.url,
-        "motto": target_user,
+        "id": user.id,
+        "username": user.username,
+
+        "email": user.email,
+        "gender": user.gender,
+        "motto": user.motto,
+        "avatar": user.avatar,
     })

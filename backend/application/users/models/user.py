@@ -20,7 +20,7 @@ class User(AbstractUser):
         ('female', '女'),
     )
     gender = models.CharField(choices=gender_choices, max_length=32, default='保密', verbose_name='性别')
-    # motto = models.CharField(max_length=256, default='这个人很懒，什么都没有留下', verbose_name='个性签名')
+    motto = models.CharField(max_length=256, default='这个人很懒，什么都没有留下', verbose_name='个性签名')
     avatar = models.CharField(default=default_avatar, verbose_name='头像', max_length=500)
 
     # 该用户发布过的评论

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.http import HttpRequest
+from django.http import HttpRequest, JsonResponse
 from django.views.decorators.http import require_GET
 
 from application.users.models import User
@@ -33,7 +33,7 @@ def serialize_comments(user: 'User') -> list:
 
 @response_wrapper
 @require_GET
-def get_user_comments(request: HttpRequest) -> dict:
+def get_user_comments(request: HttpRequest) -> JsonResponse:
     user = request.user
     comments_count = user.comments.count()
 
@@ -45,7 +45,7 @@ def get_user_comments(request: HttpRequest) -> dict:
 
 @response_wrapper
 @require_GET
-def get_user_comments_by_id(request: HttpRequest, user_id: int) -> dict:
+def get_user_comments_by_id(request: HttpRequest, user_id: int) -> dict | JsonResponse:
     target_user = User.objects.filter(id=user_id).first()
     if target_user is None:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "用户不存在！")

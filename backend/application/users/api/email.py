@@ -1,5 +1,5 @@
 # 代表了和邮件相关的操作
-
+import json
 import random
 
 from django.conf import settings
@@ -16,9 +16,9 @@ from ...utils.response import *
 @require_POST
 def send_email(request):
     # 获取数据
-    
-    email = request.GET('email')
-    content = request.GET('content')
+    body = json.loads(request.body.decode('utf-8'))
+    email = body.get('email')
+    content = body.getT('content')
     # 检查邮箱是否已存在
     if email and User.objects.filter(email=email).exists():
         # 生成token
@@ -38,8 +38,9 @@ def varify_captcha(email, captcha):
 @response_wrapper
 @require_POST
 def send_captcha(request):
-    
-    email = request.GET('email')
+    body = json.loads(request.body.decode('utf-8'))
+    email = body.get('email')
+
     captcha = '%06d' % random.randint(0, 999999)
     email_title = 'HangEat 验证码'
     email_body = '您的验证码为：' + captcha + '，请在5分钟内输入。'
@@ -55,9 +56,9 @@ def send_captcha(request):
 @response_wrapper
 @require_POST
 def change_email(request):
-    
-    new_email = request.GET('email')
-    captcha = request.GET('captcha')
+    body = json.loads(request.body.decode('utf-8'))
+    new_email = body.get('email')
+    captcha = body.get('captcha')
     if User.objects.filter(email=new_email).exists():
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "邮箱已注册")
     if varify_captcha(new_email, captcha):

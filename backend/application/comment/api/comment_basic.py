@@ -74,6 +74,7 @@ def creat_comment(request):
                           author_id=user.id)
         comment.save()
         dish.comments.add(comment)
+        user.comments.add(comment)
         return success_response({"message": "创建成功！", "title": comment.title})
     else:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "菜品不存在！")
