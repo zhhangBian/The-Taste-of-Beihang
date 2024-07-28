@@ -49,7 +49,7 @@ const router = createRouter({
         {
             path: '/man',
             name: 'man',
-            component: defineAsyncComponent(() => import(`../components/NavBar.vue`)),
+            component: defineAsyncComponent(() => import(`../components/Menu.vue`)),
             meta: {
                 title: '我的',
             },
