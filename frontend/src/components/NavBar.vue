@@ -15,41 +15,29 @@
         </header>
         <div class="menu-bar">
           <div class="menu">
-            <ul class="menu-links">
+              <ul class="menu-links">
               <li class="nav-link">
                 <a href="#">
-                  <img src="@/assets/plazaicon.svg" class="icon plazaicon" alt="Dashboard Icon">
+                  <img src="@/assets/homeicon.svg" class="icon plazaicon" alt="Home Icon">
+                  <span class="text nav-text font-man">首页</span>
+                </a>
+              </li>
+              <li class="nav-link">
+                <a href="#">
+                  <img src="@/assets/plazaicon.svg" class="icon plazaicon" alt="Plaza Icon">
                   <span class="text nav-text font-man">美食广场</span>
                 </a>
               </li>
               <li class="nav-link">
                 <a href="#">
-                  <i class='bx bx-bar-chart-alt-2 icon'></i>
-                  <span class="text nav-text">Revenue</span>
+                  <img src="@/assets/subicon.svg" class="icon plazaicon" alt="Subscribe Icon">
+                  <span class="text nav-text font-man">我的收藏</span>
                 </a>
               </li>
               <li class="nav-link">
                 <a href="#">
-                  <i class='bx bx-bell icon'></i>
-                  <span class="text nav-text">Notifications</span>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="#">
-                  <i class='bx bx-pie-chart-alt icon'></i>
-                  <span class="text nav-text">Analytics</span>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="#">
-                  <i class='bx bx-heart icon'></i>
-                  <span class="text nav-text">Likes</span>
-                </a>
-              </li>
-              <li class="nav-link">
-                <a href="#">
-                  <i class='bx bx-wallet icon'></i>
-                  <span class="text nav-text">Wallets</span>
+                  <img src="@/assets/recordicon.svg" class="icon plazaicon" alt="Record Icon">
+                  <span class="text nav-text font-man">我的就餐记录</span>
                 </a>
               </li>
             </ul>
@@ -57,8 +45,8 @@
           <div class="bottom-content">
             <li>
               <a href="#">
-                <i class="bx bx-log-out icon"></i>
-                <span class="text nav-text">Logout</span>
+                <img src="@/assets/logouticon.svg" class="icon plazaicon" alt="Logout Icon">
+                <span class="text nav-text font-man">登出</span>
               </a>
             </li>
           </div>
