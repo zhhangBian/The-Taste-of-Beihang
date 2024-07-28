@@ -1,7 +1,7 @@
 <template>
     <div class="menu-wrapper">
       <div class="content">
-        <div class="person-info">
+        <div class="person-info" @click="navigateToUserCenter">
           <img src="../assets/kobe.jpg" alt="" />
           <div class="person-name">
             <div class="name">时间的彷徨</div>
@@ -75,6 +75,9 @@
       navigateTo(path) {
         this.$router.push(path);
       },
+      navigateToUserCenter() {
+        this.navigateTo('/user');
+      },
     },
   };
   </script>
@@ -115,6 +118,7 @@
         margin-top: 20px;
         white-space: nowrap;
         text-align: left;
+        cursor: pointer; /* Add cursor pointer to indicate clickable */
   
         img {
           width: 50px;
