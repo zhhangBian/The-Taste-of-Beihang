@@ -42,7 +42,7 @@ def get_comment_basics(request: HttpRequest):
 def creat_comment(request):
     user = request.user
 
-    body = json.loads(request.body.decode('utf-8'))
+    body = json.loads(request.body.decode('utf-8')).get('params')
     title = body.get('title', '默认标题')
     content = body.get('content', '空空如也')
     # TODO：图片问题
@@ -50,17 +50,19 @@ def creat_comment(request):
     dish_name = body.get('dish_name', '默认')
     restaurant_name = body.get('restaurant', '默认')
 
-    grade = body.get('grade', '5')
-    if grade not in [0, 1, 2, 3, 4, 5]:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "评分不合法！")
-    price = body.get('price', '20')
+    grade = float(body.get('grade', '5'))
+    price = float(body.get('price', '20'))
     if price < 0 or price > 9999:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "价格不合理！")
-    flavour = body.get('flavour', '5')
-    waiting_time = body.get('waiting_time', '60')
+    flavour = float(body.get('flavour', '5'))
+    waiting_time = float(body.get('waiting_time', '60'))
+
+    author_id = 0
+    if not user.is_anonymous:
+        author_id = user.id
 
     if Dish.objects.filter(name=dish_name).exists():
-        dish = Dish.objects.filter(name=dish_name)
+        dish = Dish.objects.filter(name=dish_name).first()
         comment = Comment(title=title,
                           content=content,
 
@@ -69,12 +71,13 @@ def creat_comment(request):
                           flavour=flavour,
                           waiting_time=waiting_time,
 
-                          dish_name=dish_name,
                           restaurant_name=restaurant_name,
-                          author_id=user.id)
+                          dish_name=dish_name,
+                          author_id=author_id)
         comment.save()
         dish.comments.add(comment)
-        user.comments.add(comment)
+        if not user.is_anonymous:
+            user.comments.add(comment)
         return success_response({"message": "创建成功！", "title": comment.title})
     else:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "菜品不存在！")

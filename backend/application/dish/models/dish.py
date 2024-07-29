@@ -21,8 +21,7 @@ class Dish(models.Model):
     waiting_time = models.FloatField(verbose_name='等待时间', default=0)
 
     # 一个菜品可以有多个评论
-    comments = models.ManyToManyField('comment.Comment', related_name='dish_comments', verbose_name='评论',
-                                      blank=True, default=None)
+    comments = models.ManyToManyField('comment.Comment', related_name='dish_comments', verbose_name='评论', blank=True)
 
     def __str__(self):
         return self.name

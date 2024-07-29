@@ -69,8 +69,7 @@
         <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
           写下你的评论！</h2>
         <div class="mt-4">
-          <div class="flex items-center space-x-4 rating-container"
-               v-for="(rating, index) in ratings" :key="index">
+          <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
             <span class="font-man rating-label">{{ rating.label }}</span>
             <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
                    @input="updateRating(index, $event)">
@@ -180,12 +179,12 @@ export default {
       isSubscribed: false,  // 初始化订阅状态为未订阅
       ratings: [
         {label: '总体评价', value: 0},
-        {label: '口味', value: 0},
         {label: '价格', value: 0},
+        {label: '口味', value: 0},
         {label: '排队时长', value: 0}
       ],
       newReview: {
-        description: ''
+        comment: ''
       }
     };
   },
@@ -210,20 +209,22 @@ export default {
     submitReview() {
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
-    },
-    fetchComments() {
-      axios.get(`http://127.0.0.1:8000/dish/get-dish-comments`, {
+      axios.post(`http://127.0.0.1:8000/comment/create-comment/`, {
         params: {
-          "dish_address": this.dish.address,
-          "dish_name": this.dish.name
+          "title": this.dish.name + "好吃！",
+          "content": this.newReview.comment,
+          "dish_name": this.dish.name,
+
+          "restaurant_name": this.dish.address,
+
+          "grade": this.ratings[0].value,
+          "price": this.ratings[1].value,
+          "flavour": this.ratings[2].value,
+          "waiting_time": this.ratings[3].value,
         }
       })
-        .then(response => {
-          this.dish.overall_rating = response.data.overall_rating;
-          this.dish.flavor_rating = response.data.flavor_rating;
-          this.dish.prices = response.data.prices;
-          this.dish.waiting_time = response.data.waiting_time;
-          this.comments = response.data.comments;
+        .then(() => {
+          this.get_dish_detail();
         })
         .catch(error => {
           console.error('Error fetching comments:', error);
@@ -286,11 +287,11 @@ export default {
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);
+      console.log(this.ratings[index].value);
     }
   },
   mounted() {
     this.get_dish_detail();
-    // this.fetchComments();
     document.title = `详情 - ${this.dish.name}`;
     console.log('FoodDetail mounted with ID:', this.id);
   },

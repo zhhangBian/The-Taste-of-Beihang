@@ -8,6 +8,7 @@ from application.dish.models import Dish
 from application.users.api import User
 from application.utils.response import *
 
+default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
 
 @response_wrapper
 @require_GET
@@ -51,7 +52,12 @@ def get_dish_info_id(request: HttpRequest, id: int):
     comments = Comment.objects.filter(dish_name=dish.name)
     comments_list = []
     for comment in comments:
-        author = User.objects.get(id=comment.author_id)
+        author_name = "momo"
+        avatar = default_avatar
+        if not comment.author_id == 0:
+            user = User.objects.get(id=comment.author_id)
+            author_name = user.username
+            avatar = user.avatar
         comment_dict = {
             'id': comment.id,
             'title': comment.title,
@@ -68,8 +74,8 @@ def get_dish_info_id(request: HttpRequest, id: int):
             'dish_name': comment.dish_name,
             'dish_id': dish.id,
             'author_id': comment.author_id,
-            'author_name': author.username,
-            'avatar': author.avatar
+            'author_name': author_name,
+            'avatar': avatar,
         }
         comments_list.append(comment_dict)
     print(comments_list)
