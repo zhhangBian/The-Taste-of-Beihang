@@ -444,7 +444,7 @@ select {
 
 .card-text {
   margin-top: 0.25rem; /* 减少与标题的间距 */
-  font-size: 1.25rem;
+  font-size: 100%;
   text-align: left;
   font-family: 'Noto Sans SC', sans-serif;
 }

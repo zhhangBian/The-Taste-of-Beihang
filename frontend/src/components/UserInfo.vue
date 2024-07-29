@@ -102,7 +102,9 @@ export default {
         return '早上好';
       } else if (hour >= 11 && hour < 14) {
         return '中午好';
-      } else if (hour >= 14 && hour < 23) {
+      } else if (hour >= 14 && hour < 19) {
+        return '下午好';
+      } else if (hour >= 19 && hour < 23) {
         return '晚上好';
       } else {
         return '晚安';
