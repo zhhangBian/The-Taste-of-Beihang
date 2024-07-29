@@ -39,29 +39,33 @@ def find_row_by_value(column_name, value):
 
 import pandas as pd
 
-df = pd.read_csv("图片链接.csv")
-
-
-def get_rom_number(value, rol_name):
-    for i in range(1, len(df[rol_name])):
-        if df[rol_name][i] == value:
-            return i
-    return 0
+df = pd.read_csv("./images/image-url.csv")
 
 
 def clean_string(text):
-    # 正则表达式匹配所有非中文和非英文字符
     pattern = r'[^\u4e00-\u9fffA-Za-z]'
-    # 使用re.sub()替换所有匹配的字符为空字符串
+    cleaned_text = re.sub(pattern, '', text)
+    return cleaned_text
+
+def clean_string2(text):
+    pattern = r'[^\u4e00-\u9fff]'
     cleaned_text = re.sub(pattern, '', text)
     return cleaned_text
 
 
+def get_rom_number(value, rol_name):
+    for i in range(0, len(df[rol_name])):
+        if clean_string2(df[rol_name][i]) == clean_string2(value):
+            return i
+    return 0
+
+
 def import_data(data):
+    print(get_rom_number(data['title'], 'title'))
     dish, created = Dish.objects.update_or_create(
         name=clean_string(data['title']),
-        # image=df['image'][get_rom_number(data['title'], 'title')],
-        image=data['img_url'],
+        image=df['url'][get_rom_number(data['title'], 'title')],
+        # image=data['img_url'],
         address=data['location'],
         price=generate_random_float(8, 18),
         description=data['description'],
