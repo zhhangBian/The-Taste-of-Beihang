@@ -79,7 +79,7 @@ import axios from "axios";
 export default {
   props: {
     id: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
