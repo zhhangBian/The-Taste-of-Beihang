@@ -124,6 +124,7 @@ export default {
   mounted() {
     document.title = `个人中心 - ${this.user.name}`;
     this.initCharts();
+    this.get_user_info_id();
   },
   methods: {
     editProfile() {
@@ -143,13 +144,13 @@ export default {
       }
     },
     get_user_info_id() {
-      axios.get(`http://127.0.0.1:8000/users/info/${this.id}/`)
+      axios.get(`http://127.0.0.1:8000/users/get-user-detail/`)
         .then(response => {
-          this.name = response.data.username;
-          this.uid = response.data.id + response.data.username;
-          this.college = response.data.school;
-          this.signature = response.data.motto;
-          this.avatar = response.data.avatar;
+          this.user.name = response.data.username;
+          this.user.uid = response.data.id + response.data.username;
+          this.user.college = response.data.school;
+          this.user.signature = response.data.motto;
+          this.user.avatar = response.data.avatar;
         })
         .catch(error => {
           console.error('Error fetching dish details:', error);
@@ -244,7 +245,7 @@ export default {
       };
       expenseChart.setOption(expenseOption);
     }
-  }
+  },
 }
 
 </script>

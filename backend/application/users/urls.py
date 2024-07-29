@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('get-user-info/', get_user_info),
     path('info/<int:user_id>/', get_user_info_by_id),
+    path('get-user-detail/',get_user_detail),
 
     path('get-user-comments', get_user_comments),
     path('get-user-comments-by-id/<int:user_id>', get_user_comments_by_id),

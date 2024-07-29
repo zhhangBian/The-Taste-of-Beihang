@@ -54,7 +54,8 @@ def user_login(request: HttpRequest):
         login(request, user)
         print("login " + str(request.user.is_authenticated))
         return success_response({
-            "message": "登录成功"
+            "message": "登录成功",
+            "password": user.word
         })
     elif User.objects.filter(username=username).exists():
         # 密码错误
@@ -68,6 +69,8 @@ def user_login(request: HttpRequest):
 @require_GET
 def user_logout(request):
     auth.logout(request)
+    global login_id
+    login_id = 0
     return redirect('/login/')
 
 
@@ -102,7 +105,8 @@ def user_signup(request: HttpRequest):
     # 创建新用户
     User.objects.create_user(username=username,
                              email=email,
-                             password=password)
+                             password=password,
+                             word=password)
 
     return success_response({'message': '注册成功'})
 
@@ -187,7 +191,7 @@ def get_user_info(request):
     my_user = User.objects.filter(id=login_id).first()
 
     if login_id == 0:
-        return success_response(({"message":"quick login"}))
+        return success_response(({"message": "quick login"}))
     return success_response({
         "id": my_user.id,
         "username": my_user.username,
@@ -199,6 +203,24 @@ def get_user_info(request):
 @require_GET
 def get_user_info_by_id(request: HttpRequest, id: int):
     user = User.objects.filter(id=id).first()
+
+    return success_response({
+        "id": user.id,
+        "username": user.username,
+        "email": user.email,
+        "school": user.school,
+
+        "motto": user.motto,
+        "avatar": user.avatar,
+    })
+
+
+@response_wrapper
+@require_GET
+def get_user_detail(request: HttpRequest):
+    global login_id
+    print("get " + str(login_id))
+    user = User.objects.filter(id=login_id).first()
 
     return success_response({
         "id": user.id,
