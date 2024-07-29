@@ -33,8 +33,7 @@
       </div>
       <div class="col-span-4">
         <div class="top-container">
-          <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
-          <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
+          <img :src="currentImage" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
         </div>
         <div class="bottom-container mt-4">
           <div class="reviews-container">
@@ -110,6 +109,11 @@ export default {
         waiting_time: 3.5,
         image: 'https://placehold.co/400x300'
       },
+      currentImageIndex: 0,
+      images: [
+        'https://placehold.co/400x300', // 示例图片
+        'https://placehold.co/400x300?text=Image2' // 示例图片
+      ],
       comments: [
         {
           id: 1,
@@ -190,6 +194,11 @@ export default {
         comment: ''
       }
     };
+  },
+  computed: {
+    currentImage() {
+      return this.images[this.currentImageIndex];
+    }
   },
   methods: {
     get_dish_detail() {
@@ -291,6 +300,11 @@ export default {
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);
       console.log(this.ratings[index].value);
+    },
+    startImageSlider() {
+      setInterval(() => {
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+      }, 3000); // 每3秒切换一次图片
     }
   },
   watch: {
@@ -302,6 +316,7 @@ export default {
     this.get_dish_detail();
     document.title = `详情 - ${this.dish.name}`;
     console.log('FoodDetail mounted with ID:', this.id);
+    this.startImageSlider();
   },
 };
 </script>
@@ -355,26 +370,26 @@ body {
 }
 
 .text-8xl {
-  font-size: 3.25rem;
+  font-size: 3rem;
   line-height: 0.9;
   text-align: left; /* 左对齐 */
 }
 
 .text-7xl {
-  font-size: 3rem;
+  font-size: 2.5rem;
   line-height: 0.1;
-  margin-top: 45px;
+  margin-top: 25px;
   text-align: left; /* 左对齐 */
 }
 
 .text-4xl {
-  font-size: 1.75rem;
+  font-size: 2rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
 
 .text-3xl {
-  font-size: 2rem;
+  font-size: 1.875rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
