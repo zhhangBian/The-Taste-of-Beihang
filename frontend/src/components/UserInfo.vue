@@ -121,14 +121,22 @@ export default {
       }
     }
   },
-  mounted() {
-    document.title = `个人中心 - ${this.user.name}`;
-    this.initCharts();
-    this.get_user_info_id();
-  },
   methods: {
     editProfile() {
-      alert('点击了修改个人信息');
+      alert('完成了修改个人信息');
+      axios.post(`http://127.0.0.1:8000/users/update-user`, {
+        params: {
+          "username":this.user.name,
+          "school":this.user.college,
+          "motto":this.user.signature,
+        }
+      })
+        .then(() => {
+          this.get_user_info()
+        })
+        .catch(error => {
+          console.error('Error fetching comments:', error);
+        });
     },
     triggerFileUpload() {
       this.$refs.fileInput.click();
@@ -143,7 +151,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
-    get_user_info_id() {
+    get_user_info() {
       axios.get(`http://127.0.0.1:8000/users/get-user-detail/`)
         .then(response => {
           this.user.name = response.data.username;
@@ -245,6 +253,11 @@ export default {
       };
       expenseChart.setOption(expenseOption);
     }
+  },
+  mounted() {
+    document.title = `个人中心 - ${this.user.name}`;
+    this.initCharts();
+    this.get_user_info();
   },
 }
 

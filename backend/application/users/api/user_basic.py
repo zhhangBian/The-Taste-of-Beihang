@@ -165,6 +165,7 @@ def update_user(request: HttpRequest):
     body = json.loads(request.body.decode('utf-8'))
     username = body.get('username')
     motto = body.get('motto')
+    school = body.get('school')
 
     # 检查用户名是否已存在
     if username and User.objects.filter(username=username).exists():
@@ -177,6 +178,8 @@ def update_user(request: HttpRequest):
     # 检查个性签名是否为空
     if motto:
         user.motto = motto
+    if school:
+        user.school = school
 
     # 更新用户
     user.save()
