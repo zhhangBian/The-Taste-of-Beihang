@@ -57,7 +57,7 @@ const router = createRouter({
         {
             path: '/collection',
             name: 'collection',
-            component: defineAsyncComponent(() => import(`../components/RecordPage.vue`)),
+            component: defineAsyncComponent(() => import(`../components/CollectionPage.vue`)),
             meta: {
                 title: '我的收藏',
             },
