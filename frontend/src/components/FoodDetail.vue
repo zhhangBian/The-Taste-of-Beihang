@@ -77,6 +77,12 @@
 import axios from "axios";
 
 export default {
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       dish: {
@@ -251,7 +257,8 @@ export default {
   mounted() {
     this.fetchComments();
     document.title = `详情 - ${this.dish.name}`;
-  }
+    console.log('FoodDetail mounted with ID:', this.id);
+  },
 };
 </script>
 
@@ -271,6 +278,7 @@ body {
 
 .container {
   display: grid;
+  overflow: hidden;
   grid-template-columns: 1fr;
   gap: 12px;
   background-color: #ffffff;
@@ -303,19 +311,20 @@ body {
 }
 
 .text-8xl {
-  font-size: 4rem;
+  font-size: 3rem;
   line-height: 0.9;
   text-align: left; /* 左对齐 */
 }
 
 .text-7xl {
-  font-size: 4rem;
+  font-size: 2.5rem;
   line-height: 0.1;
+  margin-top: 25px;
   text-align: left; /* 左对齐 */
 }
 
 .text-4xl {
-  font-size: 2.25rem;
+  font-size: 2rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
@@ -402,7 +411,7 @@ body {
 }
 
 .w-full {
-  width: 100%;
+  width: 95%;
 }
 
 .h-auto {
@@ -478,7 +487,7 @@ body {
 }
 
 .reviews-container {
-  max-height: 425px; /* 设置reviews容器的最大高度 */
+  max-height: 280px; /* 设置reviews容器的最大高度 */
   overflow-y: auto; /* 添加垂直滚动条 */
 }
 
@@ -488,7 +497,7 @@ body {
 }
 
 .increased-height {
-  height: 12rem; /* 增大文本框的高度 */
+  height: 7rem; /* 增大文本框的高度 */
 }
 
 .padding-2 {

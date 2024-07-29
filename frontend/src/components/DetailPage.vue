@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <Menu />
-    <FoodDetail />
+    <FoodDetail :id="id" />
   </div>
 </template>
 
@@ -13,6 +13,11 @@ export default {
   components: {
     Menu,
     FoodDetail,
+  },
+  data() {
+    return {
+      id: Number(this.$route.params.id),
+    };
   },
 };
 </script>

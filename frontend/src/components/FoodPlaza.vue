@@ -37,7 +37,7 @@
       </div>
       <div class="results-container">
         <div class="grid">
-          <div class="card" v-for="comment in filteredComments" :key="comment.id">
+          <div class="card" v-for="comment in filteredComments" :key="comment.id" @click="goToDetail(comment.id)">
             <img :src="getImage(comment.image)" :alt="comment.title" class="card-img">
             <h2 class="card-title">{{ comment.title }}</h2>
             <p class="card-text">
@@ -245,7 +245,10 @@ export default {
         .catch(error => {
           console.error('Error fetching data: ', error);
         });
-    }
+    },
+    goToDetail(id) {
+      this.$router.push({ name: 'detail', params: { id } });
+    },
   },
   mounted() {
     // 页面加载时自动查询
@@ -435,7 +438,7 @@ select {
 
 .card-text {
   margin-top: 0.25rem; /* 减少与标题的间距 */
-  font-size: 1.25rem;
+  font-size: 100%;
   text-align: left;
   font-family: 'Noto Sans SC', sans-serif;
 }
