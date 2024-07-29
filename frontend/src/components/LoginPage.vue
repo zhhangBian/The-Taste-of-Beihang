@@ -93,7 +93,7 @@ export default {
           console.error(error);
           alert(error.response.data.message);
         });
-      setTimeout(500);
+      setTimeout(1000);
       this.$router.push('/');
     },
     signup() {

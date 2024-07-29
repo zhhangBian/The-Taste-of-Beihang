@@ -14,10 +14,13 @@ from ...utils.response import *
 
 name_not_allow = ['default', 'delete']
 
+login_id = 0
+
 
 @response_wrapper
 @require_GET
 def check_login_status(request: HttpRequest):
+    print(114514)
     if request.user.is_authenticated:
         return success_response({"login_status": 1})
     else:
@@ -33,6 +36,10 @@ def user_login(request: HttpRequest):
     password = body.get('password')
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=username, password=password)
+
+    global login_id
+    login_id = user.id
+    print("login " + str(login_id))
 
     # 通过查询邮箱找到对应的用户
     if user is None and '@' in username:
@@ -93,7 +100,9 @@ def user_signup(request: HttpRequest):
     #     return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
 
     # 创建新用户
-    User.objects.create_user(username=username, email=email, password=password)
+    User.objects.create_user(username=username,
+                             email=email,
+                             password=password)
 
     return success_response({'message': '注册成功'})
 
@@ -102,12 +111,15 @@ def user_signup(request: HttpRequest):
 @response_wrapper
 @require_POST
 def change_password(request: HttpRequest):
+    global login_id
+    user = User.objects.filter(id=login_id).first()
+
     body = json.loads(request.body.decode('utf-8'))
     old_password = body.get('old_password')
     new_password = body.get('new_password')
 
     # 使用Django的authenticate函数验证用户名和密码
-    user = authenticate(username=request.user.username, password=old_password)
+    user = authenticate(username=user.username, password=old_password)
     if user is not None:
         # 修改密码
         user.password = make_password(new_password)
@@ -143,7 +155,8 @@ def forget_password(request: HttpRequest):
 @require_POST
 def update_user(request: HttpRequest):
     # 获取用户
-    user = request.user
+    global login_id
+    user = User.objects.get(id=login_id)
 
     body = json.loads(request.body.decode('utf-8'))
     username = body.get('username')
@@ -169,34 +182,30 @@ def update_user(request: HttpRequest):
 @response_wrapper
 @require_GET
 def get_user_info(request):
-    user = request.user
+    global login_id
+    print("get " + str(login_id))
+    my_user = User.objects.filter(id=login_id).first()
 
+    if login_id == 0:
+        return success_response(({"message":"quick login"}))
     return success_response({
-        "id": user.id,
-        "username": user.username,
-
-        "email": user.email,
-        "gender": user.gender,
-        "motto": user.motto,
-        "avatar": user.avatar,
+        "id": my_user.id,
+        "username": my_user.username,
+        "avatar": my_user.avatar,
     })
 
 
 @response_wrapper
 @require_GET
-def get_user_info_by_id(request: HttpRequest):
-    body = json.loads(request.body.decode('utf-8'))
-    user_id = body.get('user_id')
-    user = User.objects.filter(id=user_id).first()
-    if user is None:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "用户不存在！")
+def get_user_info_by_id(request: HttpRequest, id: int):
+    user = User.objects.filter(id=id).first()
 
     return success_response({
         "id": user.id,
         "username": user.username,
-
         "email": user.email,
-        "gender": user.gender,
+        "school": user.school,
+
         "motto": user.motto,
         "avatar": user.avatar,
     })

@@ -1,7 +1,7 @@
 <template>
   <div class="menu-wrapper">
     <div class="content">
-      <div class="person-info" @click="navigateToUserCenter">
+      <div class="person-info" @click="navigateToUserCenter(this.id)">
         <img :src="avatar" alt=""/>
         <div class="person-name">
           <div class="name">{{ this.username }}</div>
@@ -39,6 +39,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      id: 0,
       username: "时间的彷徨",
       moto: "i am sb!",
       avatar: "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif",
@@ -52,37 +53,55 @@ export default {
     };
   },
   methods: {
+    getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    },
     navigateTo(path) {
-      axios.get(`http://127.0.0.1:8000/user/logout/`)
-        .then(() => {
-        })
-        .catch(error => {
-          console.error('Error logout:', error);
-        });
       this.$router.push(path);
     },
-    navigateToUserCenter() {
-      this.navigateTo('/user');
+    navigateToUserCenter(id) {
+      this.$router.push({name: 'user', params: {id}});
+    },
+    log_out() {
+      axios.get('http://127.0.0.1:8000/users/logout/')
+        .then(() => {
+          this.$router.push('/login');
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     },
     getAvatarUrl() {
       console.log(this.avatar)
       return this.avatar;
     },
-    check_login() {
-      axios.get('http://127.0.0.1:8000/users/check-login-status')
+    get_user_info() {
+      axios.get('http://127.0.0.1:8000/users/get-user-info/')
         .then(response => {
-          let login_status = response.data.status;
-          if (login_status === 0) {
-            this.$router.push('/login');
-          }
+          this.id = response.data.id;
+          this.username = response.data.username;
+          this.moto = response.data.moto;
+          this.avatar = response.data.avatar;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
         });
+      console.log(this.id);
     }
   },
   mounted() {
-    this.check_login();
+    setInterval(this.get_user_info, 500);
   }
 };
 </script>

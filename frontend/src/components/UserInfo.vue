@@ -1,31 +1,31 @@
 <template>
   <div class="container">
     <h1 class="main-title">{{ greeting }}，{{ user.name }}</h1>
-    <hr class="divider" />
+    <hr class="divider"/>
     <div class="content">
       <div class="profile-section">
         <div class="card">
           <h2 class="subtitle">个人信息</h2>
-          <hr class="card-divider" />
+          <hr class="card-divider"/>
           <div class="input-group">
             <label for="name"><strong>昵称</strong></label>
-            <input type="text" id="name" v-model="user.name" />
+            <input type="text" id="name" v-model="user.name"/>
           </div>
           <div class="input-group">
             <label for="uid"><strong>账号（UID）</strong></label>
-            <input type="text" id="uid" v-model="user.uid" disabled />
+            <input type="text" id="uid" v-model="user.uid" disabled/>
           </div>
           <div class="input-group">
             <label for="college"><strong>学院</strong></label>
-            <input type="text" id="college" v-model="user.college" />
+            <input type="text" id="college" v-model="user.college"/>
           </div>
           <div class="input-group">
             <label for="signature"><strong>个性签名</strong></label>
-            <input type="text" id="signature" v-model="user.signature" />
+            <input type="text" id="signature" v-model="user.signature"/>
           </div>
           <div class="input-group">
             <label><strong>头像</strong></label>
-            <img :src="user.avatar" alt="user-avatar" class="avatar" />
+            <img :src="user.avatar" alt="user-avatar" class="avatar"/>
           </div>
           <div class="button-group">
             <input type="file" @change="onFileChange" style="display: none;" ref="fileInput">
@@ -37,7 +37,7 @@
       <div class="stats-section">
         <div class="card">
           <h2 class="subtitle">统计</h2>
-          <hr class="card-divider" />
+          <hr class="card-divider"/>
           <div class="stats-content">
             <div class="stats-left">
               <p><strong>点亮菜品:</strong> {{ stats.orderRate }}%</p>
@@ -47,8 +47,10 @@
             </div>
             <div class="stats-right">
               <p><strong>已点赞的评论数:</strong> {{ stats.totalLikes }}</p>
-              <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）</p>
-              <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）</p>
+              <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）
+              </p>
+              <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）
+              </p>
             </div>
           </div>
         </div>
@@ -71,11 +73,19 @@
 
 <script>
 import * as echarts from 'echarts';
+import axios from "axios";
 
 export default {
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       user: {
+        id: Number(this.$route.params.id),
         name: '时间的彷徨',
         uid: 'zxwswd114514',
         college: '计算机学院',
@@ -132,6 +142,19 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    get_user_info_id() {
+      axios.get(`http://127.0.0.1:8000/users/info/${this.id}/`)
+        .then(response => {
+          this.name = response.data.username;
+          this.uid = response.data.id + response.data.username;
+          this.college = response.data.school;
+          this.signature = response.data.motto;
+          this.avatar = response.data.avatar;
+        })
+        .catch(error => {
+          console.error('Error fetching dish details:', error);
+        });
+    },
     initCharts() {
       // Initialize the location chart
       var locationChart = echarts.init(document.getElementById('locationChart'));
@@ -159,11 +182,11 @@ export default {
               show: false
             },
             data: [
-              { value: 1048, name: '六食堂' },
-              { value: 735, name: '四食堂' },
-              { value: 580, name: '三食堂' },
-              { value: 484, name: '二食堂' },
-              { value: 300, name: '一食堂' }
+              {value: 1048, name: '六食堂'},
+              {value: 735, name: '四食堂'},
+              {value: 580, name: '三食堂'},
+              {value: 484, name: '二食堂'},
+              {value: 300, name: '一食堂'}
             ],
             emphasis: {
               itemStyle: {
@@ -203,11 +226,11 @@ export default {
               show: false
             },
             data: [
-              { value: 1048, name: '早餐' },
-              { value: 735, name: '午餐' },
-              { value: 580, name: '晚餐' },
-              { value: 484, name: '夜宵' },
-              { value: 300, name: '其他' }
+              {value: 1048, name: '早餐'},
+              {value: 735, name: '午餐'},
+              {value: 580, name: '晚餐'},
+              {value: 484, name: '夜宵'},
+              {value: 300, name: '其他'}
             ],
             emphasis: {
               itemStyle: {
@@ -243,7 +266,7 @@ export default {
   font-size: 2.4rem;
   font-weight: bold;
   text-align: left !important;
-  margin:0 0 0;
+  margin: 0 0 0;
 }
 
 .divider {
@@ -276,7 +299,7 @@ export default {
 .subtitle {
   display: flex;
   justify-content: flex-start; /* 水平方向从容器的开头开始排列 */
-  align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
+  align-items: flex-start; /* 垂直方向从容器的开头开始排列 */
   font-size: 2rem;
   font-weight: 700;
   text-align: left !important;
@@ -352,11 +375,11 @@ export default {
 
 .chart-container {
   text-align: center;
-  padding :0 0;
+  padding: 0 0;
 }
 
 .chart-title {
-  margin-top:10px;
+  margin-top: 10px;
   font-weight: 600;
 }
 

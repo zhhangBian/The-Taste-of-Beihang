@@ -54,23 +54,8 @@ export default {
           console.error('Error fetching data: ', error);
         });
     },
-    check_login() {
-      let login_status
-      axios.get('http://127.0.0.1:8000/users/check-login-status')
-        .then(response => {
-          login_status = response.data.login_status;
-          console.log(login_status);
-        })
-        .catch(error => {
-          console.error('Error fetching data: ', error);
-        });
-      if (login_status === 0) {
-        this.$router.push('/login');
-      }
-    }
   },
   mounted() {
-    this.check_login();
   }
 };
 </script>

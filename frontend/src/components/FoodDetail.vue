@@ -208,6 +208,20 @@ export default {
     }
   },
   methods: {
+    getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    },
     get_dish_detail() {
       axios.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
         .then(response => {
@@ -228,6 +242,10 @@ export default {
         });
     },
     submitReview() {
+      const csrftoken = this.getCookie('csrftoken');
+
+      axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
+      axios.defaults.withCredentials = true;
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
       axios.post(`http://127.0.0.1:8000/comment/create-comment/`, {

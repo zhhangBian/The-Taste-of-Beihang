@@ -2,7 +2,7 @@
   <div class="home">
     <Menu/>
     <MainBackground/>
-    <MainUser/>
+<!--    <MainUser/>-->
     <MainBackgroundLine/>
   </div>
 </template>
