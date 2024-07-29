@@ -126,9 +126,9 @@ export default {
       alert('完成了修改个人信息');
       apiClient.post(`http://127.0.0.1:8000/users/update-user`, {
         params: {
-          "username":this.user.name,
-          "school":this.user.college,
-          "motto":this.user.signature,
+          "username": this.user.name,
+          "school": this.user.college,
+          "motto": this.user.signature,
         }
       })
         .then(() => {
@@ -144,11 +144,25 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
+        // 使用 FileReader 进行文件预览
         const reader = new FileReader();
         reader.onload = e => {
           this.user.avatar = e.target.result;
         };
         reader.readAsDataURL(file);
+
+        // 创建 FormData 对象并添加文件
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // 上传文件到服务器
+        apiClient.post('http://127.0.0.1:8000/users/update-avatar/', formData)
+          .then(response => {
+            this.user.avatar = response.data.avatar; // 更新用户头像
+          })
+          .catch(error => {
+            console.error('Error uploading file:', error);
+          });
       }
     },
     get_user_info() {

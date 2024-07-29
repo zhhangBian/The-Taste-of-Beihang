@@ -14,6 +14,7 @@ urlpatterns = [
     path('change-password/', change_password),
     path('forget-password/', forget_password),
     path('update-users/', update_user),
+    path('update-avatar/',update_avatar),
 
     path('get-user-info/', get_user_info),
     path('info/<int:user_id>/', get_user_info_by_id),

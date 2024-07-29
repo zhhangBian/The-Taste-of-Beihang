@@ -1,5 +1,6 @@
 # 代表了用户的基本接口
 import json
+import os
 
 from django.contrib import auth
 from django.contrib.auth import authenticate, login
@@ -155,7 +156,7 @@ def forget_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def update_user(request: HttpRequest):
-    id = login_ids
+    id = login_id
     user = User.objects.filter(id=id).first()
 
     body = json.loads(request.body.decode('utf-8'))
@@ -180,6 +181,21 @@ def update_user(request: HttpRequest):
     # 更新用户
     user.save()
     return success_response({"message": "更新成功"})
+
+
+@response_wrapper
+@require_POST
+def update_avatar(request):
+    file = request.FILES.get('file')
+    file_path = os.path.join("../../../static", file.name)
+    with open(file_path, 'wb+') as f:
+        f.write(file.read())
+        f.close()
+    # url = upload("../../../static" + file.name, file.anme)
+    return success_response({
+        "avatar": 1,
+        "message": "上传成功",
+    })
 
 
 @response_wrapper
