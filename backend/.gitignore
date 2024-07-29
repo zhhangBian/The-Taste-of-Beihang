@@ -2,4 +2,4 @@
 .idea
 .vscode
 __pycache__
-application/utils/api_key
+application/utils/api_key.json

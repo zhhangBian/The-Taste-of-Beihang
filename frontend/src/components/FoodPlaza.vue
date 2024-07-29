@@ -10,15 +10,6 @@
         <option value="学四食堂">学四食堂</option>
         <option value="学五食堂">学五食堂</option>
         <option value="学六食堂">学六食堂</option>
-        <option value="教工食堂">教工食堂</option>
-        <option value="清真食堂">清真食堂</option>
-        <option value="合一厅">合一厅</option>
-        <option value="东区第一食堂">东区第一食堂</option>
-        <option value="鼓瑟轩">鼓瑟轩</option>
-        <option value="西区清真食堂">西区清真食堂</option>
-        <option value="西区第一食堂">西区第一食堂</option>
-        <option value="西区第二食堂">西区第二食堂</option>
-        <option value="西区第三食堂">西区第三食堂</option>
       </select>
       <select v-model="selectedDish" @change="filterResults">
         <option value="所有菜品">所有菜品</option>

@@ -1,8 +1,10 @@
+import json
+
 import httpx
 from openai import OpenAI
 
-with open('api_key', 'r') as file:
-    api_key = file.readline().strip()
+with open('api_key.json', 'r') as file:
+    api_key = json.load(file).get("llm_api")
 
 client = OpenAI(
     base_url="https://api.xty.app/v1",
