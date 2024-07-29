@@ -8,7 +8,8 @@ urlpatterns = [
 
     path('get-dish-comments', get_dish_comments),
 
-    path('get-dish-basics', get_dish_info),
+    path('get-dish-info', get_dish_info),
+    path('detail/<int:id>/', get_dish_info_id),
 
     path('get-dish-recommend', get_dish_recommend)
 ]

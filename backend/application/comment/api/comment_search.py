@@ -5,6 +5,7 @@ import json
 from django.views.decorators.http import require_POST
 
 from application.comment.models import Comment
+from application.dish.models import Dish
 from application.utils.response import response_wrapper, success_response
 
 
@@ -15,6 +16,8 @@ def serialize_comments(comments) -> list:
     comments_list = []
 
     for comment in comments:
+        dish = Dish.objects.filter(name=comment.dish_name).first()
+        # print(dish.id)
         comment_dict = {
             'id': comment.id,
             'title': comment.title,
@@ -29,6 +32,7 @@ def serialize_comments(comments) -> list:
 
             'restaurant_name': comment.restaurant_name,
             'dish_name': comment.dish_name,
+            'dish_id': dish.id,
             'author_id': comment.author_id,
         }
         comments_list.append(comment_dict)

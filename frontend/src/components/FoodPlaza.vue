@@ -37,7 +37,8 @@
       </div>
       <div class="results-container">
         <div class="grid">
-          <div class="card" v-for="comment in filteredComments" :key="comment.id" @click="goToDetail(comment.id)">
+          <div class="card" v-for="comment in filteredComments" :key="comment.id"
+               @click="goToDetail(comment.dish_id)">
             <img :src="getImage(comment.image)" :alt="comment.title" class="card-img">
             <h2 class="card-title">{{ comment.title }}</h2>
             <p class="card-text">
@@ -67,7 +68,8 @@ export default {
           title: '麻辣香锅',
           restaurant_name: '学六食堂',
           grade: 4.5,
-          price: 20
+          price: 20,
+          dish_id: 1,
         },
         {
           id: 2,
@@ -343,7 +345,7 @@ select {
   height: 17rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  font-size:1.2rem;
+  font-size: 1.2rem;
   resize: none;
   font-family: 'Noto Sans SC', sans-serif;
   border: 1px solid #ccc;

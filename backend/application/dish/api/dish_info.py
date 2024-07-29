@@ -39,3 +39,24 @@ def get_dish_info(request: HttpRequest):
     return success_response({
         "dishes_info": dishes_basics,
     })
+
+
+@response_wrapper
+@require_GET
+def get_dish_info_id(request: HttpRequest, id: int):
+    dish = Dish.objects.filter(id=id).first()
+
+    return success_response({
+        "name": dish.name,
+        "image": dish.image,
+
+        "address": dish.address,
+        "restaurant_name": dish.restaurant_name,
+
+        "description": dish.description,
+
+        "prices": dish.price,
+        "overall_rating": dish.overall_rating,
+        "flavor_rating": dish.flavor_rating,
+        "waiting_time": dish.waiting_time,
+    })

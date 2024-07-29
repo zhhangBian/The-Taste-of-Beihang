@@ -5,7 +5,8 @@
         <h1 class="text-8xl font-mashan border-b border-gray pb-1 mb-1 flex items-center">
           {{ dish.name }}
           <button @click="toggleSubscription" class="icon-button ml-4">
-            <img :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" alt="Subscription status" class="icon enlarged-icon">
+            <img :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')"
+                 alt="Subscription status" class="icon enlarged-icon">
           </button>
         </h1>
         <p class="text-2xl font-noto mb-9">{{ dish.address }}</p>
@@ -31,8 +32,10 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
+        <img :src="dish.image" alt="Delicious dish"
+             class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+          吃过的怎么说？</h2>
         <div class="mt-4 reviews-container">
           <div v-for="(comment, index) in comments" :key="index">
             <div class="review-item">
@@ -40,10 +43,14 @@
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
                 <div class="review-content flex-1">
                   <div class="flex items-center justify-between">
-                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span></p>
+                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span
+                      class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
+                    </p>
                     <div class="flex space-x-2 ml-auto">
                       <button @click="toggleLike(comment.id)" class="icon-button">
-                        <img :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')" alt="Like/Unlike" class="icon">
+                        <img
+                          :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
+                          alt="Like/Unlike" class="icon">
                       </button>
                     </div>
                   </div>
@@ -57,16 +64,23 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img src="https://placehold.co/400x300" alt="Hotpot dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
+        <img src="https://placehold.co/400x300" alt="Hotpot dish"
+             class="w-full h-auto rounded-lg decreased-height">
+        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+          写下你的评论！</h2>
         <div class="mt-4">
-          <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
+          <div class="flex items-center space-x-4 rating-container"
+               v-for="(rating, index) in ratings" :key="index">
             <span class="font-man rating-label">{{ rating.label }}</span>
-            <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1" @input="updateRating(index, $event)">
+            <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
+                   @input="updateRating(index, $event)">
             <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
           </div>
-          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none" placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
-          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man" @click="submitReview">提交</button>
+          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
+                    placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
+                  @click="submitReview">提交
+          </button>
         </div>
       </div>
     </div>
@@ -165,10 +179,10 @@ export default {
       likedComments: [],
       isSubscribed: false,  // 初始化订阅状态为未订阅
       ratings: [
-        { label: '总体评价', value: 0 },
-        { label: '口味', value: 0 },
-        { label: '价格', value: 0 },
-        { label: '排队时长', value: 0 }
+        {label: '总体评价', value: 0},
+        {label: '口味', value: 0},
+        {label: '价格', value: 0},
+        {label: '排队时长', value: 0}
       ],
       newReview: {
         content: ''
@@ -176,6 +190,22 @@ export default {
     };
   },
   methods: {
+    get_dish_detail() {
+      axios.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
+        .then(response => {
+          this.dish.name = response.data.name;
+          this.dish.image = response.data.image;
+
+          this.dish.address = response.data.address;
+          this.dish.overallRating = response.data.overall_rating;
+          this.dish.flavorRating = response.data.flavor_rating;
+          this.dish.priceRating = response.data.prices;
+          this.dish.timeRating = response.data.waiting_time;
+        })
+        .catch(error => {
+          console.error('Error fetching dish details:', error);
+        });
+    },
     submitReview() {
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
@@ -255,7 +285,8 @@ export default {
     }
   },
   mounted() {
-    this.fetchComments();
+    this.get_dish_detail();
+    // this.fetchComments();
     document.title = `详情 - ${this.dish.name}`;
     console.log('FoodDetail mounted with ID:', this.id);
   },
@@ -514,14 +545,15 @@ body {
 
 .icon {
   height: 1rem; /* 调整大小 */
-  width: 1rem;  /* 调整大小 */
+  width: 1rem; /* 调整大小 */
   vertical-align: bottom; /* 保持图标底部与文字底部对齐 */
 }
 
 .enlarged-icon {
   height: 1.5rem; /* 调整图标放大后的高度 */
-  width: 1.5rem;  /* 调整图标放大后的宽度 */
+  width: 1.5rem; /* 调整图标放大后的宽度 */
 }
+
 .range {
   width: 300px;
   height: 5px;
