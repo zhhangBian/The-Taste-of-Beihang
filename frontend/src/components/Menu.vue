@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="logout" @click="navigateTo('/login')">
+      <div class="logout" @click="log_out">
         <div class="menu-list-item">
           <div class="block"></div>
           <span class="iconfont icon-jinru"></span>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from '../axios'; // 导入 Axios 实例
 
 export default {
   data() {
@@ -53,28 +53,16 @@ export default {
     };
   },
   methods: {
-    getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
-        }
-      }
-      return cookieValue;
-    },
     navigateTo(path) {
+      this.get_user_info();
       this.$router.push(path);
     },
     navigateToUserCenter(id) {
+      this.get_user_info();
       this.$router.push({name: 'user', params: {id}});
     },
     log_out() {
-      axios.get('http://127.0.0.1:8000/users/logout/')
+      apiClient.get('http://127.0.0.1:8000/users/logout/')
         .then(() => {
           this.$router.push('/login');
         })
@@ -87,7 +75,7 @@ export default {
       return this.avatar;
     },
     get_user_info() {
-      axios.get('http://127.0.0.1:8000/users/get-user-info/')
+      apiClient.get('http://127.0.0.1:8000/users/get-user-info/')
         .then(response => {
           this.id = response.data.id;
           this.username = response.data.username;
@@ -98,10 +86,25 @@ export default {
           console.error('Error fetching data: ', error);
         });
       console.log(this.id);
-    }
+    },
+    check_login_status() {
+      let status;
+      apiClient.get('http://127.0.0.1:8000/users/check-login-status')
+        .then(response => {
+          status = response.data.login_status;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+      return status;
+    },
   },
   mounted() {
-    setInterval(this.get_user_info, 500);
+    setInterval(2000);
+    if (this.check_login_status()) {
+      this.$router.push('/login');
+    }
+    setInterval(this.get_user_info,500);
   }
 };
 </script>

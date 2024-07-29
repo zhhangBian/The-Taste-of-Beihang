@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from '../axios';
 
 export default {
   data() {
@@ -244,7 +244,7 @@ export default {
       console.log('Selected Canteen:', this.selectedCanteen);
       console.log('Selected Dish:', this.selectedDish);
 
-      axios.post('http://127.0.0.1:8000/comment/search-comment', {
+      apiClient.post('http://127.0.0.1:8000/comment/search-comment', {
         search: this.query,
         restaurant_name: this.selectedCanteen,
         dish_name: this.selectedDish

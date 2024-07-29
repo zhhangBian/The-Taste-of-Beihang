@@ -23,7 +23,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import apiClient from '../axios';
 export default {
   data() {
     var validatePass = (rule, value, callback) => {

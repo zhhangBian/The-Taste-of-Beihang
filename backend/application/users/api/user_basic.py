@@ -5,26 +5,25 @@ from django.contrib import auth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest
-from django.shortcuts import redirect
 from django.views.decorators.http import require_POST, require_GET
 
 from .email import varify_captcha
 from ..models import User
 from ...utils.response import *
 
-name_not_allow = ['default', 'delete']
-
 login_id = 0
+
+# 导入用于装饰器修复技术的包
+
+name_not_allow = ['default', 'delete']
+default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
 
 
 @response_wrapper
 @require_GET
 def check_login_status(request: HttpRequest):
-    print(114514)
-    if request.user.is_authenticated:
-        return success_response({"login_status": 1})
-    else:
-        return success_response({"login_status": 0})
+    print("check login id is " + str(login_id))
+    return success_response({"login_status": (login_id != 0)})
 
 
 # 用户登录
@@ -37,10 +36,6 @@ def user_login(request: HttpRequest):
     # 使用Django的authenticate函数验证用户名和密码
     user = authenticate(username=username, password=password)
 
-    global login_id
-    login_id = user.id
-    print("login " + str(login_id))
-
     # 通过查询邮箱找到对应的用户
     if user is None and '@' in username:
         # 使用邮箱登录，查询email相等的用户
@@ -50,12 +45,14 @@ def user_login(request: HttpRequest):
         username = tmp_user.username
         user = authenticate(username=username, password=password)
 
-    if user is not None:
+    if user:
         login(request, user)
-        print("login " + str(request.user.is_authenticated))
+
+        global login_id
+        login_id = user.id
+        print("login id is " + str(login_id))
         return success_response({
-            "message": "登录成功",
-            "password": user.word
+            "message": "登录成功"
         })
     elif User.objects.filter(username=username).exists():
         # 密码错误
@@ -71,7 +68,7 @@ def user_logout(request):
     auth.logout(request)
     global login_id
     login_id = 0
-    return redirect('/login/')
+    return success_response({"message": "logout success"})
 
 
 # 用户注册
@@ -103,10 +100,10 @@ def user_signup(request: HttpRequest):
     #     return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
 
     # 创建新用户
-    User.objects.create_user(username=username,
-                             email=email,
-                             password=password,
-                             word=password)
+    user = User.objects.create_user(username=username,
+                                    email=email,
+                                    password=password)
+    user.save()
 
     return success_response({'message': '注册成功'})
 
@@ -115,8 +112,8 @@ def user_signup(request: HttpRequest):
 @response_wrapper
 @require_POST
 def change_password(request: HttpRequest):
-    global login_id
-    user = User.objects.filter(id=login_id).first()
+    id = login_id
+    user = User.objects.filter(id=id).first()
 
     body = json.loads(request.body.decode('utf-8'))
     old_password = body.get('old_password')
@@ -158,9 +155,8 @@ def forget_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def update_user(request: HttpRequest):
-    # 获取用户
-    global login_id
-    user = User.objects.get(id=login_id)
+    id = login_ids
+    user = User.objects.filter(id=id).first()
 
     body = json.loads(request.body.decode('utf-8'))
     username = body.get('username')
@@ -189,16 +185,19 @@ def update_user(request: HttpRequest):
 @response_wrapper
 @require_GET
 def get_user_info(request):
-    global login_id
-    print("get " + str(login_id))
-    my_user = User.objects.filter(id=login_id).first()
-
     if login_id == 0:
-        return success_response(({"message": "quick login"}))
+        return success_response({
+            "id": 0,
+            "username": "还未登录！",
+            "avatar": default_avatar,
+        })
+    id = login_id
+    user = User.objects.filter(id=id).first()
+
     return success_response({
-        "id": my_user.id,
-        "username": my_user.username,
-        "avatar": my_user.avatar,
+        "id": user.id,
+        "username": user.username,
+        "avatar": user.avatar,
     })
 
 
@@ -221,9 +220,8 @@ def get_user_info_by_id(request: HttpRequest, id: int):
 @response_wrapper
 @require_GET
 def get_user_detail(request: HttpRequest):
-    global login_id
-    print("get " + str(login_id))
-    user = User.objects.filter(id=login_id).first()
+    id = login_id
+    user = User.objects.filter(id=id).first()
 
     return success_response({
         "id": user.id,

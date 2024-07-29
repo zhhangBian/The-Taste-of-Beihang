@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from '../axios'; // 导入 Axios 实例
 
 export default {
   props: {
@@ -223,7 +223,8 @@ export default {
       return cookieValue;
     },
     get_dish_detail() {
-      axios.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
+
+      apiClient.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
         .then(response => {
           this.dish.name = response.data.name;
           this.dish.image = response.data.image;
@@ -242,13 +243,9 @@ export default {
         });
     },
     submitReview() {
-      const csrftoken = this.getCookie('csrftoken');
-
-      axios.defaults.headers.common['X-CSRFToken'] = csrftoken;
-      axios.defaults.withCredentials = true;
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
-      axios.post(`http://127.0.0.1:8000/comment/create-comment/`, {
+      apiClient.post(`http://127.0.0.1:8000/comment/create-comment/`, {
         params: {
           "title": this.dish.name + "好吃！",
           "content": this.newReview.comment,

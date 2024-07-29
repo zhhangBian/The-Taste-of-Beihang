@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiClient from '../axios';
 
 export default {
   data() {
@@ -82,26 +82,25 @@ export default {
       this.isLogin = !this.isLogin;
     },
     login() {
-      axios.post('http://127.0.0.1:8000/users/login/', {
+      apiClient.post('http://127.0.0.1:8000/users/login/', {
         username: this.username,
         password: this.password,
       })
         .then(response => {
           console.log(response.data);
+          this.$router.push('/');
         })
         .catch(error => {
           console.error(error);
           alert(error.response.data.message);
         });
-      setTimeout(1000);
-      this.$router.push('/');
     },
     signup() {
       if (this.password !== this.confirmPassword) {
         alert('密码不匹配');
         return;
       }
-      axios.post('http://127.0.0.1:8000/users/signup/', {
+      apiClient.post('http://127.0.0.1:8000/users/signup/', {
         username: this.username,
         password: this.password,
         email: this.email,

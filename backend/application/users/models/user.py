@@ -13,7 +13,6 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, verbose_name='邮箱',
                               error_messages={'unique': '该邮箱已被注册'}, blank=False)
     password = models.CharField(max_length=256, verbose_name='密码')
-    word = models.CharField(max_length=256, verbose_name='码',blank=True)
     school = models.CharField(max_length=200,verbose_name="学院",blank=True,default="计算机学院")
 
     gender_choices = (

@@ -73,7 +73,7 @@
 
 <script>
 import * as echarts from 'echarts';
-import axios from "axios";
+import apiClient from '../axios';
 
 export default {
   props: {
@@ -124,7 +124,7 @@ export default {
   methods: {
     editProfile() {
       alert('完成了修改个人信息');
-      axios.post(`http://127.0.0.1:8000/users/update-user`, {
+      apiClient.post(`http://127.0.0.1:8000/users/update-user`, {
         params: {
           "username":this.user.name,
           "school":this.user.college,
@@ -152,7 +152,7 @@ export default {
       }
     },
     get_user_info() {
-      axios.get(`http://127.0.0.1:8000/users/get-user-detail/`)
+      apiClient.get(`http://127.0.0.1:8000/users/get-user-detail/`)
         .then(response => {
           this.user.name = response.data.username;
           this.user.uid = response.data.id + response.data.username;

@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import apiClient from '../axios';
 
 export default {
   name: 'CenteredSvgAndTitle',
@@ -45,7 +45,7 @@ export default {
       this.$router.push('/plaza');
     },
     get_recommendation() {
-      axios.get('http://127.0.0.1:8000/dish/get-dish-recommend')
+      apiClient.get('http://127.0.0.1:8000/dish/get-dish-recommend')
         .then(response => {
           const {place, dish} = response.data;
           this.recommendation = `在<span style="color: #5E17EB;">${place}</span>吃<span style="color: #5E17EB;">${dish}</span>`;
@@ -54,8 +54,22 @@ export default {
           console.error('Error fetching data: ', error);
         });
     },
+    check_login_status() {
+      let status;
+      apiClient.get('http://127.0.0.1:8000/users/check-login-status')
+        .then(response => {
+          status = response.data.login_status;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+      return status;
+    },
   },
   mounted() {
+    if (!this.check_login_status()) {
+      //this.$router.push('/login');
+    }
   }
 };
 </script>
