@@ -31,55 +31,57 @@
             {{ dish.waiting_time.toFixed(1) }}</p>
         </div>
       </div>
-      <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish"
-             class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
-          吃过的怎么说？</h2>
-        <div class="mt-4 reviews-container">
-          <div v-for="(comment, index) in comments" :key="index" class="review-item">
-            <div class="flex items-center space-x-4">
-              <div class="avatar-container">
-                <img :src="comment.avatar" alt="User avatar" class="user-avatar">
-              </div>
-              <div class="review-description flex-1">
-                <div class="flex items-center justify-between">
-                  <p class="font-man font-bold">{{ comment.title }} &ensp;<span
-                    class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
-                  </p>
-                  <div class="flex space-x-2 ml-auto">
-                    <button @click="toggleLike(comment.id)" class="icon-button">
-                      <img
-                        :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
-                        alt="Like/Unlike" class="icon">
-                    </button>
+      <div class="col-span-4">
+        <div class="top-container">
+          <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
+          <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
+        </div>
+        <div class="bottom-container mt-4">
+          <div class="reviews-container">
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
+            <div class="reviews-inner-container mt-4">
+              <div v-for="(comment, index) in comments" :key="index" class="review-item">
+                <div class="flex items-center space-x-4">
+                  <div class="avatar-container">
+                    <img :src="comment.avatar" alt="User avatar" class="user-avatar">
+                  </div>
+                  <div class="review-description flex-1">
+                    <div class="flex items-center justify-between">
+                      <p class="font-man font-bold">{{ comment.title }} &ensp;<span
+                        class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
+                      </p>
+                      <div class="flex space-x-2 ml-auto">
+                        <button @click="toggleLike(comment.id)" class="icon-button">
+                          <img
+                            :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
+                            alt="Like/Unlike" class="icon">
+                        </button>
+                      </div>
+                    </div>
+                    <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
+                    <p class="font-man font-medium">{{ comment.content }}</p>
                   </div>
                 </div>
-                <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
-                <p class="font-man font-medium">{{ comment.content }}</p>
+                <hr class="my-2 hr-gray" v-if="index < comments.length - 1">
               </div>
             </div>
-            <hr class="my-2 hr-gray" v-if="index < comments.length - 1">
           </div>
-        </div>
-      </div>
-      <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish"
-             class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
-          写下你的评论！</h2>
-        <div class="mt-4">
-          <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
-            <span class="font-man rating-label">{{ rating.label }}</span>
-            <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
-                   @input="updateRating(index, $event)">
-            <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
+          <div class="write-review-container">
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
+            <div class="mt-4">
+              <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
+                <span class="font-man rating-label">{{ rating.label }}</span>
+                <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
+                       @input="updateRating(index, $event)">
+                <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
+              </div>
+              <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
+                        placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+              <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
+                      @click="submitReview">提交
+              </button>
+            </div>
           </div>
-          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
-                    placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
-          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
-                  @click="submitReview">提交
-          </button>
         </div>
       </div>
     </div>
@@ -99,6 +101,7 @@ export default {
   data() {
     return {
       dish: {
+        id: 114514,
         name: '麻辣香锅',
         address: '学四食堂南侧',
         overall_rating: 4.5,
@@ -335,8 +338,8 @@ body {
   grid-column: span 1;
 }
 
-.col-span-2 {
-  grid-column: span 2;
+.col-span-4 {
+  grid-column: span 4;
 }
 
 .border-b {
@@ -352,26 +355,26 @@ body {
 }
 
 .text-8xl {
-  font-size: 3rem;
+  font-size: 3.25rem;
   line-height: 0.9;
   text-align: left; /* 左对齐 */
 }
 
 .text-7xl {
-  font-size: 2.5rem;
+  font-size: 3rem;
   line-height: 0.1;
-  margin-top: 25px;
+  margin-top: 45px;
   text-align: left; /* 左对齐 */
 }
 
 .text-4xl {
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
 
 .text-3xl {
-  font-size: 1.875rem;
+  font-size: 2rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
@@ -529,6 +532,10 @@ body {
 
 .reviews-container {
   max-height: 280px; /* 设置reviews容器的最大高度 */
+}
+
+.reviews-inner-container {
+  max-height: 280px; /* 设置reviews容器的最大高度 */
   overflow-y: auto; /* 添加垂直滚动条 */
 }
 
@@ -611,5 +618,19 @@ body {
   height: auto;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between; /* 调整为左右排列 */
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between; /* 调整为左右排列 */
+}
+
+.reviews-container, .write-review-container {
+  width: 48%; /* 每个容器占一半宽度 */
 }
 </style>
