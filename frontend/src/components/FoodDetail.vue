@@ -12,23 +12,23 @@
         <p class="text-2xl font-noto mb-9">{{ dish.address }}</p>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">总体评价</h2>
-          <p :class="getColor(dish.overallRating)" class="text-7xl font-serif">
-            {{ dish.overallRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.overall_rating)" class="text-7xl font-serif">
+            {{ dish.overall_rating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">口味</h2>
-          <p :class="getColor(dish.flavorRating)" class="text-7xl font-noto">
-            {{ dish.flavorRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.flavor_rating)" class="text-7xl font-noto">
+            {{ dish.flavor_rating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">价格</h2>
-          <p :class="getColor(dish.priceRating)" class="text-7xl font-noto">
-            {{ dish.priceRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.prices)" class="text-7xl font-noto">
+            {{ dish.prices.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">排队时长</h2>
-          <p :class="getColor(dish.timeRating)" class="text-7xl font-noto">
-            {{ dish.timeRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.waiting_time)" class="text-7xl font-noto">
+            {{ dish.waiting_time.toFixed(1) }}</p>
         </div>
       </div>
       <div class="col-span-2">
@@ -41,9 +41,9 @@
             <div class="review-item">
               <div class="flex items-center space-x-4">
                 <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
-                <div class="review-content flex-1">
+                <div class="review-description flex-1">
                   <div class="flex items-center justify-between">
-                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span
+                    <p class="font-man font-bold">{{ comment.title }} &ensp;<span
                       class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
                     </p>
                     <div class="flex space-x-2 ml-auto">
@@ -102,77 +102,77 @@ export default {
       dish: {
         name: '麻辣香锅',
         address: '学四食堂南侧',
-        overallRating: 4.5,
-        flavorRating: 4.9,
-        priceRating: 2.5,
-        timeRating: 3.5,
+        overall_rating: 4.5,
+        flavor_rating: 4.9,
+        prices: 2.5,
+        waiting_time: 3.5,
         image: 'https://placehold.co/400x300'
       },
       comments: [
         {
           id: 1,
-          name: 'Jew',
+          author_name: 'Jew',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.0,
-          flavorRating: 4.0,
-          priceRating: 2.0,
-          timeRating: 3.0,
+          grade: 4.0,
+          flavour: 4.0,
+          price: 2.0,
+          waiting_time: 3.0,
           content: '感觉不如新北二楼的麻辣香锅'
         },
         {
           id: 2,
-          name: '时间的彷徨',
+          author_name: '时间的彷徨',
           date: '2024-06-18 12:20:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.0,
-          flavorRating: 4.0,
-          priceRating: 4.0,
-          timeRating: 4.0,
+          grade: 4.0,
+          flavour: 4.0,
+          price: 4.0,
+          waiting_time: 4.0,
           content: '觉得这家不好吃的都是sb'
         },
         {
           id: 3,
-          name: '传奇co助教myk',
+          author_name: '传奇co助教myk',
           date: '2024-07-27 16:45:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.9,
-          flavorRating: 4.0,
-          priceRating: 3.5,
-          timeRating: 3.2,
+          grade: 4.9,
+          flavour: 4.0,
+          price: 3.5,
+          waiting_time: 3.2,
           content: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
         },
         {
           id: 4,
-          name: '张三',
+          author_name: '张三',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 3.8,
-          flavorRating: 4.2,
-          priceRating: 3.0,
-          timeRating: 2.5,
+          grade: 3.8,
+          flavour: 4.2,
+          price: 3.0,
+          waiting_time: 2.5,
           content: '味道还不错，但是排队时间有点长。'
         },
         {
           id: 5,
-          name: '李四',
+          author_name: '李四',
           date: '2024-04-22 11:45:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 2.5,
-          flavorRating: 3.0,
-          priceRating: 1.5,
-          timeRating: 2.0,
+          grade: 2.5,
+          flavour: 3.0,
+          price: 1.5,
+          waiting_time: 2.0,
           content: '价格有点贵，性价比不高。'
         },
         {
           id: 6,
-          name: '王五',
+          author_name: '王五',
           date: '2024-07-10 19:30:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.7,
-          flavorRating: 4.8,
-          priceRating: 3.5,
-          timeRating: 3.7,
+          grade: 4.7,
+          flavour: 4.8,
+          price: 3.5,
+          waiting_time: 3.7,
           content: '总体感觉很好，推荐大家尝试！'
         }
       ],
@@ -185,7 +185,7 @@ export default {
         {label: '排队时长', value: 0}
       ],
       newReview: {
-        content: ''
+        description: ''
       }
     };
   },
@@ -197,10 +197,11 @@ export default {
           this.dish.image = response.data.image;
 
           this.dish.address = response.data.address;
-          this.dish.overallRating = response.data.overall_rating;
-          this.dish.flavorRating = response.data.flavor_rating;
-          this.dish.priceRating = response.data.prices;
-          this.dish.timeRating = response.data.waiting_time;
+          this.dish.overall_rating = response.data.overall_rating;
+          this.dish.flavor_rating = response.data.flavor_rating;
+          this.dish.prices = response.data.prices;
+          this.dish.waiting_time = response.data.waiting_time;
+          this.comments = response.data.comments;
         })
         .catch(error => {
           console.error('Error fetching dish details:', error);
@@ -218,11 +219,11 @@ export default {
         }
       })
         .then(response => {
-          this.dish.overallRating = response.data.overallRating;
-          this.dish.flavorRating = response.data.flavorRating;
-          this.dish.priceRating = response.data.priceRating;
-          this.dish.timeRating = response.data.timeRating;
-          this.comments = response.data.comments_list;
+          this.dish.overall_rating = response.data.overall_rating;
+          this.dish.flavor_rating = response.data.flavor_rating;
+          this.dish.prices = response.data.prices;
+          this.dish.waiting_time = response.data.waiting_time;
+          this.comments = response.data.comments;
         })
         .catch(error => {
           console.error('Error fetching comments:', error);
@@ -262,7 +263,10 @@ export default {
       }
     },
     getCommentTitle(comment) {
-      return `总体评价 ${comment.overallRating.toFixed(1)} | 口味 ${comment.flavorRating.toFixed(1)} | 价格 ${comment.priceRating.toFixed(1)} | 排队时长 ${comment.timeRating.toFixed(1)}`;
+      return `总体评价 ${comment.grade.toFixed(1)} |
+      口味 ${comment.flavour.toFixed(1)} |
+      价格 ${comment.price.toFixed(1)} |
+      排队时长 ${comment.waiting_time.toFixed(1)}`;
     },
     toggleLike(commentId) {
       const index = this.likedComments.indexOf(commentId);
@@ -509,7 +513,7 @@ body {
   margin-right: 0;
 }
 
-.review-content {
+.review-description {
   text-align: left; /* 确保reviews部分左对齐 */
 }
 
