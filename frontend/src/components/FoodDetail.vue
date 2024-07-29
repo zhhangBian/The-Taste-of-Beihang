@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="col-span-2">
-        <img src="https://placehold.co/400x300" alt="Hotpot dish"
+        <img :src="dish.image" alt="Delicious dish"
              class="w-full h-auto rounded-lg decreased-height">
         <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
           写下你的评论！</h2>
