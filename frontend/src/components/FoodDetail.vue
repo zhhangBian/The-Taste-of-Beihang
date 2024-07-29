@@ -77,6 +77,12 @@
 import axios from "axios";
 
 export default {
+  props: {
+    id: {
+      type: String,
+      required: true,
+    },
+  },
   data() {
     return {
       dish: {
@@ -251,7 +257,8 @@ export default {
   mounted() {
     this.fetchComments();
     document.title = `详情 - ${this.dish.name}`;
-  }
+    console.log('FoodDetail mounted with ID:', this.id);
+  },
 };
 </script>
 
