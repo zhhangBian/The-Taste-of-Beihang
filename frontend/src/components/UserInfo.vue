@@ -56,11 +56,11 @@
           <div class="charts">
             <div class="chart-container">
               <h3 class="chart-title">就餐地点统计</h3>
-              <img :src="stats.locationChart" alt="pie-chart" class="chart-image" />
+              <div id="locationChart" class="chart-image"></div>
             </div>
             <div class="chart-container">
               <h3 class="chart-title">就餐消费统计</h3>
-              <img :src="stats.expenseChart" alt="pie-chart" class="chart-image" />
+              <div id="expenseChart" class="chart-image"></div>
             </div>
           </div>
         </div>
@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import * as echarts from 'echarts';
+
 export default {
   data() {
     return {
@@ -90,8 +92,6 @@ export default {
         highestSpendMeal: '麻辣香锅/六食堂',
         lowestSpend: 2,
         lowestSpendMeal: '汉堡/四食堂',
-        locationChart: 'https://placehold.co/200x200',
-        expenseChart: 'https://placehold.co/200x200'
       }
     };
   },
@@ -113,6 +113,7 @@ export default {
   },
   mounted() {
     document.title = `个人中心 - ${this.user.name}`;
+    this.initCharts();
   },
   methods: {
     editProfile() {
@@ -130,9 +131,99 @@ export default {
         };
         reader.readAsDataURL(file);
       }
+    },
+    initCharts() {
+      // Initialize the location chart
+      var locationChart = echarts.init(document.getElementById('locationChart'));
+      var locationOption = {
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'middle'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Location',
+            type: 'pie',
+            radius: ['50%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 1048, name: '六食堂' },
+              { value: 735, name: '四食堂' },
+              { value: 580, name: '三食堂' },
+              { value: 484, name: '二食堂' },
+              { value: 300, name: '一食堂' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      locationChart.setOption(locationOption);
+
+      // Initialize the expense chart
+      var expenseChart = echarts.init(document.getElementById('expenseChart'));
+      var expenseOption = {
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'middle'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Expense',
+            type: 'pie',
+            radius: ['50%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 1048, name: '早餐' },
+              { value: 735, name: '午餐' },
+              { value: 580, name: '晚餐' },
+              { value: 484, name: '夜宵' },
+              { value: 300, name: '其他' }
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      expenseChart.setOption(expenseOption);
     }
   }
 }
+
 </script>
 
 <style scoped>
@@ -185,7 +276,7 @@ export default {
 .subtitle {
   display: flex;
   justify-content: flex-start; /* 水平方向从容器的开头开始排列 */
-align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
+  align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
   font-size: 2rem;
   font-weight: 700;
   text-align: left !important;
@@ -271,9 +362,8 @@ align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
 
 .chart-image {
   margin-top: 1px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+  width: 300px;
+  height: 300px;
 }
 
 .input-group {
@@ -300,4 +390,5 @@ align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
   background-color: #f5f5f5;
   color: #aaa;
 }
+
 </style>
