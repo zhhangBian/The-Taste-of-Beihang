@@ -1,19 +1,27 @@
 # 代表了用户的基本接口
 import json
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest
 from django.shortcuts import redirect
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
-from .auth import *
 from .email import varify_captcha
 from ..models import User
 from ...utils.response import *
 
 name_not_allow = ['default', 'delete']
-User = get_user_model()
+
+
+@response_wrapper
+@require_GET
+def check_login_status(request: HttpRequest):
+    if request.user.is_authenticated:
+        return success_response({"login_status": 1})
+    else:
+        return success_response({"login_status": 0})
 
 
 # 用户登录
@@ -36,24 +44,23 @@ def user_login(request: HttpRequest):
         user = authenticate(username=username, password=password)
 
     if user is not None:
-        request.session['is_login'] = True
-        request.session['user_id'] = user.id
-        request.session['username'] = user.username
+        login(request, user)
+        print("login " + str(request.user.is_authenticated))
         return success_response({
             "message": "登录成功"
         })
     elif User.objects.filter(username=username).exists():
+        # 密码错误
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "密码错误！")
     else:
+        # 登录失败
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "用户名或邮箱不存在！")
 
 
 @response_wrapper
 @require_GET
-def user_logoff(request):
-    # 如果不是登陆状态，无法登出
-    if request.session.get('is_login'):
-        request.session.flush()
+def user_logout(request):
+    auth.logout(request)
     return redirect('/login/')
 
 

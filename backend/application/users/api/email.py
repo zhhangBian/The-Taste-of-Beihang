@@ -3,31 +3,13 @@ import json
 import random
 
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 
-from .auth import generate_token
 from ..models import User
 from ...utils.response import *
-
-
-@response_wrapper
-@require_POST
-def send_email(request):
-    # 获取数据
-    body = json.loads(request.body.decode('utf-8'))
-    email = body.get('email')
-    content = body.getT('content')
-    # 检查邮箱是否已存在
-    if email and User.objects.filter(email=email).exists():
-        # 生成token
-        token = generate_token(email)
-        # 发送邮件
-        send_mail(content, token, settings.EMAIL_HOST_USER, [email])
-        return success_response({"message": "Email sent successfully."})
-    else:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "邮箱不存在！")
 
 
 def varify_captcha(email, captcha):

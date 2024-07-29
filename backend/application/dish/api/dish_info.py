@@ -1,5 +1,6 @@
 import json
 
+from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
@@ -9,6 +10,7 @@ from application.users.api import User
 from application.utils.response import *
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
+
 
 @response_wrapper
 @require_GET
@@ -51,6 +53,7 @@ def get_dish_info_id(request: HttpRequest, id: int):
 
     comments = Comment.objects.filter(dish_name=dish.name)
     comments_list = []
+    images = []
     for comment in comments:
         author_name = "momo"
         avatar = default_avatar
@@ -58,6 +61,7 @@ def get_dish_info_id(request: HttpRequest, id: int):
             user = User.objects.get(id=comment.author_id)
             author_name = user.username
             avatar = user.avatar
+        images.append(comment.image)
         comment_dict = {
             'id': comment.id,
             'title': comment.title,
@@ -78,7 +82,7 @@ def get_dish_info_id(request: HttpRequest, id: int):
             'avatar': avatar,
         }
         comments_list.append(comment_dict)
-    print(comments_list)
+    # print(comments_list)
 
     return success_response({
         "name": dish.name,
@@ -96,4 +100,6 @@ def get_dish_info_id(request: HttpRequest, id: int):
 
         "comment_num": len(comments_list),
         "comments": comments_list,
+
+        "images": images,
     })

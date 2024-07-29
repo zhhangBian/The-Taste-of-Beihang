@@ -86,14 +86,15 @@ export default {
         username: this.username,
         password: this.password,
       })
-          .then(response => {
-            console.log(response.data);
-            this.$router.push('/plaza');
-          })
-          .catch(error => {
-            console.error(error);
-            alert(error.response.data.message);
-          });
+        .then(response => {
+          console.log(response.data);
+        })
+        .catch(error => {
+          console.error(error);
+          alert(error.response.data.message);
+        });
+      setTimeout(500);
+      this.$router.push('/');
     },
     signup() {
       if (this.password !== this.confirmPassword) {
@@ -105,14 +106,14 @@ export default {
         password: this.password,
         email: this.email,
       })
-          .then(response => {
-            console.log(response.data);
-            alert(response.data.message);
-          })
-          .catch(error => {
-            console.error(error);
-            alert(error.response.data.message);
-          });
+        .then(response => {
+          console.log(response.data);
+          alert(response.data.message);
+        })
+        .catch(error => {
+          console.error(error);
+          alert(error.response.data.message);
+        });
     }
   }
 };

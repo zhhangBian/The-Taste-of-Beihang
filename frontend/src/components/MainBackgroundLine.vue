@@ -6,7 +6,8 @@
       </div>
       <div class="customFont" v-html="recommendation"></div>
       <div class="button-container">
-        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?</button>
+        <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?
+        </button>
         <div v-if="showBottomButtons" class="bottom-buttons">
           <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
           <button class="bottom-button" @click="handleClick('重新建议')">换一个</button>
@@ -46,13 +47,30 @@ export default {
     get_recommendation() {
       axios.get('http://127.0.0.1:8000/dish/get-dish-recommend')
         .then(response => {
-          const { place, dish } = response.data;
+          const {place, dish} = response.data;
           this.recommendation = `在<span style="color: #5E17EB;">${place}</span>吃<span style="color: #5E17EB;">${dish}</span>`;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
         });
+    },
+    check_login() {
+      let login_status
+      axios.get('http://127.0.0.1:8000/users/check-login-status')
+        .then(response => {
+          login_status = response.data.login_status;
+          console.log(login_status);
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+      if (login_status === 0) {
+        this.$router.push('/login');
+      }
     }
+  },
+  mounted() {
+    this.check_login();
   }
 };
 </script>

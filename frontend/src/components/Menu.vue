@@ -11,10 +11,10 @@
       <div class="menu-content">
         <div class="menu-list">
           <div
-              class="menu-list-item"
-              v-for="item in menuData"
-              :key="item.id"
-              @click="navigateTo(item.path)"
+            class="menu-list-item"
+            v-for="item in menuData"
+            :key="item.id"
+            @click="navigateTo(item.path)"
           >
             <div class="block"></div>
             <span class="iconfont" :class="item.iconFont"></span>
@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="logout" @click="navigateTo('/logout')">
+      <div class="logout" @click="navigateTo('/login')">
         <div class="menu-list-item">
           <div class="block"></div>
           <span class="iconfont icon-jinru"></span>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -51,6 +53,12 @@ export default {
   },
   methods: {
     navigateTo(path) {
+      axios.get(`http://127.0.0.1:8000/user/logout/`)
+        .then(() => {
+        })
+        .catch(error => {
+          console.error('Error logout:', error);
+        });
       this.$router.push(path);
     },
     navigateToUserCenter() {
@@ -59,8 +67,23 @@ export default {
     getAvatarUrl() {
       console.log(this.avatar)
       return this.avatar;
+    },
+    check_login() {
+      axios.get('http://127.0.0.1:8000/users/check-login-status')
+        .then(response => {
+          let login_status = response.data.status;
+          if (login_status === 0) {
+            this.$router.push('/login');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     }
   },
+  mounted() {
+    this.check_login();
+  }
 };
 </script>
 

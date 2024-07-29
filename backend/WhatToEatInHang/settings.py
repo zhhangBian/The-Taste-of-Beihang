@@ -44,6 +44,9 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 
 AUTH_USER_MODEL = 'users.User'
 
+LOGGING_URL = 'http://localhost:8080/'
+LOGIN_REDIRECT_URL = 'http://localhost:8080/'
+
 APPEND_SLASH = False
 
 STATIC_URL = 'static/'

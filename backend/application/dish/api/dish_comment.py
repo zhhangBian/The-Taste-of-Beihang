@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_GET
 
 from application.dish.models import Dish

@@ -33,11 +33,13 @@
       </div>
       <div class="col-span-4">
         <div class="top-container">
-          <img :src="currentImage" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
+          <img :src="currentImage" alt="Delicious dish"
+               class="w-full h-auto rounded-lg decreased-height">
         </div>
         <div class="bottom-container mt-4">
           <div class="reviews-container">
-            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+              吃过的怎么说？</h2>
             <div class="reviews-inner-container mt-4">
               <div v-for="(comment, index) in comments" :key="index" class="review-item">
                 <div class="flex items-center space-x-4">
@@ -47,7 +49,9 @@
                   <div class="review-description flex-1">
                     <div class="flex items-center justify-between">
                       <p class="font-man font-bold">{{ comment.title }} &ensp;<span
-                        class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
+                        class="font-man text-zinc-400">{{
+                          formatDate(comment.date)
+                        }}吃过&ensp;</span>
                       </p>
                       <div class="flex space-x-2 ml-auto">
                         <button @click="toggleLike(comment.id)" class="icon-button">
@@ -66,16 +70,19 @@
             </div>
           </div>
           <div class="write-review-container">
-            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+              写下你的评论！</h2>
             <div class="mt-4">
-              <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
+              <div class="flex items-center space-x-4 rating-container"
+                   v-for="(rating, index) in ratings" :key="index">
                 <span class="font-man rating-label">{{ rating.label }}</span>
                 <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
                        @input="updateRating(index, $event)">
                 <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
               </div>
-              <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
-                        placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+              <textarea
+                class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
+                placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
               <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
                       @click="submitReview">提交
               </button>
@@ -213,6 +220,8 @@ export default {
           this.dish.prices = response.data.prices;
           this.dish.waiting_time = response.data.waiting_time;
           this.comments = response.data.comments;
+
+          this.images = response.data.images;
         })
         .catch(error => {
           console.error('Error fetching dish details:', error);
@@ -308,7 +317,7 @@ export default {
     }
   },
   watch: {
-    'dish.name': function(newName) {
+    'dish.name': function (newName) {
       document.title = `详情 - ${newName}`;
     }
   },
