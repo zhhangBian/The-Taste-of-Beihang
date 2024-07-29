@@ -37,26 +37,26 @@
         <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
           吃过的怎么说？</h2>
         <div class="mt-4 reviews-container">
-          <div v-for="(comment, index) in comments" :key="index">
-            <div class="review-item">
-              <div class="flex items-center space-x-4">
-                <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
-                <div class="review-description flex-1">
-                  <div class="flex items-center justify-between">
-                    <p class="font-man font-bold">{{ comment.title }} &ensp;<span
-                      class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
-                    </p>
-                    <div class="flex space-x-2 ml-auto">
-                      <button @click="toggleLike(comment.id)" class="icon-button">
-                        <img
-                          :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
-                          alt="Like/Unlike" class="icon">
-                      </button>
-                    </div>
+          <div v-for="(comment, index) in comments" :key="index" class="review-item">
+            <div class="flex items-center space-x-4">
+              <div class="avatar-container">
+                <img :src="comment.avatar" alt="User avatar" class="user-avatar">
+              </div>
+              <div class="review-description flex-1">
+                <div class="flex items-center justify-between">
+                  <p class="font-man font-bold">{{ comment.title }} &ensp;<span
+                    class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span>
+                  </p>
+                  <div class="flex space-x-2 ml-auto">
+                    <button @click="toggleLike(comment.id)" class="icon-button">
+                      <img
+                        :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
+                        alt="Like/Unlike" class="icon">
+                    </button>
                   </div>
-                  <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
-                  <p class="font-man font-medium">{{ comment.content }}</p>
                 </div>
+                <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
+                <p class="font-man font-medium">{{ comment.content }}</p>
               </div>
             </div>
             <hr class="my-2 hr-gray" v-if="index < comments.length - 1">
@@ -286,6 +286,11 @@ export default {
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);
+    }
+  },
+  watch: {
+    'dish.name': function(newName) {
+      document.title = `详情 - ${newName}`;
     }
   },
   mounted() {
@@ -592,6 +597,18 @@ body {
 }
 
 .rating-label {
-  width: 80px; /* 调整这个宽度来对齐文字 */
+  width: 120px; /* 调整这个宽度来对齐文字 */
+}
+
+.avatar-container {
+  flex-shrink: 0;
+  width: 8%;
+}
+
+.user-avatar {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>
