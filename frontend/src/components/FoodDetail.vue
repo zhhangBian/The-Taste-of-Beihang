@@ -230,7 +230,7 @@ export default {
           this.dish.name = response.data.name;
           this.dish.image = response.data.image;
 
-          this.dish.address = response.data.address;
+          this.dish.address = response.data.restaurant_name;
           this.dish.overall_rating = response.data.overall_rating;
           this.dish.flavor_rating = response.data.flavor_rating;
           this.dish.prices = response.data.prices;
@@ -246,7 +246,7 @@ export default {
     submitReview() {
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
-      apiClient.post(`http://127.0.0.1:8000/comment/create-comment/`, {
+      apiClient.post(`http://127.0.0.1:8000/users/create-comment/`, {
         "title": this.dish.name + "好吃！",
         "content": this.newReview.comment,
         "dish_name": this.dish.name,
@@ -325,6 +325,16 @@ export default {
             showClose: true,
             customClass: 'large-message-font'
           });
+
+      apiClient.post(`http://127.0.0.1:8000/users/collect-dish/`, {
+        "restaurant_name": this.dish.address,
+        "dish_name": this.dish.name,
+      })
+        .then(() => {
+        })
+        .catch(error => {
+          alert("没有这个菜品哦");
+        });
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);

@@ -27,4 +27,16 @@ urlpatterns = [
     path('modify-record/', modify_record),
     path('delete-record/', delete_record),
     path('get-records/', get_records),
+
+    path('create-comment/', creat_comment),
+
+    path('collect-comment/', collect_comment),
+    path('collect-restaurant/', collect_restaurant),
+    path('collect-dish/', collect_dish),
+    path('discollect-comment/', discollect_comment),
+    path('discollect-restaurant/', discollect_restaurant),
+    path('discollect-dish/', discollect_dish),
+    path('get-collected-dishes/', get_collected_dishes),
+    path('get-collected-restaurants/', get_collected_restaurants),
+    path('get-collected-comments/', get_collected_comments),
 ]

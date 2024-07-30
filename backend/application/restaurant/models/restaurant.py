@@ -3,19 +3,28 @@ from django.db import models
 from application.dish.models import Dish
 
 name_choice = (
-    (1, '学一'),
-    (2, '学二'),
-    (3, '学三'),
-    (4, '学四'),
-    (5, '学五'),
-    (6, '学六'),
-    (20, '美食苑'),
-    (114514, '其他')
+    ('学一食堂', '学一食堂'),
+    ('学二食堂', '学二食堂'),
+    ('学三食堂', '学三食堂'),
+    ('学四食堂', '学四食堂'),
+    ('学五食堂', '学五食堂'),
+    ('学六食堂', '学六食堂'),
+    ('教工食堂', '教工食堂'),
+    ('清真食堂', '清真食堂'),
+    ('合一厅', '合一厅'),
+    ('东区第一食堂', '东区第一食堂'),
+    ('鼓瑟轩', '鼓瑟轩'),
+    ('西区清真食堂', '西区清真食堂'),
+    ('西区第一食堂', '西区第一食堂'),
+    ('西区第二食堂', '西区第二食堂'),
+    ('西区第三食堂', '西区第三食堂'),
+    ('美食苑', '美食苑'),
+    ('其他', '其他')
 )
 
 
 class Restaurant(models.Model):
-    name = models.IntegerField(choices=name_choice, default=0, verbose_name="用餐地点")
+    name = models.CharField(choices=name_choice, default=0, verbose_name="用餐地点", max_length=20  )
     description = models.CharField(max_length=500, default="这里可以吃饭")
     address = models.CharField(max_length=200, null=True, blank=True, default="吃饭就在这里")
     image = models.CharField(max_length=500, default="")

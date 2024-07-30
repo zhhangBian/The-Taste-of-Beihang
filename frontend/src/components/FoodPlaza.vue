@@ -22,9 +22,11 @@
       </select>
       <select v-model="selectedDish" @change="filterResults">
         <option value="所有菜品">所有菜品</option>
+        <option value="鸡">鸡</option>
+        <option value="猪">🐖</option>
+        <option value="羊">羊</option>
         <option value="香锅">香锅</option>
         <option value="汉堡">汉堡</option>
-        <option value="鸡">鸡</option>
       </select>
       <div v-if="selectedCanteen !== '全选'" class="favorite">
         <p>收藏{{ selectedCanteen }}</p>
@@ -379,10 +381,20 @@ export default {
     filterResults() {
       // 筛选逻辑不需要额外处理，因为筛选在computed中已经实现
     },
+    // 收藏
     toggleSubscription() {
       this.isSubscribed = !this.isSubscribed;
       const action = this.isSubscribed ? 'subscribed to' : 'unsubscribed from';
       console.log(`${action} ${this.selectedCanteen}`);
+
+      apiClient.post(`http://127.0.0.1:8000/users/collect-restaurant/`, {
+        "restaurant_name": this.selectedCanteen,
+      })
+        .then(() => {
+        })
+        .catch(error => {
+          alert("没有这个食堂哦");
+        });
     },
     searchResults() {
       console.log('Selected Canteen:', this.selectedCanteen);
@@ -402,7 +414,7 @@ export default {
         });
     },
     goToDetail(id) {
-      this.$router.push({ name: 'detail', params: { id } });
+      this.$router.push({name: 'detail', params: {id}});
     },
   },
   mounted() {

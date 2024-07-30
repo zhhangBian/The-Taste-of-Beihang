@@ -13,6 +13,7 @@ from ..models import User
 from ...comment.models import Comment
 from ...dish.models import Dish
 from ...record.models.record import Record
+from ...restaurant.models import Restaurant
 from ...utils.pic_upload import upload
 from ...utils.response import *
 
@@ -454,4 +455,231 @@ def get_records(request: HttpRequest):
         "records_count": record_cnt,
         # "price_mean": price_sum / record_cnt,
         # "freq_dict": restaurant_freq_dict,
+    })
+
+
+@response_wrapper
+@require_POST
+def creat_comment(request):
+    global login_id
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    title = body.get('title', '默认标题')
+    content = body.get('content', '空空如也')
+    # TODO：图片问题
+    # image = ...
+    dish_name = body.get('dish_name', '默认')
+    restaurant_name = body.get('restaurant', '默认')
+
+    grade = float(body.get('grade', '5'))
+    price = float(body.get('price', '20'))
+    if price < 0 or price > 9999:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "价格不合理！")
+    flavour = float(body.get('flavour', '5'))
+    waiting_time = float(body.get('waiting_time', '60'))
+
+    author_id = 0
+    if not user.is_anonymous:
+        author_id = user.id
+
+    if Dish.objects.filter(name=dish_name).exists():
+        dish = Dish.objects.filter(name=dish_name).first()
+        comment = Comment(title=title,
+                          content=content,
+
+                          grade=grade,
+                          price=price,
+                          flavour=flavour,
+                          waiting_time=waiting_time,
+
+                          restaurant_name=restaurant_name,
+                          dish_name=dish_name,
+                          author_id=author_id)
+        comment.save()
+        dish.comments.add(comment)
+        if not user.is_anonymous:
+            user.comments.add(comment)
+        return success_response({"message": "创建成功！", "title": comment.title})
+    else:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "菜品不存在！")
+
+
+@response_wrapper
+@require_POST
+def collect_comment(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    comment_id = body['comment_id']
+    comment = Comment.objects.filter(id=comment_id).first()
+
+    if comment is None:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '评论不存在')
+    else:  # add comment to collected_comments
+        user.collected_comments.add(comment)
+        user.save()
+        return success_response({
+            "id": user.id,
+            "comment_id": comment.id,
+        })
+
+
+@response_wrapper
+@require_POST
+def collect_restaurant(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    restaurant_name = body['restaurant_name']
+    print(restaurant_name)
+    restaurant = Restaurant.objects.filter(name=restaurant_name).first()
+
+    if restaurant is None:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '餐馆不存在')
+    else:  # add restaurant to collected_restaurants
+        user.collected_restaurants.add(restaurant)
+        user.save()
+        return success_response({
+            "id": user.id,
+            "restaurant_id": restaurant.id,
+        })
+
+
+@response_wrapper
+@require_POST
+def collect_dish(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    restaurant_name = body['restaurant_name']
+    dish_name = body['dish_name']
+    dish = Dish.objects.filter(restaurant_name=restaurant_name, name=dish_name).first()
+
+    if dish is None:
+        dish = Dish.objects.filter(name=dish_name).first()
+        if dish is None:
+            return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '菜品不存在')
+    # add dish to collected_dishes
+    user.collected_dishes.add(dish)
+    user.save()
+    return success_response({
+        "id": user.id,
+        "dish_id": dish.id,
+    })
+
+
+@response_wrapper
+@require_POST
+def discollect_comment(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    comment_id = body['comment_id']
+    comment = Comment.objects.filter(id=comment_id).first()
+
+    user.collected_comments.remove(comment)
+    user.save()
+    return success_response({
+        "id": user.id,
+        "comment_id": comment.id,
+    })
+
+
+@response_wrapper
+@require_POST
+def discollect_restaurant(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    restaurant_name = body['restaurant_name']
+    restaurant = Restaurant.objects.filter(name=restaurant_name).first()
+
+    print(restaurant_name)
+    print(len(user.collected_restaurants.all()))
+    user.collected_restaurants.remove(restaurant)
+    user.save()
+    print(len(user.collected_restaurants.all()))
+    return success_response({
+        "id": user.id,
+        "restaurant_id": restaurant.id,
+    })
+
+
+@response_wrapper
+@require_POST
+def discollect_dish(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    restaurant_name = body['restaurant_name']
+    dish_name = body['dish_name']
+    dish = Dish.objects.filter(restaurant_name=restaurant_name, name=dish_name).first()
+
+    user.collected_dishes.remove(dish)
+    user.save()
+    return success_response({
+        "id": user.id,
+        "dish_id": dish.id,
+    })
+
+
+@response_wrapper
+@require_GET
+def get_collected_dishes(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    collected_dishes = []
+
+    dishes = user.collected_dishes.all()
+    for dish in dishes:
+        collected_dishes.append({
+            "dish": dish.name,
+            "restaurant": dish.restaurant_name,
+        })
+
+    return success_response({
+        "id": user.id,
+        "collected_dishes": collected_dishes,
+        "collected_num": len(dishes)
+    })
+
+
+@response_wrapper
+@require_GET
+def get_collected_restaurants(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    collected_restaurants = []
+
+    restaurants = user.collected_restaurants.all()
+    for restaurant in restaurants:
+        collected_restaurants.append({
+            "restaurant": restaurant.name,
+        })
+
+    return success_response({
+        "id": user.id,
+        "collected_restaurants": collected_restaurants,
+        "collected_num": len(restaurants)
+    })
+
+
+@response_wrapper
+@require_GET
+def get_collected_comments(request: HttpRequest):
+    user = User.objects.filter(id=login_id).first()
+
+    collected_comments = []
+
+    comments = user.collected_comments.all()
+    for comment in comments:
+        collected_comments.append({
+            "title": comment.title,
+        })
+
+    return success_response({
+        "id": user.id,
+        "collected_restaurants": collected_comments,
+        "collected_num": len(comments)
     })

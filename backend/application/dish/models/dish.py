@@ -6,7 +6,7 @@ default_img = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/i
 
 
 class Dish(models.Model):
-    id = models.AutoField(primary_key=True, auto_created=True, verbose_name='评论ID', editable=False)
+    id = models.AutoField(primary_key=True, auto_created=True, verbose_name='菜品ID', editable=False)
     name = models.CharField(max_length=100, verbose_name='菜品名称', default="菜品名称")
     image = models.CharField(default=default_img, verbose_name='图片', max_length=500)
 

@@ -4,7 +4,6 @@ from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
 
 from ..models import Comment
-from ...dish.models import Dish
 from ...users.api import User
 from ...utils.response import response_wrapper, fail_response, ErrorCode, success_response
 
@@ -35,52 +34,6 @@ def get_comment_basics(request: HttpRequest):
         "dish": comment.dish_name,
         "restaurant": comment.restaurant_name
     })
-
-
-@response_wrapper
-@require_POST
-def creat_comment(request):
-    user = request.user
-
-    body = json.loads(request.body.decode('utf-8'))
-    title = body.get('title', '默认标题')
-    content = body.get('content', '空空如也')
-    # TODO：图片问题
-    # image = ...
-    dish_name = body.get('dish_name', '默认')
-    restaurant_name = body.get('restaurant', '默认')
-
-    grade = float(body.get('grade', '5'))
-    price = float(body.get('price', '20'))
-    if price < 0 or price > 9999:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "价格不合理！")
-    flavour = float(body.get('flavour', '5'))
-    waiting_time = float(body.get('waiting_time', '60'))
-
-    author_id = 0
-    if not user.is_anonymous:
-        author_id = user.id
-
-    if Dish.objects.filter(name=dish_name).exists():
-        dish = Dish.objects.filter(name=dish_name).first()
-        comment = Comment(title=title,
-                          content=content,
-
-                          grade=grade,
-                          price=price,
-                          flavour=flavour,
-                          waiting_time=waiting_time,
-
-                          restaurant_name=restaurant_name,
-                          dish_name=dish_name,
-                          author_id=author_id)
-        comment.save()
-        dish.comments.add(comment)
-        if not user.is_anonymous:
-            user.comments.add(comment)
-        return success_response({"message": "创建成功！", "title": comment.title})
-    else:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "菜品不存在！")
 
 
 @response_wrapper

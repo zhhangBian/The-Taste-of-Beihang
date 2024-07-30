@@ -1,8 +1,8 @@
 # 获取评论的集合
 import difflib
 import json
+import random
 
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
 from application.comment.models import Comment
@@ -69,6 +69,7 @@ def search_comment(request):
     for comment in comments:
         if matches_search(comment, search_string):
             comments_fit.append(comment)
+    random.shuffle(comments_fit)
     comments_fit_serialized = serialize_comments(comments_fit)
 
     return success_response({

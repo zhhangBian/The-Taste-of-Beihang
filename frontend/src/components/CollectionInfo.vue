@@ -9,24 +9,20 @@
           <el-input
             style="width: 300px"
             placeholder="请输入食堂名称..."
-            v-model="canteenSearchQuery"
+            v-model="restaurantSearchQuery"
             clearable
           ></el-input>
           <el-button type="primary" @click="searchCanteen" style="margin-left: 5px">查询</el-button>
         </div>
         <h2>收藏的食堂</h2>
-        <el-button type="primary" @click="handleAddCanteen" style="margin-bottom: 10px">新增食堂
+        <el-button type="primary" @click="add_collect_restaurant" style="margin-bottom: 10px">新增食堂
         </el-button>
         <el-table :data="pagedCanteenData" border style="width: 100%">
-          <el-table-column prop="time" label="时间"/>
-          <el-table-column prop="canteen" label="食堂"/>
+          <el-table-column prop="restaurant" label="食堂"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button link type="primary" size="small"
-                         @click="handleEditCanteen(scope.row, scope.$index)">编辑
-              </el-button>
               <el-button link type="danger" size="small"
-                         @click.prevent="removeCanteen(scope.$index)">删除
+                         @click.prevent="delete_collect_restaurant(scope.row,scope.$index)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -37,7 +33,7 @@
             layout="total, prev, pager, next, jumper"
             :total="totalCanteen"
             v-model:current-page="currentCanteenPage"
-            :page-size="canteenPageSize"
+            :page-size="restaurantPageSize"
           ></el-pagination>
         </div>
       </div>
@@ -55,18 +51,15 @@
           <el-button type="primary" @click="searchDish" style="margin-left: 5px">查询</el-button>
         </div>
         <h2>收藏的菜品</h2>
-        <el-button type="primary" @click="handleAddDish" style="margin-bottom: 10px">新增菜品
+        <el-button type="primary" @click="add_collect_dish" style="margin-bottom: 10px">新增菜品
         </el-button>
         <el-table :data="pagedDishData" border style="width: 100%">
-          <el-table-column prop="time" label="时间"/>
-          <el-table-column prop="canteen" label="食堂"/>
+          <el-table-column prop="restaurant" label="食堂"/>
           <el-table-column prop="dish" label="菜品"/>
           <el-table-column label="操作">
             <template #default="scope">
-              <el-button link type="primary" size="small"
-                         @click="handleEditDish(scope.row, scope.$index)">编辑
-              </el-button>
-              <el-button link type="danger" size="small" @click.prevent="removeDish(scope.$index)">
+              <el-button link type="danger" size="small"
+                         @click.prevent="delete_collect_dish(scope.$index)">
                 删除
               </el-button>
             </template>
@@ -87,7 +80,7 @@
     <el-dialog v-model="dialogFormVisible" title="添加收藏" width="60%">
       <el-form :model="form" label-width="100px" style="padding-right: 30px">
         <el-form-item label="食堂">
-          <el-select v-model="form.canteen" placeholder="请选择食堂">
+          <el-select v-model="form.restaurant" placeholder="请选择食堂">
             <el-option label="学一食堂" value="学一食堂"></el-option>
             <el-option label="学二食堂" value="学二食堂"></el-option>
             <el-option label="学三食堂" value="学三食堂"></el-option>
@@ -120,59 +113,60 @@
 </template>
 
 <script setup>
-import {reactive, ref, computed} from "vue";
+import {reactive, ref, computed, onMounted} from "vue";
+import apiClient from "@/axios";
 
-let canteenData = ref([
-  {time: "2023-07-29 12:30", canteen: "学二食堂"},
-  {time: "2023-07-28 18:00", canteen: "学四食堂"},
+let collected_restaurants = ref([
+  {restaurant: "学二食堂"},
+  {restaurant: "学四食堂"},
   // 更多数据...
 ]);
 
-let dishData = ref([
-  {time: "2023-07-29 12:30", canteen: "学二食堂", dish: "麻婆豆腐"},
-  {time: "2023-07-28 18:00", canteen: "学四食堂", dish: "宫保鸡丁"},
+let collected_dishes = ref([
+  {restaurant: "学二食堂", dish: "麻婆豆腐"},
+  {restaurant: "学四食堂", dish: "宫保鸡丁"},
   // 更多数据...
 ]);
 
 let dialogFormVisible = ref(false);
-let form = reactive({canteen: "", dish: ""});
+let form = reactive({restaurant: "", dish: ""});
 const globalIndex = ref(-1);
 const isCanteenForm = ref(true);
-const canteenSearchQuery = ref("");
+const restaurantSearchQuery = ref("");
 const dishSearchQuery = ref("");
 
 // 分页相关的状态
 const currentCanteenPage = ref(1);
-const canteenPageSize = ref(10); // 每页显示的数据条数
+const restaurantPageSize = ref(10); // 每页显示的数据条数
 
 const currentDishPage = ref(1);
 const dishPageSize = ref(10); // 每页显示的数据条数
 
 // 计算当前页显示的数据
 const pagedCanteenData = computed(() => {
-  const start = (currentCanteenPage.value - 1) * canteenPageSize.value;
-  return canteenData.value.slice(start, start + canteenPageSize.value);
+  const start = (currentCanteenPage.value - 1) * restaurantPageSize.value;
+  return collected_restaurants.value.slice(start, start + restaurantPageSize.value);
 });
 
 const pagedDishData = computed(() => {
   const start = (currentDishPage.value - 1) * dishPageSize.value;
-  return dishData.value.slice(start, start + dishPageSize.value);
+  return collected_dishes.value.slice(start, start + dishPageSize.value);
 });
 
 // 计算总页数
-const totalCanteen = computed(() => canteenData.value.length);
-const totalDish = computed(() => dishData.value.length);
+const totalCanteen = computed(() => collected_restaurants.value.length);
+const totalDish = computed(() => collected_dishes.value.length);
 
-const handleAddCanteen = () => {
-  form.canteen = "";
+const add_collect_restaurant = () => {
+  form.restaurant = "";
   form.dish = "";
   globalIndex.value = -1;
   isCanteenForm.value = true;
   dialogFormVisible.value = true;
 };
 
-const handleAddDish = () => {
-  form.canteen = "";
+const add_collect_dish = () => {
+  form.restaurant = "";
   form.dish = "";
   globalIndex.value = -1;
   isCanteenForm.value = false;
@@ -180,72 +174,110 @@ const handleAddDish = () => {
 };
 
 const save = () => {
-  // 自动生成当前时间
-  const now = new Date();
-  const timeString = `${now.getFullYear()}-${(now.getMonth() + 1)
-    .toString()
-    .padStart(2, "0")}-${now
-    .getDate()
-    .toString()
-    .padStart(2, "0")} ${now
-    .getHours()
-    .toString()
-    .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-
-  if (globalIndex.value >= 0) {
-    if (isCanteenForm.value) {
-      canteenData.value[globalIndex.value] = {...form, time: timeString};
-    } else {
-      dishData.value[globalIndex.value] = {...form, time: timeString};
-    }
-    globalIndex.value = -1;
+  if (isCanteenForm.value) {
+    apiClient.post(`http://127.0.0.1:8000/users/collect-restaurant/`, {
+      "restaurant_name": form.restaurant,
+    })
+      .then(() => {
+        apiClient.get(`http://127.0.0.1:8000/users/get-collected-restaurants/`)
+          .then(response => {
+            collected_restaurants.value = response.data.collected_restaurants;
+          })
+          .catch(error => {
+            console.error('Error get records:', error);
+          });
+      })
+      .catch(error => {
+        alert("没有这个食堂哦");
+      });
   } else {
-    if (isCanteenForm.value) {
-      canteenData.value.push({...form, time: timeString});
-    } else {
-      dishData.value.push({...form, time: timeString});
-    }
+    apiClient.post(`http://127.0.0.1:8000/users/collect-dish/`, {
+      "restaurant_name": form.restaurant,
+      "dish_name": form.dish,
+    })
+      .then(() => {
+        apiClient.get(`http://127.0.0.1:8000/users/get-collected-dishes/`)
+          .then(response => {
+            collected_dishes.value = response.data.collected_dishes;
+          })
+          .catch(error => {
+            console.error('Error get records:', error);
+          });
+      })
+      .catch(error => {
+        alert("没有这个菜品哦");
+      });
   }
+
   dialogFormVisible.value = false;
 };
 
-const handleEditCanteen = (row, index) => {
-  form.canteen = row.canteen;
-  form.dish = "";
-  globalIndex.value = index;
-  isCanteenForm.value = true;
-  dialogFormVisible.value = true;
+const delete_collect_restaurant = (row, index) => {
+  apiClient.post(`http://127.0.0.1:8000/users/discollect-restaurant/`, {
+    "restaurant_name": row.restaurant,
+  })
+    .then(() => {
+      apiClient.get(`http://127.0.0.1:8000/users/get-collected-restaurants/`)
+        .then((response) => {
+          collected_restaurants.value = response.data.collected_restaurants;
+        })
+        .catch(error => {
+          console.error('Error get records:', error);
+        });
+    })
+    .catch(error => {
+      console.error('Error save records:', error);
+    });
 };
 
-const handleEditDish = (row, index) => {
-  form.canteen = row.canteen;
-  form.dish = row.dish;
-  globalIndex.value = index;
-  isCanteenForm.value = false;
-  dialogFormVisible.value = true;
-};
-
-const removeCanteen = (index) => {
-  const actualIndex = (currentCanteenPage.value - 1) * canteenPageSize.value + index;
-  canteenData.value.splice(actualIndex, 1);
-};
-
-const removeDish = (index) => {
-  const actualIndex = (currentDishPage.value - 1) * dishPageSize.value + index;
-  dishData.value.splice(actualIndex, 1);
+const delete_collect_dish = (row, index) => {
+  apiClient.post(`http://127.0.0.1:8000/users/discollect-dish/`, {
+    "restaurant_name": row.restaurant,
+    "dish_name": row.dish,
+  })
+    .then(() => {
+      apiClient.get(`http://127.0.0.1:8000/users/get-collected-dishes/`)
+        .then((response) => {
+          collected_dishes.value = response.data.collected_dishes;
+        })
+        .catch(error => {
+          console.error('Error get records:', error);
+        });
+    })
+    .catch(error => {
+      console.error('Error save records:', error);
+    });
 };
 
 const searchCanteen = () => {
-  canteenData.value = canteenData.value.filter((v) =>
-    v.canteen.includes(canteenSearchQuery.value)
+  collected_restaurants.value = collected_restaurants.value.filter((v) =>
+    v.restaurant.includes(restaurantSearchQuery.value)
   );
 };
 
 const searchDish = () => {
-  dishData.value = dishData.value.filter((v) =>
+  collected_dishes.value = collected_dishes.value.filter((v) =>
     v.dish.includes(dishSearchQuery.value)
   );
 };
+
+onMounted(() => {
+  apiClient.get(`http://127.0.0.1:8000/users/get-collected-restaurants/`)
+    .then(response => {
+      collected_restaurants.value = response.data.collected_restaurants;
+    })
+    .catch(error => {
+      console.error('Error get records:', error);
+    });
+
+  apiClient.get(`http://127.0.0.1:8000/users/get-collected-dishes/`)
+    .then(response => {
+      collected_dishes.value = response.data.collected_dishes;
+    })
+    .catch(error => {
+      console.error('Error get records:', error);
+    });
+});
 </script>
 
 <style scoped>
