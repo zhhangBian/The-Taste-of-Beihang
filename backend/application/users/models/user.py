@@ -4,6 +4,8 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from application.comment.models import Comment
+from application.dish.models import Dish
+from application.restaurant.models import Restaurant
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
 
@@ -38,6 +40,13 @@ class User(AbstractUser):
         related_query_name='custom_user',
         blank=True,
     )
+
+    # 该用户收藏的评论
+    collected_comments = models.ManyToManyField(Comment, related_name='collected_user', blank=True)
+    # 该用户收藏的餐馆
+    collected_restaurants = models.ManyToManyField(Restaurant, related_name='collected_user', blank=True)
+    # 该用户收藏的菜品
+    collected_dishes = models.ManyToManyField(Dish, related_name='collected_user', blank=True)
 
     def __str__(self):
         return self.username
