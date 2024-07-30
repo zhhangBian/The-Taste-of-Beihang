@@ -382,7 +382,7 @@ body {
 }
 
 .border-b {
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .p-6 {
@@ -506,7 +506,7 @@ body {
 }
 
 .mt-4 {
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 .mb-1 {
