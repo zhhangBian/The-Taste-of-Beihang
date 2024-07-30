@@ -9,8 +9,8 @@
         <button v-if="!showBottomButtons" class="top-button" @click="handleTopButtonClick">吃什么?
         </button>
         <div v-if="showBottomButtons" class="bottom-buttons">
-          <button class="bottom-button" @click="handleClick('就这个！')">就这个！</button>
-          <button class="bottom-button" @click="handleClick('重新建议')">换一个</button>
+          <button class="bottom-button" @click="handleRecordClick()">就这个！</button>
+          <button class="bottom-button" @click="handleRenewClick()">换一个</button>
           <button class="bottom-button" @click="handlePlazaClick">去广场看看</button>
         </div>
       </div>
@@ -36,9 +36,17 @@ export default {
       console.log('吃什么?');
       this.get_recommendation();
     },
-    handleClick(message) {
-      console.log(message);
+    handleRenewClick() {
       this.get_recommendation();
+    },
+    handleRecordClick() {
+      ElMessage({
+            message: '成功添加记录',
+            type: 'success',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
     },
     handlePlazaClick() {
       console.log('跳转到广场');
