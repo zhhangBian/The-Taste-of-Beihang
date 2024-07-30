@@ -40,16 +40,22 @@
           <hr class="card-divider"/>
           <div class="stats-content">
             <div class="stats-left">
-              <p><strong>点亮菜品:</strong> {{ stats.orderRate }}%</p>
-              <p><strong>累计就餐:</strong> {{ stats.totalMeals }}</p>
-              <p><strong>累计消费:</strong> {{ stats.totalSpend }}元</p>
-              <p><strong>累计收藏:</strong> {{ stats.totalFavorites }}</p>
+              <!--              <p><strong>点亮菜品:</strong> {{ stats.orderRate }}%</p>-->
+              <p><strong>累计就餐:</strong> {{ stats.meal_count }}次</p>
+              <p><strong>累计消费:</strong> {{ stats.price_sum }}元</p>
+              <p><strong>累计收藏:</strong> {{ stats.collect_sum }}次</p>
             </div>
             <div class="stats-right">
-              <p><strong>已点赞的评论数:</strong> {{ stats.totalLikes }}</p>
-              <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）
+              <!--              <p><strong>已点赞的评论数:</strong> {{ stats.like_sum }}</p>-->
+              <p><strong>最高消费:</strong> {{ stats.price_highest }}元（{{
+                  stats.price_highest_place
+                }}）
               </p>
-              <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）
+              <p><strong>最低消费:</strong> {{ stats.price_lowest }}元（{{
+                  stats.price_lowest_place
+                }}）
+              </p>
+              <p><strong>平均消费:</strong> {{ stats.price_mean }}元
               </p>
             </div>
           </div>
@@ -74,7 +80,7 @@
 <script>
 import * as echarts from 'echarts';
 import apiClient from '../axios';
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
 export default {
   props: {
@@ -94,16 +100,31 @@ export default {
         avatar: 'https://placehold.co/100x100'
       },
       stats: {
-        orderRate: 92.4,
-        totalMeals: 65,
-        totalSpend: 98.7,
-        totalFavorites: 32,
-        totalLikes: 35,
-        highestSpend: 35,
-        highestSpendMeal: '麻辣香锅/六食堂',
-        lowestSpend: 2,
-        lowestSpendMeal: '汉堡/四食堂',
-      }
+
+        meal_count: 65,
+        price_sum: 98.7,
+        collect_sum: 32,
+        like_sum: 35,
+        price_highest: 35,
+        price_highest_place: '麻辣香锅/六食堂',
+        price_lowest: 2,
+        price_lowest_place: '汉堡/四食堂',
+        price_mean: 92.4,
+      },
+      place_dict: [
+        {value: 1048, name: '六食堂'},
+        {value: 735, name: '四食堂'},
+        {value: 580, name: '三食堂'},
+        {value: 484, name: '二食堂'},
+        {value: 300, name: '一食堂'}
+      ],
+      time_dict: [
+        {value: 1048, name: '早餐'},
+        {value: 735, name: '午餐'},
+        {value: 580, name: '晚餐'},
+        {value: 484, name: '夜宵'},
+        {value: 300, name: '其他'}
+      ]
     };
   },
   computed: {
@@ -123,14 +144,33 @@ export default {
     }
   },
   methods: {
+    getStatics() {
+      apiClient.get(`http://127.0.0.1:8000/users/get-statics/`, {})
+        .then(response => {
+          this.stats.meal_count = response.data.meal_count;
+          this.stats.price_sum = response.data.price_sum;
+          this.stats.collect_sum = response.data.collect_sum;
+          this.stats.price_highest = response.data.price_highest;
+          this.stats.price_highest_place = response.data.price_highest_place;
+          this.stats.price_lowest = response.data.price_lowest;
+          this.stats.price_lowest = response.data.price_lowest_place;
+          this.stats.price_mean = response.data.price_mean;
+
+          this.time_dict = response.data.time_dict;
+          this.place_dict = response.data.place_dict;
+        })
+        .catch(error => {
+          console.error('Error fetching comments:', error);
+        });
+    },
     editProfile() {
       ElMessage({
-            message: '个人信息修改完成，请刷新页面应用修改',
-            type: 'success',
-            duration: 3000,
-            showClose: true,
-            customClass: 'large-message-font'
-          });
+        message: '个人信息修改完成，请刷新页面应用修改',
+        type: 'success',
+        duration: 3000,
+        showClose: true,
+        customClass: 'large-message-font'
+      });
       apiClient.post(`http://127.0.0.1:8000/users/update-user/`, {
         "name": this.user.name,
         "school": this.user.college,
@@ -203,13 +243,7 @@ export default {
             labelLine: {
               show: false
             },
-            data: [
-              {value: 1048, name: '六食堂'},
-              {value: 735, name: '四食堂'},
-              {value: 580, name: '三食堂'},
-              {value: 484, name: '二食堂'},
-              {value: 300, name: '一食堂'}
-            ],
+            data: this.place_dict,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -247,13 +281,7 @@ export default {
             labelLine: {
               show: false
             },
-            data: [
-              {value: 1048, name: '早餐'},
-              {value: 735, name: '午餐'},
-              {value: 580, name: '晚餐'},
-              {value: 484, name: '夜宵'},
-              {value: 300, name: '其他'}
-            ],
+            data: this.time_dict,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -268,6 +296,7 @@ export default {
     }
   },
   mounted() {
+    this.getStatics();
     this.initCharts();
     this.get_user_info();
   },

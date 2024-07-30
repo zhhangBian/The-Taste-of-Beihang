@@ -27,6 +27,7 @@ urlpatterns = [
     path('modify-record/', modify_record),
     path('delete-record/', delete_record),
     path('get-records/', get_records),
+    path('get-statics/',get_statics),
 
     path('create-comment/', creat_comment),
 

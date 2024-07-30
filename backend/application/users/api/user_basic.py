@@ -1,6 +1,8 @@
 # 代表了用户的基本接口
 import json
 import os
+import re
+from datetime import datetime
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
@@ -434,12 +436,6 @@ def get_records(request: HttpRequest):
     record_cnt = len(records)
     price_sum = 0
 
-    # restaurant_frequencies = my_user.records.all().values('restaurant__name').annotate(
-    #     freq=Count('restaurant__name')).order_by('freq')
-    #
-    # # 转换餐馆频次统计结果为字典形式，以便于展示
-    # restaurant_freq_dict = {item['restaurant__name']: item['freq'] for item in restaurant_frequencies}
-
     for record in records:
         price_sum += record.price
         record_info_list.append(({
@@ -453,8 +449,88 @@ def get_records(request: HttpRequest):
     return success_response({
         "records": record_info_list,
         "records_count": record_cnt,
-        # "price_mean": price_sum / record_cnt,
-        # "freq_dict": restaurant_freq_dict,
+    })
+
+
+def check_time(time_str):
+    pattern = r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}$'
+    return re.match(pattern, time_str) is not None
+
+
+def get_meal_time(time_str):
+    time_format = "%Y-%m-%d %H:%M"
+    time_obj = datetime.strptime(time_str, time_format)
+    hour = time_obj.hour
+
+    # 根据小时数分类
+    if 6 <= hour < 9:
+        return '早餐'
+    elif 11 <= hour < 14:
+        return '午餐'
+    elif 17 <= hour < 20:
+        return '晚餐'
+    elif 22 <= hour < 24 or 0 <= hour < 3:
+        return '其他'
+    else:
+        return '夜宵'
+
+
+def get_count_dict(list_to):
+    count_dict = {}
+    for num in list_to:
+        count_dict[num] = count_dict.get(num, 0) + 1
+    return [{"value": count, "name": str(num)} for num, count in count_dict.items()]
+
+
+@response_wrapper
+@require_GET
+def get_statics(request: HttpRequest):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
+    price_sum = 0
+
+    price_lowest = 1000000
+    price_lowest_place = ''
+
+    price_highest = 0
+    price_highest_place = ''
+
+    record_info_list = []
+    records = list(my_user.records.all())
+    record_cnt = len(records)
+    price_sum = 0
+
+    place_list = []
+    time_list = []
+
+    for record in records:
+        price_sum += record.price
+
+        place_list.append(record.restaurant_name)
+
+        if check_time(record.time):
+            time_list.append(get_meal_time(record.time))
+
+        if record.price > price_highest:
+            price_highest = record.price
+            price_highest_place = record.restaurant_name
+        if record.price < price_lowest:
+            price_lowest = record.price
+            price_lowest_place = record.restaurant_name
+
+    return success_response({
+        "meal_count": len(records),
+        "price_sum": price_sum,
+        "price_mean": price_sum / len(records),
+        "price_highest": price_highest,
+        "price_highest_place": price_highest_place,
+        "price_lowest": price_lowest,
+        "price_lowest_place": price_lowest_place,
+
+        "collect_sum": my_user.collected_comments.count() + my_user.collected_dishes.count() + my_user.collected_restaurants.count(),
+        "time_dict": get_count_dict(time_list),
+        "place_dict": get_count_dict(place_list),
     })
 
 
@@ -595,11 +671,8 @@ def discollect_restaurant(request: HttpRequest):
     restaurant_name = body['restaurant_name']
     restaurant = Restaurant.objects.filter(name=restaurant_name).first()
 
-    print(restaurant_name)
-    print(len(user.collected_restaurants.all()))
     user.collected_restaurants.remove(restaurant)
     user.save()
-    print(len(user.collected_restaurants.all()))
     return success_response({
         "id": user.id,
         "restaurant_id": restaurant.id,
