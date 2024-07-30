@@ -74,6 +74,7 @@
 <script>
 import * as echarts from 'echarts';
 import apiClient from '../axios';
+import { ElMessage } from 'element-plus';
 
 export default {
   props: {
@@ -123,7 +124,13 @@ export default {
   },
   methods: {
     editProfile() {
-      alert('完成了修改个人信息');
+      ElMessage({
+            message: '个人信息修改完成，请刷新页面应用修改',
+            type: 'success',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
       apiClient.post(`http://127.0.0.1:8000/users/update-user/`, {
         "name": this.user.name,
         "school": this.user.college,
