@@ -3,3 +3,11 @@ html,body,#app{
     padding: 0;
     height: 100%;
 }
+
+.large-message-font .el-message__content {
+    font-size: 18px !important;  /* 放大字体 */
+  }
+  
+  .large-message-font .el-icon {
+    font-size: 24px !important;  /* 放大图标 */
+  }

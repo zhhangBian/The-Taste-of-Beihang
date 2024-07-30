@@ -58,6 +58,7 @@
 
 <script>
 import apiClient from '../axios';
+import { ElMessage } from 'element-plus';
 
 export default {
   data() {
@@ -91,7 +92,13 @@ export default {
         })
         .catch(error => {
           console.error(error);
-          //alert(error.response.data.message);
+          ElMessage({
+            message: '账户或密码错误',
+            type: 'error',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
         });
     },
     signup() {
