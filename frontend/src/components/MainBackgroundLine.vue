@@ -20,7 +20,7 @@
 
 <script>
 import apiClient from '../axios';
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
 export default {
   name: 'CenteredSvgAndTitle',
@@ -29,6 +29,8 @@ export default {
     return {
       showBottomButtons: false,
       recommendation: '今天在BUAA吃什么？', // 默认显示的内容
+      dish: '',
+      place: '',
     };
   },
   methods: {
@@ -41,13 +43,41 @@ export default {
       this.get_recommendation();
     },
     handleRecordClick() {
-      ElMessage({
-            message: '成功添加记录',
-            type: 'success',
-            duration: 3000,
-            showClose: true,
-            customClass: 'large-message-font'
+      if (this.dish === '' || this.place === '') {
+        ElMessage({
+          message: '菜还没有选择哦',
+          type: 'error',
+          duration: 3000,
+          showClose: true,
+          customClass: 'large-message-font'
+        });
+      } else {
+        ElMessage({
+          message: '成功添加记录',
+          type: 'success',
+          duration: 3000,
+          showClose: true,
+          customClass: 'large-message-font'
+        });
+
+        apiClient.post(`http://127.0.0.1:8000/users/add-record/`, {
+          "time": '打算去吃！',
+          "dish_name": this.dish,
+          "restaurant_name": this.place,
+          "price": 0,
+        })
+          .then(() => {
+            apiClient.get(`http://127.0.0.1:8000/users/get-records/`)
+              .then(() => {
+              })
+              .catch(error => {
+                console.error('Error add records:', error);
+              });
+          })
+          .catch(error => {
+            console.error('Error save records:', error);
           });
+      }
     },
     handlePlazaClick() {
       console.log('跳转到广场');
@@ -58,6 +88,8 @@ export default {
         .then(response => {
           const {place, dish} = response.data;
           this.recommendation = `在<span style="color: #5E17EB;">${place}</span>吃<span style="color: #5E17EB;">${dish}</span>`;
+          this.place = place;
+          this.dish = dish;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
