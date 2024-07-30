@@ -171,6 +171,7 @@ export default {
           this.user.college = response.data.school;
           this.user.signature = response.data.motto;
           this.user.avatar = response.data.avatar;
+          document.title = `个人中心 - ${this.user.name}`;
         })
         .catch(error => {
           console.error('Error fetching dish details:', error);
@@ -267,7 +268,6 @@ export default {
     }
   },
   mounted() {
-    document.title = `个人中心 - ${this.user.name}`;
     this.initCharts();
     this.get_user_info();
   },
