@@ -1,6 +1,5 @@
 # 实现图片上传并返回链接
 
-import json
 import logging
 import sys
 import time
@@ -8,11 +7,17 @@ import time
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
-with open('api_key.json', 'r', encoding='utf-8') as file:
-    data = json.load(file)
-    secret_id = data.get("secret_id")
-    secret_key = data.get("secret_key")
-    bucket_name = data.get("bucket_name")
+from WhatToEatInHang import settings
+
+# with open('api_key.json', 'r', encoding='utf-8') as file:
+#     data = json.load(file)
+#     secret_id = data.get("secret_id")
+#     secret_key = data.get("secret_key")
+#     bucket_name = data.get("bucket_name")
+
+secret_id = settings.PIC_SECRET_ID
+secret_key = settings.PIC_SECRET_KEY
+bucket_name = settings.PIC_BUCKET
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 

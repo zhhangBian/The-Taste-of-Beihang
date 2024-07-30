@@ -149,21 +149,14 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
-        // 使用 FileReader 进行文件预览
-        const reader = new FileReader();
-        reader.onload = e => {
-          this.user.avatar = e.target.result;
-        };
-        reader.readAsDataURL(file);
-
-        // 创建 FormData 对象并添加文件
         const formData = new FormData();
-        formData.append('file', file);
+        formData.append('img', file);
 
         // 上传文件到服务器
         apiClient.post('http://127.0.0.1:8000/users/update-avatar/', formData)
           .then(response => {
-            this.user.avatar = response.data.avatar; // 更新用户头像
+            this.user.avatar = response.data.avatar;
+            alert("头像更新成功");
           })
           .catch(error => {
             console.error('Error uploading file:', error);

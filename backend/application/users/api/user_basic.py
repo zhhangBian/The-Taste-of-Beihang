@@ -4,15 +4,16 @@ import os
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
-from django.db.models import Count
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST, require_GET
 
+from WhatToEatInHang import settings
 from .email import varify_captcha
 from ..models import User
 from ...comment.models import Comment
 from ...dish.models import Dish
 from ...record.models.record import Record
+from ...utils.pic_upload import upload
 from ...utils.response import *
 
 MAGIC_ID = 114514
@@ -222,12 +223,27 @@ def update_avatar(request):
     global login_id
     my_user = User.objects.filter(id=login_id).first()
 
-    file = request.FILES.get('file')
-    file_path = os.path.join("../../../static", file.name)
-    with open(file_path, 'wb+') as f:
-        f.write(file.read())
-        f.close()
-    # url = upload("../../../static" + file.name, file.anme)
+    # 由前端指定的name获取到图片数据
+    img = request.FILES.get('img')
+    # 截取文件后缀和文件名
+    img_name = img.name
+    mobile = os.path.splitext(img_name)[0]
+    ext = os.path.splitext(img_name)[1]
+    # 重定义文件名
+    img_name = f'avatar-{mobile}{ext}'
+    # 从配置文件中载入图片保存路径
+    img_path = os.path.join(settings.STATIC_URL, img_name)
+    # 写入文件
+    with open(img_path, 'ab') as fp:
+        # 如果上传的图片非常大，就通过chunks()方法分割成多个片段来上传
+        for chunk in img.chunks():
+            fp.write(chunk)
+    url = upload(img_path, img_name)
+
+    print(url)
+    my_user.avatar = url
+    my_user.save()
+
     return success_response({
         "avatar": 1,
         "message": "上传成功",
