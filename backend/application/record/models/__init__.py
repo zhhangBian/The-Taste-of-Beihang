@@ -1,1 +1,1 @@
-from .record import Restaurant
+from .record import Record

@@ -6,7 +6,8 @@ from django.db import models
 class Record(models.Model):
     id = models.AutoField(primary_key=True, auto_created=True, verbose_name='用餐记录ID', editable=False)
     date = models.DateTimeField(auto_now_add=True, verbose_name='日期')
-    dish_name = models.CharField(max_length=200, verbose_name="餐品名称", blank=False)
+    dish_name = models.CharField(max_length=200, verbose_name="餐品名称", blank=False),
+    restaurant_name = models.CharField(max_length=200, verbose_name="所属食堂", default="默认食堂")
     price = models.FloatField(default=0, verbose_name="价格")
 
     def __str__(self):

@@ -4,11 +4,15 @@ import os
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
+from django.db.models import Count
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST, require_GET
 
 from .email import varify_captcha
 from ..models import User
+from ...comment.models import Comment
+from ...dish.models import Dish
+from ...record.models.record import Record
 from ...utils.response import *
 
 MAGIC_ID = 114514
@@ -279,6 +283,55 @@ def get_user_detail(request: HttpRequest):
         "avatar": my_user.avatar,
     })
 
+
+@response_wrapper
+@require_POST
+def add_comment(request: HttpRequest):
+    global login_id
+    user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8')).get('params')
+    title = body.get('title', '默认标题')
+    content = body.get('content', '空空如也')
+    # TODO：图片问题
+    # image = ...
+    dish_name = body.get('dish_name', '默认')
+    restaurant_name = body.get('restaurant', '默认')
+
+    grade = float(body.get('grade', '5'))
+    price = float(body.get('price', '20'))
+    if price < 0 or price > 9999:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "价格不合理！")
+    flavour = float(body.get('flavour', '5'))
+    waiting_time = float(body.get('waiting_time', '60'))
+
+    author_id = 0
+    if not user.is_anonymous:
+        author_id = user.id
+
+    if Dish.objects.filter(name=dish_name).exists():
+        dish = Dish.objects.filter(name=dish_name).first()
+        comment = Comment(title=title,
+                          content=content,
+
+                          grade=grade,
+                          price=price,
+                          flavour=flavour,
+                          waiting_time=waiting_time,
+
+                          restaurant_name=restaurant_name,
+                          dish_name=dish_name,
+                          author_id=author_id)
+        comment.save()
+        dish.comments.add(comment)
+        if not user.is_anonymous:
+            user.comments.add(comment)
+            user.save()
+        return success_response({"message": "创建成功！", "title": comment.title})
+    else:
+        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "菜品不存在！")
+
+
 @response_wrapper
 @require_POST
 def add_record(request: HttpRequest):
@@ -286,11 +339,21 @@ def add_record(request: HttpRequest):
     my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
-    record_id = body.get('record_id')
+    dish_name = body.get('dish_name')
+    restaurant_name = body.get('restaurant_name')
+    price = float(body.get('price'))
 
+    record = Record(dish_name=dish_name,
+                    restaurant_name=restaurant_name,
+                    price=price)
+    record.save()
+    my_user.records.add(record)
     my_user.save()
-    print("update, login id is " + str(login_id))
-    return success_response({"message": "用户资料更新成功"})
+    print("add record, login id is " + str(login_id))
+    return success_response({
+        "message": "添加用餐记录成功",
+    })
+
 
 @response_wrapper
 @require_POST
@@ -299,11 +362,29 @@ def modify_record(request: HttpRequest):
     my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
-    name = body.get('name')
+    record_id = body.get('record_id', '')
+    record = Record.objects.filter(id=record_id).first()
 
+    date = body.get('date', '')
+    dish_name = body.get('dish_name', '')
+    restaurant_name = body.get('restaurant_name')
+    price = float(body.get('price', 0))
+
+    if date:
+        record.date = date
+    if dish_name:
+        record.dish_name = dish_name
+    if restaurant_name:
+        record.restaurant_name = restaurant_name
+    if price:
+        record.price = price
+    record.save()
     my_user.save()
-    print("update, login id is " + str(login_id))
-    return success_response({"message": "用户资料更新成功"})
+    print("modify record, login id is " + str(login_id))
+    return success_response({
+        "message": "修改用餐记录成功",
+    })
+
 
 @response_wrapper
 @require_POST
@@ -312,8 +393,45 @@ def delete_record(request: HttpRequest):
     my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
-    name = body.get('name')
-
+    record_id = body.get('record_id')
+    my_user.records.remove(Record.objects.get(id=record_id))
     my_user.save()
-    print("update, login id is " + str(login_id))
-    return success_response({"message": "用户资料更新成功"})
+    print("delete record, login id is " + str(login_id))
+    return success_response({
+        "message": "删除用餐记录成功",
+    })
+
+
+@response_wrapper
+@require_GET
+def get_records(request: HttpRequest):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
+    record_info_list = []
+    records = list(my_user.records.all())
+    record_cnt = len(records)
+    price_sum = 0
+
+    restaurant_frequencies = my_user.records.all().values('restaurant__name').annotate(
+        freq=Count('restaurant')).order_by('freq')
+
+    # 转换餐馆频次统计结果为字典形式，以便于展示
+    restaurant_freq_dict = {item['restaurant__name']: item['freq'] for item in restaurant_frequencies}
+
+    for record in records:
+        price_sum += record.price
+        record_info_list.append(({
+            "id": record.id,
+            "date": record.date,
+            "dish_name": record.dish_name,
+            "restaurant_name": record.restaurant_name,
+            "price": record.price,
+        }))
+
+    return success_response({
+        "records": record_info_list,
+        "records_count": record_cnt,
+        "price_mean": price_sum / record_cnt,
+        "freq_dict": restaurant_freq_dict,
+    })

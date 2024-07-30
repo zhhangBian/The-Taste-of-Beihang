@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'application.users',
     'application.restaurant',
     'application.comment',
+    'application.record',
     'corsheaders',  # 注册 corsheaders
 ]
 

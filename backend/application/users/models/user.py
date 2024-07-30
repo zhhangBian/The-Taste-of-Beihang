@@ -5,6 +5,7 @@ from django.db import models
 
 from application.comment.models import Comment
 from application.dish.models import Dish
+from application.record.models.record import Record
 from application.restaurant.models import Restaurant
 
 default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
@@ -29,6 +30,8 @@ class User(AbstractUser):
 
     # 该用户发布过的评论
     comments = models.ManyToManyField(Comment, related_name='user_comments', blank=True)
+    # 用餐记录
+    records = models.ManyToManyField(Record, related_name="user_records", blank=True)
 
     groups = models.ManyToManyField(
         'auth.Group',

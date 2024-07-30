@@ -1,5 +1,5 @@
 from django.contrib import admin
 
-from application.restaurant.models import Restaurant
+from application.record.models import Record
 
-admin.site.register(Restaurant)
+admin.site.register(Record)
