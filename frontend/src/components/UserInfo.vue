@@ -376,6 +376,7 @@ export default {
   border: none;
   transition: background-color 0.3s;
   display: inline-block;
+  margin-bottom: 10px;
   font-family: 'Noto Sans SC', sans-serif; /* 设置按钮的字体 */
 }
 
@@ -403,18 +404,19 @@ export default {
 
 .chart-container {
   text-align: center;
-  padding: 0 0;
+  padding: 0 0 0 0;
 }
 
 .chart-title {
   margin-top: 10px;
+  margin-bottom: 0px;
+  margin-left: 0px;
   font-weight: 600;
 }
 
 .chart-image {
-  margin-top: 1px;
-  width: 300px;
-  height: 300px;
+  width: 220px;
+  height: 220px;
 }
 
 .input-group {
