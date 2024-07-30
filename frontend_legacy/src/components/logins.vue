@@ -11,12 +11,10 @@
     name: 'RegisterLoginButtons',  
     methods: {  
       handleLogin() {  
-        this.$router.push('/login');
         console.log('登录按钮被点击');
       },  
       handleRegister() {  
         // 处理注册逻辑，比如跳转到注册页面或显示注册表单  
-        this.$router.push('/login');
         console.log('注册按钮被点击');  
       },  
     },  

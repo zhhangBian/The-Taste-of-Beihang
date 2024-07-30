@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <Menu />
-    <FoodDetail :id="id" />
+    <Menu/>
+    <FoodDetail :id="id"/>
   </div>
 </template>
 

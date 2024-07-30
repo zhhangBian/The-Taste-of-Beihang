@@ -3,3 +3,4 @@
 .idea
 **/.idea
 backend/application/utils/api_key
+backend/db.sqlite3

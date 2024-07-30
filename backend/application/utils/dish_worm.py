@@ -1,9 +1,11 @@
 import os
-import re
+import urllib.request
 
 import django
 import requests
 from bs4 import BeautifulSoup
+
+from application.utils.pic_upload import upload
 
 # 设置环境变量并初始化 Django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WhatToEatInHang.settings')
@@ -29,50 +31,20 @@ def generate_random_real_float(a, b):
     return round(random.uniform(a, b), 1)
 
 
-def find_row_by_value(column_name, value):
-    matching_row = df[df[column_name] == value]
-    if not matching_row.empty:
-        return matching_row.iloc[0]
-    else:
-        return None
-
-
-import pandas as pd
-
-df = pd.read_csv("./images/image-url.csv")
-
-
-def clean_string(text):
-    pattern = r'[^\u4e00-\u9fffA-Za-z]'
-    cleaned_text = re.sub(pattern, '', text)
-    return cleaned_text
-
-def clean_string2(text):
-    pattern = r'[^\u4e00-\u9fff]'
-    cleaned_text = re.sub(pattern, '', text)
-    return cleaned_text
-
-
-def get_rom_number(value, rol_name):
-    for i in range(0, len(df[rol_name])):
-        if clean_string2(df[rol_name][i]) == clean_string2(value):
-            return i
-    return 0
-
-
 def import_data(data):
-    print(get_rom_number(data['title'], 'title'))
     dish, created = Dish.objects.update_or_create(
-        name=clean_string(data['title']),
-        image=df['url'][get_rom_number(data['title'], 'title')],
-        # image=data['img_url'],
+        name=data['title'],
+        image=data['img_url'],
+
         address=data['location'],
-        price=generate_random_float(8, 18),
+        restaurant_name=data['window'],
+
         description=data['description'],
+
+        price=generate_random_float(8, 18),
         overall_rating=generate_random_real_float(4, 5),
         flavor_rating=generate_random_real_float(4, 5),
         waiting_time=generate_random_float(0, 2),
-        restaurant_name=data['window'],
     )
 
 
@@ -101,11 +73,12 @@ def download_img(url, save_dir):
     for title_tag in titles:
         # 查找img元素
         img_tag = title_tag.find_next_sibling('p', class_='contentImage').img
-        # print(img_tag.get('src'))
-        # urllib.request.urlretrieve(img_tag.get('src'), save_dir + '/' + str(title_tag.text) + '.jpg')
-        # break
-        # print(str(i) + ': ' + str(title_tag.text))
-        # i += 1
+        print(img_tag.get('src'))
+
+        title = str(title_tag.text).replace(" ", "").replace("\t", "").replace("\n", "")
+        path = save_dir + '/' + str(title) + '.jpg'
+        urllib.request.urlretrieve(img_tag.get('src'), path)
+        url = upload(path, str(title) + '.jpg')
 
         # 坐标
         location_tag = img_tag.find_parent().find_next_sibling('p', class_='contentFont')
@@ -121,8 +94,8 @@ def download_img(url, save_dir):
 
         # 将这些信息存储为一个字典
         item = {
-            'title': title_tag.text.strip(),
-            'img_url': img_tag['src'],
+            'title': title,
+            'img_url': url,
             'location': location,
             'window': window,
             'description': description
@@ -133,5 +106,5 @@ def download_img(url, save_dir):
 
 
 url = 'https://m.thepaper.cn/baijiahao_26628231'
-save_dir = 'images'
+save_dir = './images'
 download_img(url, save_dir)

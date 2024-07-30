@@ -1,31 +1,31 @@
 <template>
   <div class="container">
     <h1 class="main-title">{{ greeting }}，{{ user.name }}</h1>
-    <hr class="divider" />
+    <hr class="divider"/>
     <div class="content">
       <div class="profile-section">
         <div class="card">
           <h2 class="subtitle">个人信息</h2>
-          <hr class="card-divider" />
+          <hr class="card-divider"/>
           <div class="input-group">
             <label for="name"><strong>昵称</strong></label>
-            <input type="text" id="name" v-model="user.name" />
+            <input type="text" id="name" v-model="user.name"/>
           </div>
           <div class="input-group">
             <label for="uid"><strong>账号（UID）</strong></label>
-            <input type="text" id="uid" v-model="user.uid" disabled />
+            <input type="text" id="uid" v-model="user.uid" disabled/>
           </div>
           <div class="input-group">
             <label for="college"><strong>学院</strong></label>
-            <input type="text" id="college" v-model="user.college" />
+            <input type="text" id="college" v-model="user.college"/>
           </div>
           <div class="input-group">
             <label for="signature"><strong>个性签名</strong></label>
-            <input type="text" id="signature" v-model="user.signature" />
+            <input type="text" id="signature" v-model="user.signature"/>
           </div>
           <div class="input-group">
             <label><strong>头像</strong></label>
-            <img :src="user.avatar" alt="user-avatar" class="avatar" />
+            <img :src="user.avatar" alt="user-avatar" class="avatar"/>
           </div>
           <div class="button-group">
             <input type="file" @change="onFileChange" style="display: none;" ref="fileInput">
@@ -37,7 +37,7 @@
       <div class="stats-section">
         <div class="card">
           <h2 class="subtitle">统计</h2>
-          <hr class="card-divider" />
+          <hr class="card-divider"/>
           <div class="stats-content">
             <div class="stats-left">
               <p><strong>点亮菜品:</strong> {{ stats.orderRate }}%</p>
@@ -47,8 +47,10 @@
             </div>
             <div class="stats-right">
               <p><strong>已点赞的评论数:</strong> {{ stats.totalLikes }}</p>
-              <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）</p>
-              <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）</p>
+              <p><strong>最高消费:</strong> {{ stats.highestSpend }}元（{{ stats.highestSpendMeal }}）
+              </p>
+              <p><strong>最低消费:</strong> {{ stats.lowestSpend }}元（{{ stats.lowestSpendMeal }}）
+              </p>
             </div>
           </div>
         </div>
@@ -56,11 +58,11 @@
           <div class="charts">
             <div class="chart-container">
               <h3 class="chart-title">就餐地点统计</h3>
-              <img :src="stats.locationChart" alt="pie-chart" class="chart-image" />
+              <div id="locationChart" class="chart-image"></div>
             </div>
             <div class="chart-container">
               <h3 class="chart-title">就餐消费统计</h3>
-              <img :src="stats.expenseChart" alt="pie-chart" class="chart-image" />
+              <div id="expenseChart" class="chart-image"></div>
             </div>
           </div>
         </div>
@@ -70,10 +72,20 @@
 </template>
 
 <script>
+import * as echarts from 'echarts';
+import apiClient from '../axios';
+
 export default {
+  props: {
+    id: {
+      type: Number,
+      required: true,
+    },
+  },
   data() {
     return {
       user: {
+        id: Number(this.$route.params.id),
         name: '时间的彷徨',
         uid: 'zxwswd114514',
         college: '计算机学院',
@@ -90,8 +102,6 @@ export default {
         highestSpendMeal: '麻辣香锅/六食堂',
         lowestSpend: 2,
         lowestSpendMeal: '汉堡/四食堂',
-        locationChart: 'https://placehold.co/200x200',
-        expenseChart: 'https://placehold.co/200x200'
       }
     };
   },
@@ -111,12 +121,22 @@ export default {
       }
     }
   },
-  mounted() {
-    document.title = `个人中心 - ${this.user.name}`;
-  },
   methods: {
     editProfile() {
-      alert('点击了修改个人信息');
+      alert('完成了修改个人信息');
+      apiClient.post(`http://127.0.0.1:8000/users/update-user`, {
+        params: {
+          "username": this.user.name,
+          "school": this.user.college,
+          "motto": this.user.signature,
+        }
+      })
+        .then(() => {
+          this.get_user_info()
+        })
+        .catch(error => {
+          console.error('Error fetching comments:', error);
+        });
     },
     triggerFileUpload() {
       this.$refs.fileInput.click();
@@ -124,15 +144,137 @@ export default {
     onFileChange(event) {
       const file = event.target.files[0];
       if (file) {
+        // 使用 FileReader 进行文件预览
         const reader = new FileReader();
         reader.onload = e => {
           this.user.avatar = e.target.result;
         };
         reader.readAsDataURL(file);
+
+        // 创建 FormData 对象并添加文件
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // 上传文件到服务器
+        apiClient.post('http://127.0.0.1:8000/users/update-avatar/', formData)
+          .then(response => {
+            this.user.avatar = response.data.avatar; // 更新用户头像
+          })
+          .catch(error => {
+            console.error('Error uploading file:', error);
+          });
       }
+    },
+    get_user_info() {
+      apiClient.get(`http://127.0.0.1:8000/users/get-user-detail/`)
+        .then(response => {
+          this.user.name = response.data.username;
+          this.user.uid = response.data.id + response.data.username;
+          this.user.college = response.data.school;
+          this.user.signature = response.data.motto;
+          this.user.avatar = response.data.avatar;
+        })
+        .catch(error => {
+          console.error('Error fetching dish details:', error);
+        });
+    },
+    initCharts() {
+      // Initialize the location chart
+      var locationChart = echarts.init(document.getElementById('locationChart'));
+      var locationOption = {
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'middle'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Location',
+            type: 'pie',
+            radius: ['50%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              {value: 1048, name: '六食堂'},
+              {value: 735, name: '四食堂'},
+              {value: 580, name: '三食堂'},
+              {value: 484, name: '二食堂'},
+              {value: 300, name: '一食堂'}
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      locationChart.setOption(locationOption);
+
+      // Initialize the expense chart
+      var expenseChart = echarts.init(document.getElementById('expenseChart'));
+      var expenseOption = {
+        legend: {
+          orient: 'vertical',
+          left: 'right',
+          top: 'middle'
+        },
+        tooltip: {
+          trigger: 'item'
+        },
+        series: [
+          {
+            name: 'Expense',
+            type: 'pie',
+            radius: ['50%'],
+            center: ['40%', '50%'],
+            avoidLabelOverlap: false,
+            label: {
+              show: false,
+              position: 'center'
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              {value: 1048, name: '早餐'},
+              {value: 735, name: '午餐'},
+              {value: 580, name: '晚餐'},
+              {value: 484, name: '夜宵'},
+              {value: 300, name: '其他'}
+            ],
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      };
+      expenseChart.setOption(expenseOption);
     }
-  }
+  },
+  mounted() {
+    document.title = `个人中心 - ${this.user.name}`;
+    this.initCharts();
+    this.get_user_info();
+  },
 }
+
 </script>
 
 <style scoped>
@@ -152,7 +294,7 @@ export default {
   font-size: 2.4rem;
   font-weight: bold;
   text-align: left !important;
-  margin:0 0 0;
+  margin: 0 0 0;
 }
 
 .divider {
@@ -185,7 +327,7 @@ export default {
 .subtitle {
   display: flex;
   justify-content: flex-start; /* 水平方向从容器的开头开始排列 */
-align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
+  align-items: flex-start; /* 垂直方向从容器的开头开始排列 */
   font-size: 2rem;
   font-weight: 700;
   text-align: left !important;
@@ -234,6 +376,7 @@ align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
   border: none;
   transition: background-color 0.3s;
   display: inline-block;
+  margin-bottom: 10px;
   font-family: 'Noto Sans SC', sans-serif; /* 设置按钮的字体 */
 }
 
@@ -261,19 +404,19 @@ align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
 
 .chart-container {
   text-align: center;
-  padding :0 0;
+  padding: 0 0 0 0;
 }
 
 .chart-title {
-  margin-top:10px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+  margin-left: 0px;
   font-weight: 600;
 }
 
 .chart-image {
-  margin-top: 1px;
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
+  width: 220px;
+  height: 220px;
 }
 
 .input-group {
@@ -300,4 +443,5 @@ align-items: flex-start;  /* 垂直方向从容器的开头开始排列 */
   background-color: #f5f5f5;
   color: #aaa;
 }
+
 </style>

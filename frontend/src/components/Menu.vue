@@ -1,7 +1,7 @@
 <template>
   <div class="menu-wrapper">
     <div class="content">
-      <div class="person-info" @click="navigateToUserCenter">
+      <div class="person-info" @click="navigateToUserCenter(this.id)">
         <img :src="avatar" alt=""/>
         <div class="person-name">
           <div class="name">{{ this.username }}</div>
@@ -11,10 +11,10 @@
       <div class="menu-content">
         <div class="menu-list">
           <div
-              class="menu-list-item"
-              v-for="item in menuData"
-              :key="item.id"
-              @click="navigateTo(item.path)"
+            class="menu-list-item"
+            v-for="item in menuData"
+            :key="item.id"
+            @click="navigateTo(item.path)"
           >
             <div class="block"></div>
             <span class="iconfont" :class="item.iconFont"></span>
@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="logout" @click="navigateTo('/logout')">
+      <div class="logout" @click="log_out">
         <div class="menu-list-item">
           <div class="block"></div>
           <span class="iconfont icon-jinru"></span>
@@ -34,9 +34,12 @@
 </template>
 
 <script>
+import apiClient from '../axios'; // 导入 Axios 实例
+
 export default {
   data() {
     return {
+      id: 0,
       username: "时间的彷徨",
       moto: "i am sb!",
       avatar: "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif",
@@ -51,16 +54,58 @@ export default {
   },
   methods: {
     navigateTo(path) {
+      this.get_user_info();
       this.$router.push(path);
     },
-    navigateToUserCenter() {
-      this.navigateTo('/user');
+    navigateToUserCenter(id) {
+      this.get_user_info();
+      this.$router.push({name: 'user', params: {id}});
+    },
+    log_out() {
+      apiClient.get('http://127.0.0.1:8000/users/logout/')
+        .then(() => {
+          this.$router.push('/login');
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
     },
     getAvatarUrl() {
       console.log(this.avatar)
       return this.avatar;
-    }
+    },
+    get_user_info() {
+      apiClient.get('http://127.0.0.1:8000/users/get-user-info/')
+        .then(response => {
+          this.id = response.data.id;
+          this.username = response.data.username;
+          this.moto = response.data.moto;
+          this.avatar = response.data.avatar;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+      console.log(this.id);
+    },
+    check_login_status() {
+      let status;
+      apiClient.get('http://127.0.0.1:8000/users/check-login-status')
+        .then(response => {
+          status = response.data.login_status;
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+      return status;
+    },
   },
+  mounted() {
+    setInterval(2000);
+    if (this.check_login_status()) {
+      this.$router.push('/login');
+    }
+    setInterval(this.get_user_info,500);
+  }
 };
 </script>
 

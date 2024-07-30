@@ -1,19 +1,30 @@
 # 代表了用户的基本接口
 import json
+import os
 
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest
-from django.shortcuts import redirect
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 
-from .auth import *
 from .email import varify_captcha
 from ..models import User
 from ...utils.response import *
 
+login_id = 0
+
+# 导入用于装饰器修复技术的包
+
 name_not_allow = ['default', 'delete']
-User = get_user_model()
+default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241830349.avif"
+
+
+@response_wrapper
+@require_GET
+def check_login_status(request: HttpRequest):
+    print("check login id is " + str(login_id))
+    return success_response({"login_status": (login_id != 0)})
 
 
 # 用户登录
@@ -35,26 +46,30 @@ def user_login(request: HttpRequest):
         username = tmp_user.username
         user = authenticate(username=username, password=password)
 
-    if user is not None:
-        request.session['is_login'] = True
-        request.session['user_id'] = user.id
-        request.session['username'] = user.username
+    if user:
+        login(request, user)
+
+        global login_id
+        login_id = user.id
+        print("login id is " + str(login_id))
         return success_response({
             "message": "登录成功"
         })
     elif User.objects.filter(username=username).exists():
+        # 密码错误
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "密码错误！")
     else:
+        # 登录失败
         return fail_response(ErrorCode.CANNOT_LOGIN_ERROR, "用户名或邮箱不存在！")
 
 
 @response_wrapper
 @require_GET
-def user_logoff(request):
-    # 如果不是登陆状态，无法登出
-    if request.session.get('is_login'):
-        request.session.flush()
-    return redirect('/login/')
+def user_logout(request):
+    auth.logout(request)
+    global login_id
+    login_id = 0
+    return success_response({"message": "logout success"})
 
 
 # 用户注册
@@ -86,7 +101,10 @@ def user_signup(request: HttpRequest):
     #     return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "验证码错误")
 
     # 创建新用户
-    User.objects.create_user(username=username, email=email, password=password)
+    user = User.objects.create_user(username=username,
+                                    email=email,
+                                    password=password)
+    user.save()
 
     return success_response({'message': '注册成功'})
 
@@ -95,12 +113,15 @@ def user_signup(request: HttpRequest):
 @response_wrapper
 @require_POST
 def change_password(request: HttpRequest):
+    id = login_id
+    user = User.objects.filter(id=id).first()
+
     body = json.loads(request.body.decode('utf-8'))
     old_password = body.get('old_password')
     new_password = body.get('new_password')
 
     # 使用Django的authenticate函数验证用户名和密码
-    user = authenticate(username=request.user.username, password=old_password)
+    user = authenticate(username=user.username, password=old_password)
     if user is not None:
         # 修改密码
         user.password = make_password(new_password)
@@ -135,12 +156,13 @@ def forget_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def update_user(request: HttpRequest):
-    # 获取用户
-    user = request.user
+    id = login_id
+    user = User.objects.filter(id=id).first()
 
     body = json.loads(request.body.decode('utf-8'))
     username = body.get('username')
     motto = body.get('motto')
+    school = body.get('school')
 
     # 检查用户名是否已存在
     if username and User.objects.filter(username=username).exists():
@@ -153,6 +175,8 @@ def update_user(request: HttpRequest):
     # 检查个性签名是否为空
     if motto:
         user.motto = motto
+    if school:
+        user.school = school
 
     # 更新用户
     user.save()
@@ -160,16 +184,50 @@ def update_user(request: HttpRequest):
 
 
 @response_wrapper
+@require_POST
+def update_avatar(request):
+    file = request.FILES.get('file')
+    file_path = os.path.join("../../../static", file.name)
+    with open(file_path, 'wb+') as f:
+        f.write(file.read())
+        f.close()
+    # url = upload("../../../static" + file.name, file.anme)
+    return success_response({
+        "avatar": 1,
+        "message": "上传成功",
+    })
+
+
+@response_wrapper
 @require_GET
 def get_user_info(request):
-    user = request.user
+    if login_id == 0:
+        return success_response({
+            "id": 0,
+            "username": "还未登录！",
+            "avatar": default_avatar,
+        })
+    id = login_id
+    user = User.objects.filter(id=id).first()
 
     return success_response({
         "id": user.id,
         "username": user.username,
+        "avatar": user.avatar,
+    })
 
+
+@response_wrapper
+@require_GET
+def get_user_info_by_id(request: HttpRequest, id: int):
+    user = User.objects.filter(id=id).first()
+
+    return success_response({
+        "id": user.id,
+        "username": user.username,
         "email": user.email,
-        "gender": user.gender,
+        "school": user.school,
+
         "motto": user.motto,
         "avatar": user.avatar,
     })
@@ -177,19 +235,16 @@ def get_user_info(request):
 
 @response_wrapper
 @require_GET
-def get_user_info_by_id(request: HttpRequest):
-    body = json.loads(request.body.decode('utf-8'))
-    user_id = body.get('user_id')
-    user = User.objects.filter(id=user_id).first()
-    if user is None:
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "用户不存在！")
+def get_user_detail(request: HttpRequest):
+    id = login_id
+    user = User.objects.filter(id=id).first()
 
     return success_response({
         "id": user.id,
         "username": user.username,
-
         "email": user.email,
-        "gender": user.gender,
+        "school": user.school,
+
         "motto": user.motto,
         "avatar": user.avatar,
     })

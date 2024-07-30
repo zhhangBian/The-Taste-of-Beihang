@@ -5,68 +5,89 @@
         <h1 class="text-8xl font-mashan border-b border-gray pb-1 mb-1 flex items-center">
           {{ dish.name }}
           <button @click="toggleSubscription" class="icon-button ml-4">
-            <img :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')" alt="Subscription status" class="icon enlarged-icon">
+            <img :src="isSubscribed ? require('@/assets/sub.svg') : require('@/assets/unsub.svg')"
+                 alt="Subscription status" class="icon enlarged-icon">
           </button>
         </h1>
         <p class="text-2xl font-noto mb-9">{{ dish.address }}</p>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">总体评价</h2>
-          <p :class="getColor(dish.overallRating)" class="text-7xl font-serif">
-            {{ dish.overallRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.overall_rating)" class="text-7xl font-serif">
+            {{ dish.overall_rating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">口味</h2>
-          <p :class="getColor(dish.flavorRating)" class="text-7xl font-noto">
-            {{ dish.flavorRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.flavor_rating)" class="text-7xl font-noto">
+            {{ dish.flavor_rating.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">价格</h2>
-          <p :class="getColor(dish.priceRating)" class="text-7xl font-noto">
-            {{ dish.priceRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.prices)" class="text-7xl font-noto">
+            {{ dish.prices.toFixed(1) }}</p>
         </div>
         <div class="mt-4">
           <h2 class="text-4xl font-noto border-b border-gray pb-1 mb-1">排队时长</h2>
-          <p :class="getColor(dish.timeRating)" class="text-7xl font-noto">
-            {{ dish.timeRating.toFixed(1) }}</p>
+          <p :class="getColor(dish.waiting_time)" class="text-7xl font-noto">
+            {{ dish.waiting_time.toFixed(1) }}</p>
         </div>
       </div>
-      <div class="col-span-2">
-        <img :src="dish.image" alt="Delicious dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">吃过的怎么说？</h2>
-        <div class="mt-4 reviews-container">
-          <div v-for="(comment, index) in comments" :key="index">
-            <div class="review-item">
-              <div class="flex items-center space-x-4">
-                <img :src="comment.avatar" alt="User avatar" class="w-12 h-12 rounded-full">
-                <div class="review-content flex-1">
-                  <div class="flex items-center justify-between">
-                    <p class="font-man font-bold">{{ comment.name }} &ensp;<span class="font-man text-zinc-400">{{ formatDate(comment.date) }}吃过&ensp;</span></p>
-                    <div class="flex space-x-2 ml-auto">
-                      <button @click="toggleLike(comment.id)" class="icon-button">
-                        <img :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')" alt="Like/Unlike" class="icon">
-                      </button>
-                    </div>
+      <div class="col-span-4">
+        <div class="top-container">
+          <img :src="currentImage" alt="Delicious dish"
+               class="w-full h-auto rounded-lg decreased-height">
+        </div>
+        <div class="bottom-container mt-4">
+          <div class="reviews-container">
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+              吃过的怎么说？</h2>
+            <div class="reviews-inner-container mt-4">
+              <div v-for="(comment, index) in comments" :key="index" class="review-item">
+                <div class="flex items-center space-x-4">
+                  <div class="avatar-container">
+                    <img :src="comment.avatar" alt="User avatar" class="user-avatar">
                   </div>
-                  <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
-                  <p class="font-man font-medium">{{ comment.content }}</p>
+                  <div class="review-description flex-1">
+                    <div class="flex items-center justify-between">
+                      <p class="font-man font-bold">{{ comment.title }} &ensp;<span
+                        class="font-man text-zinc-400">{{
+                          formatDate(comment.date)
+                        }}吃过&ensp;</span>
+                      </p>
+                      <div class="flex space-x-2 ml-auto">
+                        <button @click="toggleLike(comment.id)" class="icon-button">
+                          <img
+                            :src="likedComments.includes(comment.id) ? require('@/assets/like.svg') : require('@/assets/unlike.svg')"
+                            alt="Like/Unlike" class="icon">
+                        </button>
+                      </div>
+                    </div>
+                    <p class="font-man text-zinc-500">{{ getCommentTitle(comment) }}</p>
+                    <p class="font-man font-medium">{{ comment.content }}</p>
+                  </div>
                 </div>
+                <hr class="my-2 hr-gray" v-if="index < comments.length - 1">
               </div>
             </div>
-            <hr class="my-2 hr-gray" v-if="index < comments.length - 1">
           </div>
-        </div>
-      </div>
-      <div class="col-span-2">
-        <img src="https://placehold.co/400x300" alt="Hotpot dish" class="w-full h-auto rounded-lg decreased-height">
-        <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">写下你的评论！</h2>
-        <div class="mt-4">
-          <div class="flex items-center space-x-4 rating-container" v-for="(rating, index) in ratings" :key="index">
-            <span class="font-man rating-label">{{ rating.label }}</span>
-            <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1" @input="updateRating(index, $event)">
-            <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
+          <div class="write-review-container">
+            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
+              写下你的评论！</h2>
+            <div class="mt-4">
+              <div class="flex items-center space-x-4 rating-container"
+                   v-for="(rating, index) in ratings" :key="index">
+                <span class="font-man rating-label">{{ rating.label }}</span>
+                <input type="range" class="range" :value="rating.value" min="0" max="5" step="0.1"
+                       @input="updateRating(index, $event)">
+                <span>{{ parseFloat(rating.value).toFixed(1) }}</span>
+              </div>
+              <textarea
+                class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none"
+                placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
+              <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man"
+                      @click="submitReview">提交
+              </button>
+            </div>
           </div>
-          <textarea class="w-full increased-height mt-4 padding-2 rounded-lg font-man resize-none" placeholder="帮助大家了解这道菜吧！" v-model="newReview.comment"></textarea>
-          <button class="mt-4 bg-black text-white py-2 px-4 rounded-lg font-man" @click="submitReview">提交</button>
         </div>
       </div>
     </div>
@@ -74,7 +95,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import apiClient from '../axios'; // 导入 Axios 实例
 
 export default {
   props: {
@@ -86,113 +107,160 @@ export default {
   data() {
     return {
       dish: {
+        id: 114514,
         name: '麻辣香锅',
         address: '学四食堂南侧',
-        overallRating: 4.5,
-        flavorRating: 4.9,
-        priceRating: 2.5,
-        timeRating: 3.5,
+        overall_rating: 4.5,
+        flavor_rating: 4.9,
+        prices: 2.5,
+        waiting_time: 3.5,
         image: 'https://placehold.co/400x300'
       },
+      currentImageIndex: 0,
+      images: [
+        'https://placehold.co/400x300', // 示例图片
+        'https://placehold.co/400x300?text=Image2' // 示例图片
+      ],
       comments: [
         {
           id: 1,
-          name: 'Jew',
+          author_name: 'Jew',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.0,
-          flavorRating: 4.0,
-          priceRating: 2.0,
-          timeRating: 3.0,
+          grade: 4.0,
+          flavour: 4.0,
+          price: 2.0,
+          waiting_time: 3.0,
           content: '感觉不如新北二楼的麻辣香锅'
         },
         {
           id: 2,
-          name: '时间的彷徨',
+          author_name: '时间的彷徨',
           date: '2024-06-18 12:20:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.0,
-          flavorRating: 4.0,
-          priceRating: 4.0,
-          timeRating: 4.0,
+          grade: 4.0,
+          flavour: 4.0,
+          price: 4.0,
+          waiting_time: 4.0,
           content: '觉得这家不好吃的都是sb'
         },
         {
           id: 3,
-          name: '传奇co助教myk',
+          author_name: '传奇co助教myk',
           date: '2024-07-27 16:45:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.9,
-          flavorRating: 4.0,
-          priceRating: 3.5,
-          timeRating: 3.2,
+          grade: 4.9,
+          flavour: 4.0,
+          price: 3.5,
+          waiting_time: 3.2,
           content: '少年，代码你要亲自写，屎你要亲自去吃；未来可期，拼尽全力。当你为未来付出踏踏实实努力的时候，那些你觉得看不到的人，和遇不到的风景，都终将在你生命里出现。'
         },
         {
           id: 4,
-          name: '张三',
+          author_name: '张三',
           date: '2024-05-18 09:15:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 3.8,
-          flavorRating: 4.2,
-          priceRating: 3.0,
-          timeRating: 2.5,
+          grade: 3.8,
+          flavour: 4.2,
+          price: 3.0,
+          waiting_time: 2.5,
           content: '味道还不错，但是排队时间有点长。'
         },
         {
           id: 5,
-          name: '李四',
+          author_name: '李四',
           date: '2024-04-22 11:45:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 2.5,
-          flavorRating: 3.0,
-          priceRating: 1.5,
-          timeRating: 2.0,
+          grade: 2.5,
+          flavour: 3.0,
+          price: 1.5,
+          waiting_time: 2.0,
           content: '价格有点贵，性价比不高。'
         },
         {
           id: 6,
-          name: '王五',
+          author_name: '王五',
           date: '2024-07-10 19:30:00',
           avatar: 'https://placehold.co/50x50',
-          overallRating: 4.7,
-          flavorRating: 4.8,
-          priceRating: 3.5,
-          timeRating: 3.7,
+          grade: 4.7,
+          flavour: 4.8,
+          price: 3.5,
+          waiting_time: 3.7,
           content: '总体感觉很好，推荐大家尝试！'
         }
       ],
       likedComments: [],
       isSubscribed: false,  // 初始化订阅状态为未订阅
       ratings: [
-        { label: '总体评价', value: 0 },
-        { label: '口味', value: 0 },
-        { label: '价格', value: 0 },
-        { label: '排队时长', value: 0 }
+        {label: '总体评价', value: 0},
+        {label: '价格', value: 0},
+        {label: '口味', value: 0},
+        {label: '排队时长', value: 0}
       ],
       newReview: {
-        content: ''
+        comment: ''
       }
     };
   },
+  computed: {
+    currentImage() {
+      return this.images[this.currentImageIndex];
+    }
+  },
   methods: {
+    getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    },
+    get_dish_detail() {
+
+      apiClient.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
+        .then(response => {
+          this.dish.name = response.data.name;
+          this.dish.image = response.data.image;
+
+          this.dish.address = response.data.address;
+          this.dish.overall_rating = response.data.overall_rating;
+          this.dish.flavor_rating = response.data.flavor_rating;
+          this.dish.prices = response.data.prices;
+          this.dish.waiting_time = response.data.waiting_time;
+          this.comments = response.data.comments;
+
+          this.images = response.data.images;
+        })
+        .catch(error => {
+          console.error('Error fetching dish details:', error);
+        });
+    },
     submitReview() {
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
-    },
-    fetchComments() {
-      axios.get(`http://127.0.0.1:8000/dish/get-dish-comments`, {
+      apiClient.post(`http://127.0.0.1:8000/comment/create-comment/`, {
         params: {
-          "dish_address": this.dish.address,
-          "dish_name": this.dish.name
+          "title": this.dish.name + "好吃！",
+          "content": this.newReview.comment,
+          "dish_name": this.dish.name,
+
+          "restaurant_name": this.dish.address,
+
+          "grade": this.ratings[0].value,
+          "price": this.ratings[1].value,
+          "flavour": this.ratings[2].value,
+          "waiting_time": this.ratings[3].value,
         }
       })
-        .then(response => {
-          this.dish.overallRating = response.data.overallRating;
-          this.dish.flavorRating = response.data.flavorRating;
-          this.dish.priceRating = response.data.priceRating;
-          this.dish.timeRating = response.data.timeRating;
-          this.comments = response.data.comments_list;
+        .then(() => {
+          this.get_dish_detail();
         })
         .catch(error => {
           console.error('Error fetching comments:', error);
@@ -232,7 +300,10 @@ export default {
       }
     },
     getCommentTitle(comment) {
-      return `总体评价 ${comment.overallRating.toFixed(1)} | 口味 ${comment.flavorRating.toFixed(1)} | 价格 ${comment.priceRating.toFixed(1)} | 排队时长 ${comment.timeRating.toFixed(1)}`;
+      return `总体评价 ${comment.grade.toFixed(1)} |
+      口味 ${comment.flavour.toFixed(1)} |
+      价格 ${comment.price.toFixed(1)} |
+      排队时长 ${comment.waiting_time.toFixed(1)}`;
     },
     toggleLike(commentId) {
       const index = this.likedComments.indexOf(commentId);
@@ -252,12 +323,24 @@ export default {
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);
+      console.log(this.ratings[index].value);
+    },
+    startImageSlider() {
+      setInterval(() => {
+        this.currentImageIndex = (this.currentImageIndex + 1) % this.images.length;
+      }, 3000); // 每3秒切换一次图片
+    }
+  },
+  watch: {
+    'dish.name': function (newName) {
+      document.title = `详情 - ${newName}`;
     }
   },
   mounted() {
-    this.fetchComments();
+    this.get_dish_detail();
     document.title = `详情 - ${this.dish.name}`;
     console.log('FoodDetail mounted with ID:', this.id);
+    this.startImageSlider();
   },
 };
 </script>
@@ -278,6 +361,7 @@ body {
 
 .container {
   display: grid;
+  overflow: hidden;
   grid-template-columns: 1fr;
   gap: 12px;
   background-color: #ffffff;
@@ -293,12 +377,12 @@ body {
   grid-column: span 1;
 }
 
-.col-span-2 {
-  grid-column: span 2;
+.col-span-4 {
+  grid-column: span 4;
 }
 
 .border-b {
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .p-6 {
@@ -310,19 +394,20 @@ body {
 }
 
 .text-8xl {
-  font-size: 4rem;
+  font-size: 3rem;
   line-height: 0.9;
   text-align: left; /* 左对齐 */
 }
 
 .text-7xl {
-  font-size: 4rem;
+  font-size: 2.5rem;
   line-height: 0.1;
+  margin-top: 25px;
   text-align: left; /* 左对齐 */
 }
 
 .text-4xl {
-  font-size: 2.25rem;
+  font-size: 2rem;
   line-height: 1.1;
   text-align: left; /* 左对齐 */
 }
@@ -409,7 +494,7 @@ body {
 }
 
 .w-full {
-  width: 100%;
+  width: 95%;
 }
 
 .h-auto {
@@ -421,7 +506,7 @@ body {
 }
 
 .mt-4 {
-  margin-top: 16px;
+  margin-top: 10px;
 }
 
 .mb-1 {
@@ -476,7 +561,7 @@ body {
   margin-right: 0;
 }
 
-.review-content {
+.review-description {
   text-align: left; /* 确保reviews部分左对齐 */
 }
 
@@ -485,7 +570,11 @@ body {
 }
 
 .reviews-container {
-  max-height: 425px; /* 设置reviews容器的最大高度 */
+  max-height: 280px; /* 设置reviews容器的最大高度 */
+}
+
+.reviews-inner-container {
+  max-height: 280px; /* 设置reviews容器的最大高度 */
   overflow-y: auto; /* 添加垂直滚动条 */
 }
 
@@ -495,7 +584,7 @@ body {
 }
 
 .increased-height {
-  height: 12rem; /* 增大文本框的高度 */
+  height: 7rem; /* 增大文本框的高度 */
 }
 
 .padding-2 {
@@ -512,14 +601,15 @@ body {
 
 .icon {
   height: 1rem; /* 调整大小 */
-  width: 1rem;  /* 调整大小 */
+  width: 1rem; /* 调整大小 */
   vertical-align: bottom; /* 保持图标底部与文字底部对齐 */
 }
 
 .enlarged-icon {
   height: 1.5rem; /* 调整图标放大后的高度 */
-  width: 1.5rem;  /* 调整图标放大后的宽度 */
+  width: 1.5rem; /* 调整图标放大后的宽度 */
 }
+
 .range {
   width: 300px;
   height: 5px;
@@ -554,6 +644,32 @@ body {
 }
 
 .rating-label {
-  width: 80px; /* 调整这个宽度来对齐文字 */
+  width: 120px; /* 调整这个宽度来对齐文字 */
+}
+
+.avatar-container {
+  flex-shrink: 0;
+  width: 8%;
+}
+
+.user-avatar {
+  width: 100%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.top-container {
+  display: flex;
+  justify-content: space-between; /* 调整为左右排列 */
+}
+
+.bottom-container {
+  display: flex;
+  justify-content: space-between; /* 调整为左右排列 */
+}
+
+.reviews-container, .write-review-container {
+  width: 48%; /* 每个容器占一半宽度 */
 }
 </style>

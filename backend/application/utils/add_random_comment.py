@@ -37,6 +37,9 @@ def clean_string(text):
     return cleaned_text
 
 
+heads = ["天哪！", "震惊！", "快来这个宝藏食堂"]
+comments = ["哈哈哈好好吃", "好吃到跺脚", "不愧是北航水平", '香甜软糯啊']
+
 for i in range(100):
     dish = Dish.objects.order_by('?').first()
     author = User.objects.order_by('?').first()
@@ -44,7 +47,7 @@ for i in range(100):
 
     comment, created = Comment.objects.update_or_create(
         title=clean_string(str(dish.name) + "热评"),
-        content="哈哈哈好好吃",
+        content=random.choice(heads) + random.choice(comments),
         image=dish.image,
 
         grade=generate_random_real_float(4, 5),
