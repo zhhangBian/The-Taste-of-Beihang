@@ -11,3 +11,27 @@ html,body,#app{
   .large-message-font .el-icon {
     font-size: 24px !important;  /* 放大图标 */
   }
+
+  .el-input__inner {
+    font-size: 16px !important; /* 输入框字体大小 */
+}
+
+.el-button {
+    font-size: 16px !important; /* 按钮字体大小 */
+}
+
+.el-table th, .el-table td {
+    font-size: 16px !important; /* 表格字体大小 */
+}
+
+.el-pagination {
+    font-size: 16px !important; /* 分页组件字体大小 */
+}
+
+.el-dialog__body {
+    font-size: 16px !important; /* 弹窗内容字体大小 */
+}
+
+.el-form-item__content {
+    font-size: 16px !important; /* 表单项内容字体大小 */
+}
