@@ -12,8 +12,8 @@
             <input type="text" id="name" v-model="user.name"/>
           </div>
           <div class="input-group">
-            <label for="uid"><strong>账号（UID）</strong></label>
-            <input type="text" id="uid" v-model="user.uid" disabled/>
+            <label for="username"><strong>账号</strong></label>
+            <input type="text" id="username" v-model="user.username" disabled/>
           </div>
           <div class="input-group">
             <label for="college"><strong>学院</strong></label>
@@ -87,7 +87,7 @@ export default {
       user: {
         id: Number(this.$route.params.id),
         name: '时间的彷徨',
-        uid: 'zxwswd114514',
+        username: 'zxwswd114514',
         college: '计算机学院',
         signature: '我是sb我是sb我是sb我是sb',
         avatar: 'https://placehold.co/100x100'
@@ -124,12 +124,10 @@ export default {
   methods: {
     editProfile() {
       alert('完成了修改个人信息');
-      apiClient.post(`http://127.0.0.1:8000/users/update-user`, {
-        params: {
-          "username": this.user.name,
-          "school": this.user.college,
-          "motto": this.user.signature,
-        }
+      apiClient.post(`http://127.0.0.1:8000/users/update-user/`, {
+        "name": this.user.name,
+        "school": this.user.college,
+        "motto": this.user.signature,
       })
         .then(() => {
           this.get_user_info()
@@ -168,8 +166,8 @@ export default {
     get_user_info() {
       apiClient.get(`http://127.0.0.1:8000/users/get-user-detail/`)
         .then(response => {
-          this.user.name = response.data.username;
-          this.user.uid = response.data.id + response.data.username;
+          this.user.name = response.data.name;
+          this.user.username = response.data.username;
           this.user.college = response.data.school;
           this.user.signature = response.data.motto;
           this.user.avatar = response.data.avatar;

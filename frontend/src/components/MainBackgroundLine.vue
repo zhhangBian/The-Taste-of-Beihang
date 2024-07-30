@@ -55,21 +55,19 @@ export default {
         });
     },
     check_login_status() {
-      let status;
       apiClient.get('http://127.0.0.1:8000/users/check-login-status')
         .then(response => {
-          status = response.data.login_status;
+          response.data.login_status;
+          console.log("已登录")
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
+          this.$router.push('/login');
         });
-      return status;
     },
   },
   mounted() {
-    if (!this.check_login_status()) {
-      //this.$router.push('/login');
-    }
+    this.check_login_status();
   }
 };
 </script>

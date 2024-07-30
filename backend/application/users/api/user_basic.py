@@ -2,8 +2,7 @@
 import json
 import os
 
-from django.contrib import auth
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.hashers import make_password
 from django.http import HttpRequest
 from django.views.decorators.http import require_POST, require_GET
@@ -12,7 +11,8 @@ from .email import varify_captcha
 from ..models import User
 from ...utils.response import *
 
-login_id = 0
+MAGIC_ID = 114514
+login_id = MAGIC_ID
 
 # 导入用于装饰器修复技术的包
 
@@ -23,8 +23,14 @@ default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.co
 @response_wrapper
 @require_GET
 def check_login_status(request: HttpRequest):
-    print("check login id is " + str(login_id))
-    return success_response({"login_status": (login_id != 0)})
+    global login_id
+
+    if login_id != MAGIC_ID:
+        return success_response({
+            "message": "已登录"
+        })
+    else:
+        return fail_response(ErrorCode.UNAUTHORIZED_ERROR, "还没有登录")
 
 
 # 用户登录
@@ -49,9 +55,13 @@ def user_login(request: HttpRequest):
     if user:
         login(request, user)
 
+        request.session['is_login'] = True
+        request.session['user_id'] = user.id
+        request.session['username'] = user.username
+
         global login_id
         login_id = user.id
-        print("login id is " + str(login_id))
+        print("login, id to " + str(login_id))
         return success_response({
             "message": "登录成功"
         })
@@ -66,16 +76,37 @@ def user_login(request: HttpRequest):
 @response_wrapper
 @require_GET
 def user_logout(request):
-    auth.logout(request)
+    request.session.pop('is_login', None)
+    request.session.pop('username', None)
+    request.session.pop('user_id', None)
+    logout(request)
+
     global login_id
-    login_id = 0
-    return success_response({"message": "logout success"})
+    login_id = MAGIC_ID
+    return success_response({
+        "message": "退出成功"
+    })
+
+
+@response_wrapper
+@require_POST
+def get_user_id(request):
+    global login_id
+    user = User.objects.filter(id=login_id).first()
+    return success_response({
+        "user_id": login_id,
+        "username": user.username,
+    })
 
 
 # 用户注册
 @response_wrapper
 @require_POST
 def user_signup(request: HttpRequest):
+    if request.session.get('is_login', None):
+        return success_response({
+            "message": "已经登录"
+        })
     body = json.loads(request.body.decode('utf-8'))
     username = body.get('username')
     password = body.get('password')
@@ -106,7 +137,9 @@ def user_signup(request: HttpRequest):
                                     password=password)
     user.save()
 
-    return success_response({'message': '注册成功'})
+    return success_response({
+        "message": "注册成功"
+    })
 
 
 # 修改密码
@@ -156,36 +189,35 @@ def forget_password(request: HttpRequest):
 @response_wrapper
 @require_POST
 def update_user(request: HttpRequest):
-    id = login_id
-    user = User.objects.filter(id=id).first()
+    global login_id
+    print("now login id is " + str(login_id))
+    my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
-    username = body.get('username')
+    name = body.get('name')
     motto = body.get('motto')
     school = body.get('school')
 
-    # 检查用户名是否已存在
-    if username and User.objects.filter(username=username).exists():
-        return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '用户名已存在')
-    elif username in name_not_allow:
+    if name in name_not_allow:
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '非法取名')
-    elif username:
-        user.username = username
-
-    # 检查个性签名是否为空
+    elif name:
+        my_user.name = name
     if motto:
-        user.motto = motto
+        my_user.motto = motto
     if school:
-        user.school = school
+        my_user.school = school
 
-    # 更新用户
-    user.save()
-    return success_response({"message": "更新成功"})
+    my_user.save()
+    print("update, login id is " + str(login_id))
+    return success_response({"message": "用户资料更新成功"})
 
 
 @response_wrapper
 @require_POST
 def update_avatar(request):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
     file = request.FILES.get('file')
     file_path = os.path.join("../../../static", file.name)
     with open(file_path, 'wb+') as f:
@@ -201,19 +233,15 @@ def update_avatar(request):
 @response_wrapper
 @require_GET
 def get_user_info(request):
-    if login_id == 0:
-        return success_response({
-            "id": 0,
-            "username": "还未登录！",
-            "avatar": default_avatar,
-        })
-    id = login_id
-    user = User.objects.filter(id=id).first()
-
+    global login_id
+    print(login_id)
+    my_user = User.objects.filter(id=login_id).first()
     return success_response({
-        "id": user.id,
-        "username": user.username,
-        "avatar": user.avatar,
+        "id": my_user.id,
+        "username": my_user.username,
+        "name": my_user.name,
+        "avatar": my_user.avatar,
+        "motto": my_user.motto,
     })
 
 
@@ -225,6 +253,7 @@ def get_user_info_by_id(request: HttpRequest, id: int):
     return success_response({
         "id": user.id,
         "username": user.username,
+        "name": user.name,
         "email": user.email,
         "school": user.school,
 
@@ -236,15 +265,16 @@ def get_user_info_by_id(request: HttpRequest, id: int):
 @response_wrapper
 @require_GET
 def get_user_detail(request: HttpRequest):
-    id = login_id
-    user = User.objects.filter(id=id).first()
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
 
     return success_response({
-        "id": user.id,
-        "username": user.username,
-        "email": user.email,
-        "school": user.school,
+        "id": my_user.id,
+        "username": my_user.username,
+        "name": my_user.name,
+        "email": my_user.email,
+        "school": my_user.school,
 
-        "motto": user.motto,
-        "avatar": user.avatar,
+        "motto": my_user.motto,
+        "avatar": my_user.avatar,
     })

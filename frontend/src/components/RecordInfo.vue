@@ -123,7 +123,7 @@ const handleAdd = () => {
     form.day = now.getDate().toString().padStart(2, '0');
     form.hour = now.getHours().toString().padStart(2, '0');
     form.minute = now.getMinutes().toString().padStart(2, '0');
-    
+
     form.location = '';
     form.dishName = '';
     form.cost = '';

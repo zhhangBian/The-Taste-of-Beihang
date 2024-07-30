@@ -10,10 +10,11 @@ default_avatar = "https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.co
 
 class User(AbstractUser):
     id = models.AutoField(primary_key=True, auto_created=True, verbose_name='用户ID', editable=False)
+    name = models.EmailField(verbose_name="昵称", blank=True, default="默认昵称")
     email = models.EmailField(unique=True, verbose_name='邮箱',
                               error_messages={'unique': '该邮箱已被注册'}, blank=False)
     password = models.CharField(max_length=256, verbose_name='密码')
-    school = models.CharField(max_length=200,verbose_name="学院",blank=True,default="计算机学院")
+    school = models.CharField(max_length=200, verbose_name="学院", blank=True, default="计算机学院")
 
     gender_choices = (
         ('secret', '不设置/保密'),

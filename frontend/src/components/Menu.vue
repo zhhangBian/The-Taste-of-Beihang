@@ -78,33 +78,30 @@ export default {
       apiClient.get('http://127.0.0.1:8000/users/get-user-info/')
         .then(response => {
           this.id = response.data.id;
-          this.username = response.data.username;
+          this.username = response.data.name;
           this.moto = response.data.moto;
           this.avatar = response.data.avatar;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
+          this.$router.push('/login');
         });
       console.log(this.id);
     },
     check_login_status() {
-      let status;
       apiClient.get('http://127.0.0.1:8000/users/check-login-status')
         .then(response => {
-          status = response.data.login_status;
+          response.data.login_status;
+          console.log("已登录")
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
         });
-      return status;
     },
   },
   mounted() {
-    setInterval(2000);
-    if (this.check_login_status()) {
-      this.$router.push('/login');
-    }
-    setInterval(this.get_user_info,500);
+    this.check_login_status();
+    this.get_user_info();
   }
 };
 </script>

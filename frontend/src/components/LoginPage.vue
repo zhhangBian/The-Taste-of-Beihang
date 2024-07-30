@@ -86,13 +86,12 @@ export default {
         username: this.username,
         password: this.password,
       })
-        .then(response => {
-          console.log(response.data);
+        .then(() => {
           this.$router.push('/');
         })
         .catch(error => {
           console.error(error);
-          alert(error.response.data.message);
+          //alert(error.response.data.message);
         });
     },
     signup() {
