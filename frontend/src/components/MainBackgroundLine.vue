@@ -20,6 +20,7 @@
 
 <script>
 import apiClient from '../axios';
+import { ElMessage } from 'element-plus';
 
 export default {
   name: 'CenteredSvgAndTitle',
