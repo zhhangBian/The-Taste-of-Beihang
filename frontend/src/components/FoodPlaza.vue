@@ -39,7 +39,8 @@
       </div>
       <p class="recommend-title">或者......</p>
       <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
-      <textarea class="textarea" placeholder="今天想吃什么？" v-model="query"></textarea>
+      <textarea class="textarea" placeholder="今天想吃什么？" v-model="inputText"></textarea>
+      <div>{{ llm_answer }}</div>
       <button class="search-button" @click="searchResults">查询</button>
     </div>
     <div class="content">
@@ -69,7 +70,7 @@ import apiClient from '../axios';
 export default {
   data() {
     return {
-      query: '',
+      inputText: '',
       selectedCanteen: '全选',
       selectedDish: '所有菜品',
       comments_list: [
@@ -357,6 +358,7 @@ export default {
       ],
       isFavorite: false,
       isSubscribed: false,
+      llm_answer:'',
     };
   },
   computed: {
@@ -408,6 +410,7 @@ export default {
         .then(response => {
           this.comments_list = response.data.comments;
           this.filterResults(); // 调用筛选方法
+          this.llm_answer = response.data.llm_answer;
         })
         .catch(error => {
           console.error('Error fetching data: ', error);

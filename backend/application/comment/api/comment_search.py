@@ -7,6 +7,7 @@ from django.views.decorators.http import require_POST
 
 from application.comment.models import Comment
 from application.dish.models import Dish
+from application.utils.llm import getLLMresponse
 from application.utils.response import response_wrapper, success_response
 
 
@@ -58,6 +59,8 @@ def search_comment(request):
     print(restaurant_name)
     print(dish_name)
 
+    llm_answer = getLLMresponse(search_string)
+
     comments = Comment.objects.all()
 
     if restaurant_name != '全选':
@@ -74,5 +77,6 @@ def search_comment(request):
 
     return success_response({
         "comments": comments_fit_serialized,
-        "comments_count": len(comments_fit_serialized)
+        "comments_count": len(comments_fit_serialized),
+        "llm_answer": llm_answer,
     })

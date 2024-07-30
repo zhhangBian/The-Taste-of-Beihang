@@ -1,10 +1,11 @@
-import json
-
 import httpx
 from openai import OpenAI
 
-with open('api_key.json', 'r') as file:
-    api_key = json.load(file).get("llm_api")
+from WhatToEatInHang import settings
+
+# with open('api_key.json', 'r') as file:
+#     api_key = json.load(file).get("llm_api")
+api_key = settings.LLM_API
 
 client = OpenAI(
     base_url="https://api.xty.app/v1",
@@ -16,6 +17,12 @@ client = OpenAI(
 )
 
 
+url = "https://stardustlm.zhipin.com/api/gpt/open/chat/openai/send/msg"
+headers = {
+    'Content-Type': 'application/json',
+    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IiIsInV1aWQiOiJuYmdfY3NsX3BhcnRuZXJfcGxheWVyOS02NTkzNDhlZS1lZDcyLTQxZGEtYWYwZi05N2E2MGE1MGExMGUifQ.9hTvhNxwncrLvVPG-utFFdUmZDNXA3YmvkWl-RGDJm8'
+}
+
 def getLLMresponse(content: str):
     completion = client.chat.completions.create(
         model="gpt-3.5-turbo",
@@ -26,3 +33,7 @@ def getLLMresponse(content: str):
         ]
     )
     return completion.choices[0].message.content
+
+
+if __name__ == "__main__":
+    print(getLLMresponse("你好吗"))
