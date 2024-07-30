@@ -59,7 +59,7 @@ def search_comment(request):
     print(restaurant_name)
     print(dish_name)
 
-    llm_answer = getLLMresponse(search_string)
+    # llm_answer = getLLMresponse(search_string)
 
     comments = Comment.objects.all()
 
@@ -78,5 +78,5 @@ def search_comment(request):
     return success_response({
         "comments": comments_fit_serialized,
         "comments_count": len(comments_fit_serialized),
-        "llm_answer": llm_answer,
+        # "llm_answer": llm_answer,
     })
