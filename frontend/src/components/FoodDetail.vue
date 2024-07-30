@@ -246,18 +246,16 @@ export default {
       // 提交评论的逻辑
       console.log('New Review Submitted:', this.newReview);
       apiClient.post(`http://127.0.0.1:8000/comment/create-comment/`, {
-        params: {
-          "title": this.dish.name + "好吃！",
-          "content": this.newReview.comment,
-          "dish_name": this.dish.name,
+        "title": this.dish.name + "好吃！",
+        "content": this.newReview.comment,
+        "dish_name": this.dish.name,
 
-          "restaurant_name": this.dish.address,
+        "restaurant_name": this.dish.address,
 
-          "grade": this.ratings[0].value,
-          "price": this.ratings[1].value,
-          "flavour": this.ratings[2].value,
-          "waiting_time": this.ratings[3].value,
-        }
+        "grade": this.ratings[0].value,
+        "price": this.ratings[1].value,
+        "flavour": this.ratings[2].value,
+        "waiting_time": this.ratings[3].value,
       })
         .then(() => {
           this.get_dish_detail();

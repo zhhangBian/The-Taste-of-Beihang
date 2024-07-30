@@ -22,4 +22,9 @@ urlpatterns = [
 
     path('get-user-comments', get_user_comments),
     path('get-user-comments-by-id/<int:user_id>', get_user_comments_by_id),
+
+    path('add-record/', add_record),
+    path('modify-record/', modify_record),
+    path('delete-record/', delete_record),
+    path('get-records/', get_records),
 ]

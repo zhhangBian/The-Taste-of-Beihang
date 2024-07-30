@@ -339,11 +339,14 @@ def add_record(request: HttpRequest):
     my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
+    print(body)
+    time = body.get('time')
     dish_name = body.get('dish_name')
     restaurant_name = body.get('restaurant_name')
     price = float(body.get('price'))
 
     record = Record(dish_name=dish_name,
+                    time=time,
                     restaurant_name=restaurant_name,
                     price=price)
     record.save()
@@ -351,6 +354,7 @@ def add_record(request: HttpRequest):
     my_user.save()
     print("add record, login id is " + str(login_id))
     return success_response({
+        "id": record.id,
         "message": "添加用餐记录成功",
     })
 
@@ -365,13 +369,13 @@ def modify_record(request: HttpRequest):
     record_id = body.get('record_id', '')
     record = Record.objects.filter(id=record_id).first()
 
-    date = body.get('date', '')
+    time = body.get('time', '')
     dish_name = body.get('dish_name', '')
     restaurant_name = body.get('restaurant_name')
     price = float(body.get('price', 0))
 
-    if date:
-        record.date = date
+    if time:
+        record.time = time
     if dish_name:
         record.dish_name = dish_name
     if restaurant_name:
@@ -393,7 +397,7 @@ def delete_record(request: HttpRequest):
     my_user = User.objects.filter(id=login_id).first()
 
     body = json.loads(request.body.decode('utf-8'))
-    record_id = body.get('record_id')
+    record_id = int(body.get('record_id'))
     my_user.records.remove(Record.objects.get(id=record_id))
     my_user.save()
     print("delete record, login id is " + str(login_id))
@@ -413,17 +417,17 @@ def get_records(request: HttpRequest):
     record_cnt = len(records)
     price_sum = 0
 
-    restaurant_frequencies = my_user.records.all().values('restaurant__name').annotate(
-        freq=Count('restaurant')).order_by('freq')
-
-    # 转换餐馆频次统计结果为字典形式，以便于展示
-    restaurant_freq_dict = {item['restaurant__name']: item['freq'] for item in restaurant_frequencies}
+    # restaurant_frequencies = my_user.records.all().values('restaurant__name').annotate(
+    #     freq=Count('restaurant__name')).order_by('freq')
+    #
+    # # 转换餐馆频次统计结果为字典形式，以便于展示
+    # restaurant_freq_dict = {item['restaurant__name']: item['freq'] for item in restaurant_frequencies}
 
     for record in records:
         price_sum += record.price
         record_info_list.append(({
             "id": record.id,
-            "date": record.date,
+            "time": record.time,
             "dish_name": record.dish_name,
             "restaurant_name": record.restaurant_name,
             "price": record.price,
@@ -432,6 +436,6 @@ def get_records(request: HttpRequest):
     return success_response({
         "records": record_info_list,
         "records_count": record_cnt,
-        "price_mean": price_sum / record_cnt,
-        "freq_dict": restaurant_freq_dict,
+        # "price_mean": price_sum / record_cnt,
+        # "freq_dict": restaurant_freq_dict,
     })

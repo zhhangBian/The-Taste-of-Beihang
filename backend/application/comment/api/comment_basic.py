@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
 
@@ -43,7 +42,7 @@ def get_comment_basics(request: HttpRequest):
 def creat_comment(request):
     user = request.user
 
-    body = json.loads(request.body.decode('utf-8')).get('params')
+    body = json.loads(request.body.decode('utf-8'))
     title = body.get('title', '默认标题')
     content = body.get('content', '空空如也')
     # TODO：图片问题

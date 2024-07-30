@@ -63,6 +63,6 @@ def upload(path, title):
     return url
 
 
-if __name__ == "__main":
-    url = upload("images/pic_test.png", "pic_test.png")
+if __name__ == "__main__":
+    url = upload("images/#金汤豆花鱼.jpg", "pic_test.png")
     print(url)
