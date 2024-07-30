@@ -96,6 +96,7 @@
 
 <script>
 import apiClient from '../axios'; // 导入 Axios 实例
+import { ElMessage } from 'element-plus';
 
 export default {
   props: {
@@ -319,7 +320,13 @@ export default {
       this.isSubscribed = !this.isSubscribed;
       const message = this.isSubscribed ? `已收藏 ${this.dish.name}` : `取消收藏 ${this.dish.name}`;
       console.log(message);
-      alert(message);
+      ElMessage({
+            message: message,
+            type: 'info',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
     },
     updateRating(index, event) {
       this.ratings[index].value = parseFloat(event.target.value);

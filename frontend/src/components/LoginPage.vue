@@ -103,7 +103,13 @@ export default {
     },
     signup() {
       if (this.password !== this.confirmPassword) {
-        alert('密码不匹配');
+        ElMessage({
+            message: '密码不匹配',
+            type: 'error',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
         return;
       }
       apiClient.post('http://127.0.0.1:8000/users/signup/', {
@@ -113,11 +119,23 @@ export default {
       })
         .then(response => {
           console.log(response.data);
-          alert(response.data.message);
+          ElMessage({
+            message: '注册成功',
+            type: 'success',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
         })
         .catch(error => {
           console.error(error);
-          alert(error.response.data.message);
+          ElMessage({
+            message: '注册发生错误',
+            type: 'error',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
         });
     }
   }
