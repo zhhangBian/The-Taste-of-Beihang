@@ -25,19 +25,18 @@ INSTALLED_APPS = [
     'application.users',
     'application.restaurant',
     'application.comment',
-    # 'corsheaders',  # 注册上corsheaders
+    'corsheaders',  # 注册 corsheaders
 ]
 
 MIDDLEWARE = [
-    # 'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # 添加 CorsMiddleware
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # django.middleware.csrf.CsrfViewMiddleware",
+    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django.middleware.security.SecurityMiddleware',
 ]
 
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -119,26 +118,25 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# CORS configuration
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True  # 在开发环境中可以使用
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
 ]
-CORS_ORIGIN_WHITELIST = (
-    ['http://127.0.0.1:*']
-)
-CORS_ALLOW_METHODS = (
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:8000'
+]
+CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
     'OPTIONS',
     'PATCH',
     'POST',
     'PUT',
-    'VIEW',
-)
+]
 
-CORS_ALLOW_HEADERS = (
+CORS_ALLOW_HEADERS = [
     'XMLHttpRequest',
     'X_FILENAME',
     'accept-encoding',
@@ -150,7 +148,7 @@ CORS_ALLOW_HEADERS = (
     'x-csrftoken',
     'x-requested-with',
     'Pragma',
-)
+]
 
 # 允许前端通过 cookie 发送和接收 session
 SESSION_COOKIE_SAMESITE = None

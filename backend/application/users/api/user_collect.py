@@ -3,8 +3,8 @@ import json
 
 from django.contrib.auth import authenticate
 from django.http import HttpRequest
+from django.views.decorators.http import require_GET
 
-from .auth import *
 from ...comment.models import Comment
 from ...dish.models import Dish
 from ...restaurant.models import Restaurant

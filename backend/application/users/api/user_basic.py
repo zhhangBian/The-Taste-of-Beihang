@@ -278,3 +278,42 @@ def get_user_detail(request: HttpRequest):
         "motto": my_user.motto,
         "avatar": my_user.avatar,
     })
+
+@response_wrapper
+@require_POST
+def add_record(request: HttpRequest):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    record_id = body.get('record_id')
+
+    my_user.save()
+    print("update, login id is " + str(login_id))
+    return success_response({"message": "用户资料更新成功"})
+
+@response_wrapper
+@require_POST
+def modify_record(request: HttpRequest):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    name = body.get('name')
+
+    my_user.save()
+    print("update, login id is " + str(login_id))
+    return success_response({"message": "用户资料更新成功"})
+
+@response_wrapper
+@require_POST
+def delete_record(request: HttpRequest):
+    global login_id
+    my_user = User.objects.filter(id=login_id).first()
+
+    body = json.loads(request.body.decode('utf-8'))
+    name = body.get('name')
+
+    my_user.save()
+    print("update, login id is " + str(login_id))
+    return success_response({"message": "用户资料更新成功"})
