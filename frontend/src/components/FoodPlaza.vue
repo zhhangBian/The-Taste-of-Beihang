@@ -23,7 +23,7 @@
       <select v-model="selectedDish" @change="filterResults">
         <option value="所有菜品">所有菜品</option>
         <option value="鸡">鸡</option>
-        <option value="猪">🐖</option>
+        <option value="猪">猪</option>
         <option value="羊">羊</option>
         <option value="香锅">香锅</option>
         <option value="汉堡">汉堡</option>

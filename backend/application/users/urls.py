@@ -16,6 +16,8 @@ urlpatterns = [
     path('update-user/', update_user),
     path('update-avatar/', update_avatar),
 
+    path('upload-img/', upload_img),
+
     path('get-user-info/', get_user_info),
     path('info/<int:user_id>/', get_user_info_by_id),
     path('get-user-detail/', get_user_detail),
@@ -27,7 +29,7 @@ urlpatterns = [
     path('modify-record/', modify_record),
     path('delete-record/', delete_record),
     path('get-records/', get_records),
-    path('get-statics/',get_statics),
+    path('get-statics/', get_statics),
 
     path('create-comment/', creat_comment),
 

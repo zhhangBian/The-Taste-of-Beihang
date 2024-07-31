@@ -254,6 +254,34 @@ def update_avatar(request):
 
 
 @response_wrapper
+@require_POST
+def upload_img(request):
+    # 由前端指定的name获取到图片数据
+    img = request.FILES.get('img')
+    # 截取文件后缀和文件名
+    img_name = img.name
+    mobile = os.path.splitext(img_name)[0]
+    ext = os.path.splitext(img_name)[1]
+    # 重定义文件名
+    img_name = f'avatar-{mobile}{ext}'
+    # 从配置文件中载入图片保存路径
+    img_path = os.path.join(settings.STATIC_URL, img_name)
+    # 写入文件
+    with open(img_path, 'ab') as fp:
+        # 如果上传的图片非常大，就通过chunks()方法分割成多个片段来上传
+        for chunk in img.chunks():
+            fp.write(chunk)
+    url = upload(img_path, img_name)
+
+    print(url)
+
+    return success_response({
+        "message": "上传成功",
+        "url": url,
+    })
+
+
+@response_wrapper
 @require_GET
 def get_user_info(request):
     global login_id
@@ -519,9 +547,6 @@ def get_statics(request: HttpRequest):
             price_lowest = record.price
             price_lowest_place = record.restaurant_name
 
-    print(get_count_dict(time_list))
-    print(get_count_dict(place_list))
-
     return success_response({
         "meal_count": len(records),
         "price_sum": price_sum,
@@ -546,8 +571,7 @@ def creat_comment(request):
     body = json.loads(request.body.decode('utf-8'))
     title = body.get('title', '默认标题')
     content = body.get('content', '空空如也')
-    # TODO：图片问题
-    # image = ...
+    image = body.get('img_url', '')
     dish_name = body.get('dish_name', '默认')
     restaurant_name = body.get('restaurant', '默认')
 
@@ -566,6 +590,7 @@ def creat_comment(request):
         dish = Dish.objects.filter(name=dish_name).first()
         comment = Comment(title=title,
                           content=content,
+                          image=image,
 
                           grade=grade,
                           price=price,

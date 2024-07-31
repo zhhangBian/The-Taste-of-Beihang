@@ -71,20 +71,22 @@
           </div>
           <div class="write-review-container ">
             <div class="flex-container mt-4 font-man font-bold border-b border-gray pb-1 mb-1">
-  <h2 class="mt-4 font-man font-bold border-b border-gray pb-1 mb-1 text-3xl inline-block">写下你的评论！</h2>
-  <div class="btn bg-black text-white text-xl inline-block ml-auto rounded-lg">
-    <label for="image-upload">
-      上传图片
-      <input
-        id="image-upload"
-        type="file"
-        accept="image/*"
-        @change="handleImageUpload"
-        style="display: none;"
-      />
-    </label>
-  </div>
-</div>
+              <h2
+                class="mt-4 font-man font-bold border-b border-gray pb-1 mb-1 text-3xl inline-block">
+                写下你的评论！</h2>
+              <div class="btn bg-black text-white text-xl inline-block ml-auto rounded-lg">
+                <label for="image-upload">
+                  上传图片
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    @change="handleImageUpload"
+                    style="display: none;"
+                  />
+                </label>
+              </div>
+            </div>
             <div class="mt-4">
               <div class="flex items-center space-x-4 rating-container"
                    v-for="(rating, index) in ratings" :key="index">
@@ -109,7 +111,7 @@
 
 <script>
 import apiClient from '../axios'; // 导入 Axios 实例
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
 export default {
   props: {
@@ -121,6 +123,7 @@ export default {
   data() {
     return {
       imageFiles: [], //新加
+      img_file: 'https://pigkiller-011955-1319328397.cos.ap-beijing.myqcloud.com/img/202407241935479.jpg',
       dish: {
         id: 114514,
         name: '麻辣香锅',
@@ -226,8 +229,24 @@ export default {
     handleImageUpload(event) { //新加
       const files = event.target.files;
       if (!files.length) return;
-      this.imageFiles = Array.from(files); 
-      console.log(this.imageFiles); 
+      this.imageFiles = Array.from(files);
+      console.log(this.imageFiles);
+
+      const file = event.target.files[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('img', file);
+
+        // 上传文件到服务器
+        apiClient.post('http://127.0.0.1:8000/users/upload-img/', formData)
+          .then(response => {
+            this.img_file = response.data.url;
+            alert("上传成功");
+          })
+          .catch(error => {
+            console.error('Error uploading file:', error);
+          });
+      }
     },
     getCookie(name) {
       let cookieValue = null;
@@ -269,6 +288,7 @@ export default {
       apiClient.post(`http://127.0.0.1:8000/users/create-comment/`, {
         "title": this.dish.name + "好吃！",
         "content": this.newReview.comment,
+        'image': this.img_file,
         "dish_name": this.dish.name,
 
         "restaurant_name": this.dish.address,
@@ -339,12 +359,12 @@ export default {
       const message = this.isSubscribed ? `已收藏 ${this.dish.name}` : `取消收藏 ${this.dish.name}`;
       console.log(message);
       ElMessage({
-            message: message,
-            type: 'info',
-            duration: 3000,
-            showClose: true,
-            customClass: 'large-message-font'
-          });
+        message: message,
+        type: 'info',
+        duration: 3000,
+        showClose: true,
+        customClass: 'large-message-font'
+      });
 
       apiClient.post(`http://127.0.0.1:8000/users/collect-dish/`, {
         "restaurant_name": this.dish.address,
@@ -384,9 +404,11 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=ZCOOL+KuaiLe&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
-.inline-block {  
-    display: inline-block;  
-}  
+
+.inline-block {
+  display: inline-block;
+}
+
 .flex-container {
   display: flex;
   align-items: flex-start; /* 垂直方向上不改变对齐方式 */
@@ -410,6 +432,7 @@ export default {
 .ml-auto {
   margin-left: auto; /* 推到右侧 */
 }
+
 body {
   font-family: 'Noto Sans SC', sans-serif;
   background-color: #ffffff;
