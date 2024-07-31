@@ -103,7 +103,7 @@ export default {
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
-          this.$router.push('/login');
+          //this.$router.push('/login');
         });
     },
   },
