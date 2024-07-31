@@ -359,7 +359,7 @@ export default {
       ],
       isFavorite: false,
       isSubscribed: false,
-      llm_answer:'',
+      llm_answer:'12345',
     };
   },
   computed: {

@@ -1,39 +1,28 @@
-import httpx
-from openai import OpenAI
+import os
 
-from WhatToEatInHang import settings
+import qianfan
 
-# with open('api_key.json', 'r') as file:
-#     api_key = json.load(file).get("llm_api")
-api_key = settings.LLM_API
+# 【推荐】使用安全认证AK/SK鉴权，通过环境变量初始化认证信息
+# 替换下列示例中参数，安全认证Access Key替换your_iam_ak，Secret Key替换your_iam_sk
+os.environ["QIANFAN_ACCESS_KEY"] = "ALTAKP07gS9EEuULw6UCxj457h"
+os.environ["QIANFAN_SECRET_KEY"] = "d7a2cdb08482484aa95acd28d7702713"
 
-client = OpenAI(
-    base_url="https://api.xty.app/v1",
-    api_key=api_key,
-    http_client=httpx.Client(
-        base_url="https://api.xty.app/v1",
-        follow_redirects=True,
-    ),
-)
+chat_comp = qianfan.ChatCompletion()
 
 
-url = "https://stardustlm.zhipin.com/api/gpt/open/chat/openai/send/msg"
-headers = {
-    'Content-Type': 'application/json',
-    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IiIsInV1aWQiOiJuYmdfY3NsX3BhcnRuZXJfcGxheWVyOS02NTkzNDhlZS1lZDcyLTQxZGEtYWYwZi05N2E2MGE1MGExMGUifQ.9hTvhNxwncrLvVPG-utFFdUmZDNXA3YmvkWl-RGDJm8'
-}
+def llm(content):
+    return chat_comp.do(model="Yi-34B-Chat", messages=[{
+        "role": "user",
+        "content": "假如你是一个美食推荐专家，对食堂中的美食进行个性化推荐，可选食堂包括{学一食堂，学二食堂，学三食堂，学四食堂，学五食堂，沙西第一食堂，沙西第二食堂，学院路清真食堂，沙河清真食堂，教工食堂，沙东一层食堂，沙东二层食堂，鼓瑟轩，新北地下一层食堂，新北二层食堂，新北三层食堂}，样例为{user: 我今天想吃香锅。agent：如果您想吃香锅的，可以选择新北二层食堂的麻辣香锅或者学三食堂的成都冒菜，两个的口味都非常不错。+再简要介绍一下香锅}（总共约100字）" + content,
+    }])
+
 
 def getLLMresponse(content: str):
-    completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system",
-             "content": "You are an assistant to help people find out what they dishes would like to eat."},
-            {"role": "user", "content": content}
-        ]
-    )
-    return completion.choices[0].message.content
+    resp = llm(content)
+    answer = resp["body"]["result"]
+
+    return answer
 
 
 if __name__ == "__main__":
-    print(getLLMresponse("你好吗"))
+    print(getLLMresponse("我想吃麻辣烫"))
