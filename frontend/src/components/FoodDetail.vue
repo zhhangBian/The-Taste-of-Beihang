@@ -69,9 +69,22 @@
               </div>
             </div>
           </div>
-          <div class="write-review-container">
-            <h2 class="mt-4 text-3xl font-man font-bold border-b border-gray pb-1 mb-1">
-              写下你的评论！</h2>
+          <div class="write-review-container ">
+            <div class="flex-container mt-4 font-man font-bold border-b border-gray pb-1 mb-1">
+  <h2 class="mt-4 font-man font-bold border-b border-gray pb-1 mb-1 text-3xl inline-block">写下你的评论！</h2>
+  <div class="btn bg-black text-white text-xl inline-block ml-auto rounded-lg">
+    <label for="image-upload">
+      上传图片
+      <input
+        id="image-upload"
+        type="file"
+        accept="image/*"
+        @change="handleImageUpload"
+        style="display: none;"
+      />
+    </label>
+  </div>
+</div>
             <div class="mt-4">
               <div class="flex items-center space-x-4 rating-container"
                    v-for="(rating, index) in ratings" :key="index">
@@ -107,6 +120,7 @@ export default {
   },
   data() {
     return {
+      imageFiles: [], //新加
       dish: {
         id: 114514,
         name: '麻辣香锅',
@@ -209,6 +223,12 @@ export default {
     }
   },
   methods: {
+    handleImageUpload(event) { //新加
+      const files = event.target.files;
+      if (!files.length) return;
+      this.imageFiles = Array.from(files); 
+      console.log(this.imageFiles); 
+    },
     getCookie(name) {
       let cookieValue = null;
       if (document.cookie && document.cookie !== '') {
@@ -364,7 +384,32 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&family=ZCOOL+KuaiLe&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@100..900&display=swap');
+.inline-block {  
+    display: inline-block;  
+}  
+.flex-container {
+  display: flex;
+  align-items: flex-start; /* 垂直方向上不改变对齐方式 */
+  justify-content: space-between; /* 水平方向上在容器两端留白 */
+}
 
+.btn {
+  /* 按钮的基础样式 */
+  padding: 0.5em 1em; /* 根据需要调整内边距 */
+  margin-right: 10%;
+  margin-top: 1%;
+  white-space: nowrap; /* 防止文本换行 */
+  cursor: pointer; /* 鼠标悬停时显示手型图标 */
+}
+
+.text-xl {
+  line-height: 1.5;
+  font-size: 1rem; /* 根据需要调整字体大小 */
+}
+
+.ml-auto {
+  margin-left: auto; /* 推到右侧 */
+}
 body {
   font-family: 'Noto Sans SC', sans-serif;
   background-color: #ffffff;

@@ -41,53 +41,70 @@
 
     <!--新增和编辑都复用这个弹窗-->
     <el-dialog v-model="dialogFormVisible" title="更改就餐记录" width="60%">
-      <el-form :model="record" label-width="100px" style="padding-right:30px">
-        <el-form-item label="时间">
-          <el-row :gutter="10">
-            <el-col :span="4">
-              <el-input v-model="record.year" placeholder="年" type="number" autocomplete="off">
-                <template #append>年</template>
-              </el-input>
-            </el-col>
-            <el-col :span="4">
-              <el-input v-model="record.month" placeholder="月" type="number" autocomplete="off">
-                <template #append>月</template>
-              </el-input>
-            </el-col>
-            <el-col :span="4">
-              <el-input v-model="record.day" placeholder="日" type="number" autocomplete="off">
-                <template #append>日</template>
-              </el-input>
-            </el-col>
-            <el-col :span="4">
-              <el-input v-model="record.hour" placeholder="时" type="number" autocomplete="off">
-                <template #append>时</template>
-              </el-input>
-            </el-col>
-            <el-col :span="4">
-              <el-input v-model="record.minute" placeholder="分" type="number" autocomplete="off">
-                <template #append>分</template>
-              </el-input>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item label="地点">
-          <el-input v-model="record.restaurant_name" autocomplete="off"/>
-        </el-form-item>
-        <el-form-item label="菜品名称">
-          <el-input v-model="record.dish_name" autocomplete="off"/>
-        </el-form-item>
-        <el-form-item label="花费">
-          <el-input v-model="record.price" type="number" autocomplete="off"/>
-        </el-form-item>
-      </el-form>
-      <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="dialogFormVisible = false">取消</el-button>
-                    <el-button type="primary" @click="save_record">确认</el-button>
-                </span>
-      </template>
-    </el-dialog>
+  <el-form :model="record" label-width="100px" style="padding-right:30px">
+    <el-form-item label="时间">
+      <el-row :gutter="10">
+        <el-col :span="4">
+          <el-input v-model="record.year" placeholder="年" type="number" autocomplete="off">
+            <template #append>年</template>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="record.month" placeholder="月" type="number" autocomplete="off">
+            <template #append>月</template>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="record.day" placeholder="日" type="number" autocomplete="off">
+            <template #append>日</template>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="record.hour" placeholder="时" type="number" autocomplete="off">
+            <template #append>时</template>
+          </el-input>
+        </el-col>
+        <el-col :span="4">
+          <el-input v-model="record.minute" placeholder="分" type="number" autocomplete="off">
+            <template #append>分</template>
+          </el-input>
+        </el-col>
+      </el-row>
+    </el-form-item>
+    <el-form-item label="地点">
+      <el-select v-model="record.restaurant_name" placeholder="请选择食堂">
+        <el-option label="学一食堂" value="学一食堂"></el-option>
+        <el-option label="学二食堂" value="学二食堂"></el-option>
+        <el-option label="学三食堂" value="学三食堂"></el-option>
+        <el-option label="学四食堂" value="学四食堂"></el-option>
+        <el-option label="学五食堂" value="学五食堂"></el-option>
+        <el-option label="学六食堂" value="学六食堂"></el-option>
+        <el-option label="教工食堂" value="教工食堂"></el-option>
+        <el-option label="清真食堂" value="清真食堂"></el-option>
+        <el-option label="合一厅" value="合一厅"></el-option>
+        <el-option label="东区第一食堂" value="东区第一食堂"></el-option>
+        <el-option label="鼓瑟轩" value="鼓瑟轩"></el-option>
+        <el-option label="西区清真食堂" value="西区清真食堂"></el-option>
+        <el-option label="西区第一食堂" value="西区第一食堂"></el-option>
+        <el-option label="西区第二食堂" value="西区第二食堂"></el-option>
+        <el-option label="西区第三食堂" value="西区第三食堂"></el-option>
+      </el-select>
+    </el-form-item>
+    <el-form-item label="菜品名称">
+      <el-input v-model="record.dish_name" autocomplete="off"/>
+    </el-form-item>
+    <el-form-item label="花费">
+      <el-input v-model="record.price" type="number" autocomplete="off"/>
+    </el-form-item>
+  </el-form>
+  <template #footer>
+    <span class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取消</el-button>
+      <el-button type="primary" @click="save_record">确认</el-button>
+    </span>
+  </template>
+</el-dialog>
+
   </div>
 </template>
 

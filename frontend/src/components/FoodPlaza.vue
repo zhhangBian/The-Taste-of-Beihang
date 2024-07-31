@@ -66,6 +66,7 @@
 
 <script>
 import apiClient from '../axios';
+import { ElMessage } from 'element-plus';
 
 export default {
   data() {
@@ -388,7 +389,14 @@ export default {
       this.isSubscribed = !this.isSubscribed;
       const action = this.isSubscribed ? 'subscribed to' : 'unsubscribed from';
       console.log(`${action} ${this.selectedCanteen}`);
-
+      const message = this.isSubscribed ? `已收藏 ${this.selectedCanteen}` : `取消收藏 ${this.selectedCanteen}`;
+      ElMessage({
+            message: message,
+            type: 'info',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
       apiClient.post(`http://127.0.0.1:8000/users/collect-restaurant/`, {
         "restaurant_name": this.selectedCanteen,
       })
