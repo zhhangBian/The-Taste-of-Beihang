@@ -548,7 +548,7 @@ select {
 .textarea {
   width: 100%;
   box-sizing: border-box; /* 确保宽度包括padding和border */
-  height: 4rem;
+  height: 3rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   font-size: 1.2rem;
@@ -567,6 +567,7 @@ select {
   resize: none;
   font-family: 'Noto Sans SC', sans-serif;
   border: 1px solid #ccc;
+  color:black;
 }
 
 .search-button {
