@@ -40,7 +40,7 @@
       <p class="recommend-title">或者......</p>
       <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
       <textarea class="textarea" placeholder="今天想吃什么？" v-model="inputText"></textarea>
-      <div>{{ llm_answer }}</div>
+      <textarea class="textarea2" placeholder="llm_answer" v-model="llm_answer" disabled readonly></textarea>
       <button class="search-button" @click="searchResults">查询</button>
     </div>
     <div class="content">
@@ -359,7 +359,7 @@ export default {
       ],
       isFavorite: false,
       isSubscribed: false,
-      llm_answer:'12345',
+      llm_answer:'sb我怎么知道你想吃什么',
     };
   },
   computed: {
@@ -524,7 +524,19 @@ select {
 .textarea {
   width: 100%;
   box-sizing: border-box; /* 确保宽度包括padding和border */
-  height: 17rem;
+  height: 4rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 1.2rem;
+  resize: none;
+  font-family: 'Noto Sans SC', sans-serif;
+  border: 1px solid #ccc;
+}
+
+.textarea2 {
+  width: 100%;
+  box-sizing: border-box; /* 确保宽度包括padding和border */
+  height: 15rem;
   padding: 0.5rem;
   border-radius: 0.5rem;
   font-size: 1.2rem;
