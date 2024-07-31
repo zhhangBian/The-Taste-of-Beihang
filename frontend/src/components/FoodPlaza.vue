@@ -56,7 +56,7 @@
             <h2 class="card-title">{{ comment.title }}</h2>
             <p class="card-text">
               {{
-                `${comment.restaurant_name} | ${comment.grade}分 | 平均${comment.price}元`
+                `${comment.restaurant_name} | ${comment.grade.toFixed(1)}分 | 平均${comment.price.toFixed(2)}元`
               }}</p>
           </div>
         </div>
