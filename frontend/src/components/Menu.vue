@@ -64,7 +64,7 @@ export default {
     log_out() {
       apiClient.get('http://127.0.0.1:8000/users/logout/')
         .then(() => {
-          //this.$router.push('/login');
+          this.$router.push('/login');
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
@@ -84,7 +84,7 @@ export default {
         })
         .catch(error => {
           console.error('Error fetching data: ', error);
-          //this.$router.push('/login');
+          this.$router.push('/login');
         });
       console.log(this.id);
     },
