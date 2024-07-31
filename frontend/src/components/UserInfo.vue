@@ -153,7 +153,7 @@ export default {
           this.stats.price_highest = response.data.price_highest;
           this.stats.price_highest_place = response.data.price_highest_place;
           this.stats.price_lowest = response.data.price_lowest;
-          this.stats.price_lowest = response.data.price_lowest_place;
+          this.stats.price_lowest_place = response.data.price_lowest_place;
           this.stats.price_mean = response.data.price_mean;
 
           this.time_dict = response.data.time_dict;
@@ -299,6 +299,8 @@ export default {
     this.getStatics();
     this.initCharts();
     this.get_user_info();
+
+    setInterval(this.initCharts, 1000);
   },
 }
 

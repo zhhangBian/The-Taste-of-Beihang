@@ -519,6 +519,9 @@ def get_statics(request: HttpRequest):
             price_lowest = record.price
             price_lowest_place = record.restaurant_name
 
+    print(get_count_dict(time_list))
+    print(get_count_dict(place_list))
+
     return success_response({
         "meal_count": len(records),
         "price_sum": price_sum,
