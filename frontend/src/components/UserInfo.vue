@@ -306,7 +306,7 @@ export default {
     this.initCharts();
     this.get_user_info();
 
-    this.intervalId = setInterval(this.initCharts, 2000);
+    this.intervalId = setInterval(this.initCharts, 1000);
   },
   beforeUnmount() {
     clearInterval(this.intervalId); // 确保intervalId是setInterval返回的ID
