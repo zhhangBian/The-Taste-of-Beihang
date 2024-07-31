@@ -571,7 +571,8 @@ def creat_comment(request):
     body = json.loads(request.body.decode('utf-8'))
     title = body.get('title', '默认标题')
     content = body.get('content', '空空如也')
-    image = body.get('img_url', '')
+    image = body.get('image', '')
+    print(image)
     dish_name = body.get('dish_name', '默认')
     restaurant_name = body.get('restaurant', '默认')
 
