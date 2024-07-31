@@ -241,7 +241,13 @@ export default {
         apiClient.post('http://127.0.0.1:8000/users/upload-img/', formData)
           .then(response => {
             this.img_file = response.data.url;
-            alert("上传成功");
+            ElMessage({
+              message: '上传文件成功',
+              type: 'success',
+              duration: 3000,
+              showClose: true,
+              customClass: 'large-message-font'
+            });
           })
           .catch(error => {
             console.error('Error uploading file:', error);
@@ -373,7 +379,13 @@ export default {
         .then(() => {
         })
         .catch(error => {
-          alert("没有这个菜品哦");
+          ElMessage({
+            message: '没有这个菜品哦',
+            type: 'error',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
         });
     },
     updateRating(index, event) {

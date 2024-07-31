@@ -403,7 +403,13 @@ export default {
         .then(() => {
         })
         .catch(error => {
-          alert("没有这个食堂哦");
+          ElMessage({
+              message: '没有这个食堂',
+              type: 'error',
+              duration: 3000,
+              showClose: true,
+              customClass: 'large-message-font'
+            });
         });
     },
     searchResults() {
