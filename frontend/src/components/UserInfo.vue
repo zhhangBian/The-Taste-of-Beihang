@@ -91,6 +91,9 @@ export default {
   },
   data() {
     return {
+      intervalId: null,
+      locationChart: '',
+      expenseChart: '',
       user: {
         id: Number(this.$route.params.id),
         name: '时间的彷徨',
@@ -158,6 +161,8 @@ export default {
 
           this.time_dict = response.data.time_dict;
           this.place_dict = response.data.place_dict;
+
+          this.initCharts();
         })
         .catch(error => {
           console.error('Error fetching comments:', error);
@@ -218,6 +223,8 @@ export default {
           this.user.signature = response.data.motto;
           this.user.avatar = response.data.avatar;
           document.title = `个人中心 - ${this.user.name}`;
+
+          this.getStatics();
         })
         .catch(error => {
           console.error('Error fetching dish details:', error);
@@ -225,7 +232,7 @@ export default {
     },
     initCharts() {
       // Initialize the location chart
-      var locationChart = echarts.init(document.getElementById('locationChart'));
+      this.locationChart = echarts.init(document.getElementById('locationChart'));
       var locationOption = {
         legend: {
           orient: 'vertical',
@@ -260,10 +267,10 @@ export default {
           }
         ]
       };
-      locationChart.setOption(locationOption);
+      this.locationChart.setOption(locationOption);
 
       // Initialize the expense chart
-      var expenseChart = echarts.init(document.getElementById('expenseChart'));
+      this.expenseChart = echarts.init(document.getElementById('expenseChart'));
       var expenseOption = {
         legend: {
           orient: 'vertical',
@@ -298,19 +305,20 @@ export default {
           }
         ]
       };
-      expenseChart.setOption(expenseOption);
+      this.expenseChart.setOption(expenseOption);
     }
   },
   mounted() {
-    this.getStatics();
-    this.initCharts();
     this.get_user_info();
-
-    this.intervalId = setInterval(this.initCharts, 1000);
+  },
+  activated() {
+    console.log(114513);
+    this.get_user_info();
   },
   beforeUnmount() {
-    clearInterval(this.intervalId); // 确保intervalId是setInterval返回的ID
-  }
+    this.expenseChart.dispose();
+    this.locationChart.dispose();
+  },
 }
 
 </script>
