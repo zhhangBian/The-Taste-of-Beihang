@@ -443,6 +443,7 @@ export default {
           console.error('Error fetching data: ', error);
         });
 
+      this.llm_answer = '结果加载中';
       apiClient.post('http://127.0.0.1:8000/comment/get-llm-answer', {
         search: this.inputText,
       })
