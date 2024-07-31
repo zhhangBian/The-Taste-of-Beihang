@@ -115,6 +115,7 @@
 <script setup>
 import {reactive, ref, computed, onMounted} from "vue";
 import apiClient from "@/axios";
+import { ElMessage } from 'element-plus';
 
 let collected_restaurants = ref([
   {restaurant: "学二食堂"},
@@ -188,7 +189,13 @@ const save = () => {
           });
       })
       .catch(error => {
-        alert("没有这个食堂哦");
+        ElMessage({
+              message: '没有这个食堂',
+              type: 'error',
+              duration: 3000,
+              showClose: true,
+              customClass: 'large-message-font'
+            });
       });
   } else {
     apiClient.post(`http://127.0.0.1:8000/users/collect-dish/`, {
@@ -205,7 +212,13 @@ const save = () => {
           });
       })
       .catch(error => {
-        alert("没有这个菜品哦");
+        ElMessage({
+              message: '没有这个菜品',
+              type: 'error',
+              duration: 3000,
+              showClose: true,
+              customClass: 'large-message-font'
+            });
       });
   }
 

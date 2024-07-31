@@ -196,7 +196,13 @@ export default {
         apiClient.post('http://127.0.0.1:8000/users/update-avatar/', formData)
           .then(response => {
             this.user.avatar = response.data.avatar;
-            alert("头像更新成功");
+            ElMessage({
+              message: '头像上传成功，请刷新页面应用修改',
+              type: 'success',
+              duration: 3000,
+              showClose: true,
+              customClass: 'large-message-font'
+            });
           })
           .catch(error => {
             console.error('Error uploading file:', error);
