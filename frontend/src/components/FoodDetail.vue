@@ -72,7 +72,7 @@
           <div class="write-review-container ">
             <div class="flex-container mt-4 font-man font-bold border-b border-gray pb-1 mb-1">
   <h2 class="mt-4 font-man font-bold border-b border-gray pb-1 mb-1 text-3xl inline-block">写下你的评论！</h2>
-  <div class="btn bg-black text-white text-xl inline-block ml-auto">
+  <div class="btn bg-black text-white text-xl inline-block ml-auto rounded-lg">
     <label for="image-upload">
       上传图片
       <input
