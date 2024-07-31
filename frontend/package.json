@@ -16,6 +16,7 @@
     "list": "^2.0.19",
     "vue": "^3.2.13",
     "vue-awesome-swiper": "^5.0.1",
+    "vue-cli-service": "^5.0.10",
     "vue-router": "^4.4.0"
   },
   "devDependencies": {

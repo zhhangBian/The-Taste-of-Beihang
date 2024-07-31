@@ -15,7 +15,7 @@ export default {
   methods: {
     testLogin() {
       console.log('登录按钮点击');
-      this.$router.push('/login');
+      //this.$router.push('/login');
     },
   },
 };

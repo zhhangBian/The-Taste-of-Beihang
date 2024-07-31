@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container black">
     <div class="sidebar">
       <h5 class="title">美食广场</h5>
       <select v-model="selectedCanteen" @change="filterResults">
@@ -196,6 +196,10 @@ body {
   color: hsl(240, 10%, 3.9%);
 }
 
+.black {
+  overflow: hidden;
+  color : black;
+}
 .container {
   display: flex;
   height: 100vh; /* 设置高度为视口高度 */
