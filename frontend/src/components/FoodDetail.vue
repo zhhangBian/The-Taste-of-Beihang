@@ -269,7 +269,6 @@ export default {
       return cookieValue;
     },
     get_dish_detail() {
-
       apiClient.get(`http://127.0.0.1:8000/dish/detail/${this.id}/`)
         .then(response => {
           this.dish.name = response.data.name;

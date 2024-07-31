@@ -1,6 +1,5 @@
 import json
 
-from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest
 from django.views.decorators.http import require_GET
 
@@ -54,6 +53,12 @@ def get_dish_info_id(request: HttpRequest, id: int):
     comments = Comment.objects.filter(dish_name=dish.name)
     comments_list = []
     images = []
+
+    grade_sum = 0
+    price_sum = 0
+    flavour_sum = 0
+    waiting_time_sum = 0
+
     for comment in comments:
         author_name = "momo"
         avatar = default_avatar
@@ -62,6 +67,12 @@ def get_dish_info_id(request: HttpRequest, id: int):
             author_name = user.username
             avatar = user.avatar
         images.append(comment.image)
+
+        grade_sum += comment.grade
+        price_sum += comment.price
+        flavour_sum += comment.flavour
+        waiting_time_sum += comment.waiting_time
+
         comment_dict = {
             'id': comment.id,
             'title': comment.title,
@@ -82,8 +93,8 @@ def get_dish_info_id(request: HttpRequest, id: int):
             'avatar': avatar,
         }
         comments_list.append(comment_dict)
-    # print(comments_list)
 
+    cnt = len(comments)
     return success_response({
         "name": dish.name,
         "image": dish.image,
@@ -93,10 +104,10 @@ def get_dish_info_id(request: HttpRequest, id: int):
 
         "description": dish.description,
 
-        "prices": dish.price,
-        "overall_rating": dish.overall_rating,
-        "flavor_rating": dish.flavor_rating,
-        "waiting_time": dish.waiting_time,
+        "prices": price_sum / cnt,
+        "overall_rating": grade_sum / cnt,
+        "flavor_rating": flavour_sum / cnt,
+        "waiting_time": waiting_time_sum / cnt,
 
         "comment_num": len(comments_list),
         "comments": comments_list,
