@@ -55,7 +55,7 @@
                   stats.price_lowest_place
                 }}）
               </p>
-              <p><strong>平均消费:</strong> {{ stats.price_mean }}元
+              <p><strong>平均消费:</strong> {{ stats.price_mean.toFixed(2) }}元
               </p>
             </div>
           </div>
@@ -103,7 +103,6 @@ export default {
         avatar: 'https://placehold.co/100x100'
       },
       stats: {
-
         meal_count: 65,
         price_sum: 98.7,
         collect_sum: 32,
@@ -445,7 +444,7 @@ export default {
 
 .charts {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around; /* 更改为 space-around 以缩小图表之间的间距 */
 }
 
 .chart-container {
