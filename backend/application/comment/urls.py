@@ -7,4 +7,5 @@ urlpatterns = [
     path('agree-comment', agree_comment),
 
     path('search-comment', search_comment),
+    path('get-llm-answer', get_llm_answer),
 ]

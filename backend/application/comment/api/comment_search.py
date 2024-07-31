@@ -59,8 +59,6 @@ def search_comment(request):
     print(restaurant_name)
     print(dish_name)
 
-    llm_answer = getLLMresponse(search_string)
-
     comments = Comment.objects.all()
 
     if restaurant_name != '全选':
@@ -78,5 +76,20 @@ def search_comment(request):
     return success_response({
         "comments": comments_fit_serialized,
         "comments_count": len(comments_fit_serialized),
+    })
+
+
+@response_wrapper
+@require_POST
+def get_llm_answer(request):
+    body = json.loads(request.body.decode('utf-8'))
+    search_string = body.get('search', '')
+
+    llm_answer = getLLMresponse(search_string)
+
+    print(search_string)
+    print(llm_answer)
+
+    return success_response({
         "llm_answer": llm_answer,
     })

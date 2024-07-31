@@ -40,7 +40,8 @@
       <p class="recommend-title">或者......</p>
       <p class="recommend-subtitle">输入你的需求，<br/>让我们为你推荐！</p>
       <textarea class="textarea" placeholder="今天想吃什么？" v-model="inputText"></textarea>
-      <textarea class="textarea2" placeholder="llm_answer" v-model="llm_answer" disabled readonly></textarea>
+      <textarea class="textarea2" placeholder="llm_answer" v-model="llm_answer" disabled
+                readonly></textarea>
       <button class="search-button" @click="searchResults">查询</button>
     </div>
     <div class="content">
@@ -66,7 +67,7 @@
 
 <script>
 import apiClient from '../axios';
-import { ElMessage } from 'element-plus';
+import {ElMessage} from 'element-plus';
 
 export default {
   data() {
@@ -359,7 +360,7 @@ export default {
       ],
       isFavorite: false,
       isSubscribed: false,
-      llm_answer:'sb我怎么知道你想吃什么',
+      llm_answer: '大模型等待你的询问',
     };
   },
   computed: {
@@ -391,12 +392,12 @@ export default {
       console.log(`${action} ${this.selectedCanteen}`);
       const message = this.isSubscribed ? `已收藏 ${this.selectedCanteen}` : `取消收藏 ${this.selectedCanteen}`;
       ElMessage({
-            message: message,
-            type: 'info',
-            duration: 3000,
-            showClose: true,
-            customClass: 'large-message-font'
-          });
+        message: message,
+        type: 'info',
+        duration: 3000,
+        showClose: true,
+        customClass: 'large-message-font'
+      });
       apiClient.post(`http://127.0.0.1:8000/users/collect-restaurant/`, {
         "restaurant_name": this.selectedCanteen,
       })
@@ -404,12 +405,25 @@ export default {
         })
         .catch(error => {
           ElMessage({
-              message: '没有这个食堂',
-              type: 'error',
-              duration: 3000,
-              showClose: true,
-              customClass: 'large-message-font'
-            });
+            message: '没有这个食堂',
+            type: 'error',
+            duration: 3000,
+            showClose: true,
+            customClass: 'large-message-font'
+          });
+        });
+    },
+    getList() {
+      apiClient.post('http://127.0.0.1:8000/comment/search-comment', {
+        restaurant_name: this.selectedCanteen,
+        dish_name: this.selectedDish
+      })
+        .then(response => {
+          this.comments_list = response.data.comments;
+          this.filterResults(); // 调用筛选方法
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
         });
     },
     searchResults() {
@@ -417,13 +431,22 @@ export default {
       console.log('Selected Dish:', this.selectedDish);
 
       apiClient.post('http://127.0.0.1:8000/comment/search-comment', {
-        search: this.query,
+        search: this.inputText,
         restaurant_name: this.selectedCanteen,
         dish_name: this.selectedDish
       })
         .then(response => {
           this.comments_list = response.data.comments;
           this.filterResults(); // 调用筛选方法
+        })
+        .catch(error => {
+          console.error('Error fetching data: ', error);
+        });
+
+      apiClient.post('http://127.0.0.1:8000/comment/get-llm-answer', {
+        search: this.inputText,
+      })
+        .then(response => {
           this.llm_answer = response.data.llm_answer;
         })
         .catch(error => {
@@ -436,7 +459,7 @@ export default {
   },
   mounted() {
     // 页面加载时自动查询
-    this.searchResults();
+    this.getList();
   }
 };
 </script>
