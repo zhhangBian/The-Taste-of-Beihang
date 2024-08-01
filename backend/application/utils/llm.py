@@ -4,8 +4,8 @@ import qianfan
 
 # 【推荐】使用安全认证AK/SK鉴权，通过环境变量初始化认证信息
 # 替换下列示例中参数，安全认证Access Key替换your_iam_ak，Secret Key替换your_iam_sk
-os.environ["QIANFAN_ACCESS_KEY"] = "ALTAKP07gS9EEuULw6UCxj457h"
-os.environ["QIANFAN_SECRET_KEY"] = "d7a2cdb08482484aa95acd28d7702713"
+os.environ["QIANFAN_ACCESS_KEY"] = ""
+os.environ["QIANFAN_SECRET_KEY"] = ""
 
 chat_comp = qianfan.ChatCompletion()
 

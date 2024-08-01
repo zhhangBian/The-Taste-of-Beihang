@@ -128,12 +128,16 @@ def user_signup(request: HttpRequest):
 
     # 检查用户名是否已存在
     if User.objects.filter(username=username).exists():
+        print('用户名已存在')
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '用户名已存在')
     if username in name_not_allow:
+        print('非法取名')
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, '非法取名')
     if User.objects.filter(email=email).exists():
+        print("邮箱已注册")
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "邮箱已注册")
     if password == '':
+        print("密码不能为空")
         return fail_response(ErrorCode.INVALID_REQUEST_ARGUMENT_ERROR, "密码不能为空")
     # 验证验证码
     # if not varify_captcha(email, captcha):
